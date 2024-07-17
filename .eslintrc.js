@@ -21,7 +21,7 @@ module.exports = {
   settings: {
     "import/resolver": {
       alias: {
-        map: [["@", "./"]], // Map @ to the base directory
+        map: [["@", "./src/"]], // Map @ to the base directory
         extensions: [".ts", ".tsx", ".js", ".jsx", ".json"],
       },
       typescript: {
