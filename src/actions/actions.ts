@@ -74,7 +74,7 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
         username: profile.userName,
         url: profile.url,
         name: profile.name,
-        profilePicture: profile.profilePicture,
+        profilePicture: profile.profilePicture.replace('_normal.', '_400x400.'),
         description: profile.description,
         location: profile.location,
       },
@@ -83,6 +83,41 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
     return {
       data: null,
       error: 'No profile found',
+    }
+  }
+}
+
+export const scrapeTweets = async ({ username }: { username: string }) => {
+  const url = `https://api.apify.com/v2/acts/61RPP7dywgiy0JPD0/run-sync-get-dataset-items?token=${process.env.APIFY_API_KEY}`
+
+  // Headers for the HTTP request
+  const headers = {
+    'Content-Type': 'application/json',
+  }
+
+  // Prepare the data for the POST request
+  const body = {
+    startUrls: [`https://twitter.com/${username}`],
+    maxTweetsPerQuery: 20,
+    sort: 'Latest',
+    tweetLanguage: 'en',
+    customMapFunction: '(object) => { return {...object} }',
+  }
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+    })
+    const data = await response.json()
+    console.log('🟣 | file: actions.ts:114 | scrapeTweets | data:', data)
+
+    return { data: data, error: null }
+  } catch (error) {
+    return {
+      data: null,
+      error: error,
     }
   }
 }
