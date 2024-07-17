@@ -98,10 +98,31 @@ export const scrapeTweets = async ({ username }: { username: string }) => {
   // Prepare the data for the POST request
   const body = {
     startUrls: [`https://twitter.com/${username}`],
-    maxTweetsPerQuery: 20,
+    maxItems: 40,
     sort: 'Latest',
     tweetLanguage: 'en',
-    customMapFunction: '(object) => { return {...object} }',
+    customMapFunction: `(object) => { 
+      return {
+        type: object.type,
+        text: object.text,
+        source: object.source,
+        retweetCount: object.retweetCount,
+        replyCount: object.replyCount,
+        likeCount: object.likeCount,
+        quoteCount: object.quoteCount,
+        viewCount: object.viewCount,
+        createdAt: object.createdAt,
+        lang: object.lang,
+        bookmarkCount: object.bookmarkCount,
+        isReply: object.isReply,
+        fastFollowersCount: object.fastFollowersCount,
+        favouritesCount: object.favouritesCount,
+        extendedEntities: object.extendedEntities,
+        isRetweet: object.isRetweet,
+        isQuote: object.isQuote,
+        media: object.media
+      }
+    }`,
   }
 
   try {
