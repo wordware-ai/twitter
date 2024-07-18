@@ -1,6 +1,6 @@
 import { getUser } from '@/actions/actions'
 
-import Result from './result'
+import ResultComponent from './result-component'
 import ScrapeTweets from './scrape-tweets'
 
 const Page = async ({ params }: { params: { username: string } }) => {
@@ -49,11 +49,10 @@ const Page = async ({ params }: { params: { username: string } }) => {
           </div>
         </div>
       </div>
-      {/* <pre className="whitespace-pre-wrap">data: {JSON.stringify(data, null, 2)}</pre> */}
+      <pre className="whitespace-pre-wrap">data: {JSON.stringify(data, null, 2)}</pre>
       <div>{/* <pre className="whitespace-pre-wrap">tweets: {JSON.stringify(tweets, null, 2)}</pre> */}</div>
-
       <ScrapeTweets username={params.username} />
-      <Result userData={undefined} />
+      <ResultComponent />
     </div>
   )
 }
