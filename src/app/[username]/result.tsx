@@ -17,45 +17,38 @@ import {
   PiWallet,
 } from 'react-icons/pi'
 
-import { Avatar } from '@/components/ui/avatar'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-interface Strength {
-  title: string
-  subtitle: string
+export type TwitterAnalysis = {
+  about?: string
+  strengths?: {
+    title: string
+    subtitle: string
+  }[]
+  weaknesses?: {
+    title: string
+    subtitle: string
+  }[]
+  loveLife?: string
+  money?: string
+  health?: string
+  biggestGoal?: string
+  colleaguePerspective?: string
+  pickupLines?: string[]
+  famousPersonComparison?: string
+  previousLife?: string
+  animal?: string
+  fiftyDollarThing?: string
+  career?: string
+  lifeSuggestion?: string
+  roast?: string
 }
 
-interface Weakness {
-  title: string
-  subtitle: string
-}
-
-interface UserData {
-  name: string
-  twitterusername: string
-  profilePictureUrl: string
-  about: string
-  strengths: Strength[]
-  weaknesses: Weakness[]
-  loveLife: string
-  money: string
-  health: string
-  biggestGoal: string
-  colleaguePerspective: string
-  pickupLines: string[]
-  famousPersonComparison: string
-  previousLife: string
-  animal: string
-  fiftyDollarThing: string
-  career: string
-  lifeSuggestion: string
-}
-
-export default function Result({ userData }: { userData: UserData | undefined }) {
+export default function Result({ userData }: { userData: TwitterAnalysis | undefined }) {
   return (
     <div>
       <div className="mb-16 mt-12 text-center">
-        <div className="mb-2 text-center md:px-8">
+        {/* <div className="mb-2 text-center md:px-8">
           <h1 className="mb-6 text-3xl text-[#0F172A] md:text-5xl">
             here is an AI agent&apos;s analysis of my
             <span className="bg-[#CB9F9F] bg-clip-text text-transparent"> twitter </span>
@@ -78,9 +71,9 @@ export default function Result({ userData }: { userData: UserData | undefined })
               </a>
             </div>
           </div>
-        </div>
+        </div> */}
 
-        <div className="mx-auto mb-10 px-5 py-10 text-center md:text-left">
+        {/* <div className="mx-auto mb-10 px-5 py-10 text-center md:text-left">
           <div className="mt-10 flex flex-col items-center justify-between md:flex-row">
             <h3 className="mb-6 text-base font-normal md:text-lg">Would you like to get your own profile? try here</h3>
             <a
@@ -89,30 +82,10 @@ export default function Result({ userData }: { userData: UserData | undefined })
               try with your own twitter!
             </a>
           </div>
-        </div>
+        </div> */}
 
-        <div className="md:px-5">
-          <Card className="mb-4 p-4 md:px-10">
-            <div className="flex flex-col items-center md:flex-row md:items-center">
-              <Avatar className="mx-auto mb-4 h-32 w-32 md:mb-0 md:mr-8">
-                <img
-                  src={userData?.profilePictureUrl}
-                  alt="user image"
-                />
-              </Avatar>
-              <div className="text-center md:text-left">
-                <CardHeader>
-                  <CardTitle>
-                    {userData?.name} (<span style={{ color: 'grey' }}>@{userData?.twitterusername}</span>)
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p>{userData?.about}</p>
-                </CardContent>
-              </div>
-            </div>
-          </Card>
-        </div>
+        <div>{userData?.about}</div>
+        <div>{userData?.roast}</div>
 
         <div className="text-left">
           <Card className="relative mx-auto bg-white pb-2 pt-2 shadow-md">
@@ -128,7 +101,7 @@ export default function Result({ userData }: { userData: UserData | undefined })
             </CardHeader>
             <CardContent className="flex flex-col p-4 pt-3 text-gray-700">
               <ul className="list-none space-y-2 pl-4 pr-4">
-                {userData?.strengths.map((strength, index) => (
+                {userData?.strengths?.map((strength, index) => (
                   <li key={index}>
                     <span className="font-semibold">{strength.title}:</span> {strength.subtitle}
                   </li>
@@ -151,7 +124,7 @@ export default function Result({ userData }: { userData: UserData | undefined })
             </CardHeader>
             <CardContent className="flex flex-col p-4 pt-3 text-gray-700">
               <ul className="list-none space-y-2 pl-4 pr-4">
-                {userData?.weaknesses.map((weakness, index) => (
+                {userData?.weaknesses?.map((weakness, index) => (
                   <li key={index}>
                     <span className="font-semibold">{weakness.title}:</span> {weakness.subtitle}
                   </li>
@@ -275,7 +248,7 @@ export default function Result({ userData }: { userData: UserData | undefined })
               <div className="w-full border-b border-gray-300" />
             </CardHeader>
             <CardContent className="flex flex-col p-4 pt-3 text-gray-700">
-              <ul className="list-none space-y-2 pl-5">{userData?.pickupLines.map((line, index) => <li key={index}>{line}</li>)}</ul>
+              <ul className="list-none space-y-2 pl-5">{userData?.pickupLines?.map((line, index) => <li key={index}>{line}</li>)}</ul>
             </CardContent>
             <div className="absolute bottom-0 left-0 h-10 w-full bg-gradient-to-b from-transparent to-pink-50"></div>
           </Card>

@@ -1,7 +1,19 @@
-export async function POST(request: Request) {
-  const { transcript } = await request.json()
+import { getUser, updateUser } from '@/actions/actions'
 
-  const runResponse = await fetch('https://app.wordware.ai/api/prompt/a80ab6d8-c7a3-4eee-aaab-10d89cfe53db/run', {
+export async function POST(request: Request) {
+  const { tweets, profilePicture, profileInfo, username } = await request.json()
+  const user = await getUser({ username })
+  if (user.wordwareStarted) {
+    return Response.json({ error: 'Wordware already started' })
+  }
+  await updateUser({
+    user: {
+      ...user,
+      wordwareStarted: true,
+    },
+  })
+
+  const runResponse = await fetch('https://app.wordware.ai/api/released-app/aa3d8ee8-2042-4237-8e9f-d497844b6d91/run', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -9,7 +21,10 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       inputs: {
-        transcript,
+        tweets,
+        profilePicture,
+        profileInfo,
+        version: '^1.4',
       },
     }),
   })
@@ -33,7 +48,6 @@ export async function POST(request: Request) {
           }
 
           const chunk = decoder.decode(value)
-          console.log('🟣 | file: route.ts:39 | start | chunk:', chunk)
 
           for (let i = 0, len = chunk.length; i < len; ++i) {
             const isChunkSeparator = chunk[i] === '\n'
@@ -65,7 +79,24 @@ export async function POST(request: Request) {
                 controller.enqueue(value.value ?? '')
               }
             } else if (value.type === 'outputs') {
-              console.log(value)
+              console.log('✨ here:')
+              console.log(value.values.output)
+              try {
+                console.log('parsing:')
+                const parsedOutput = JSON.parse(value.values.output)
+                console.log('🟣 | file: route.ts:87 | start | parsedOutput:', parsedOutput)
+                await updateUser({
+                  user: {
+                    ...user,
+                    wordwareStarted: true,
+                    wordwareCompleted: true,
+                    analysis: parsedOutput,
+                  },
+                })
+                console.log('Analysis saved to database')
+              } catch (error) {
+                console.error('Error parsing or saving output:', error)
+              }
             }
 
             buffer = []

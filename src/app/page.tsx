@@ -1,6 +1,7 @@
-import NewUsernameForm from "@/components/new-username-form";
-import Quote from "@/components/quote";
-import Link from "next/link";
+import Link from 'next/link'
+
+import NewUsernameForm from '@/components/new-username-form'
+import Quote from '@/components/quote'
 
 const Page = () => {
   return (
@@ -11,10 +12,9 @@ const Page = () => {
             discover your <br />
             <span
               className="bg-clip-text text-transparent"
-              style={{ backgroundColor: "#CB9F9F" }}
-            >
-              {" "}
-              twitter{" "}
+              style={{ backgroundColor: '#CB9F9F' }}>
+              {' '}
+              twitter{' '}
             </span>
             personality
           </h1>
@@ -39,16 +39,14 @@ const Page = () => {
           <p className="2xl:text-md mb-2 text-sm">
             this app is powered by Wordware.
             <br />
-            you can build your own AI app in ~15 minutes.{" "}
+            you can build your own AI app in ~15 minutes.{' '}
             <span
               className="bg-clip-text font-bold text-transparent"
-              style={{ backgroundColor: "#CB9F9F" }}
-            >
+              style={{ backgroundColor: '#CB9F9F' }}>
               <Link
                 href="https://www.wordware.ai/"
                 target="_blank"
-                rel="noopener noreferrer"
-              >
+                rel="noopener noreferrer">
                 try here!
               </Link>
             </span>
@@ -62,7 +60,7 @@ const Page = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page

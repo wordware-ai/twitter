@@ -10,6 +10,8 @@ export const users = pgTable('users', {
   location: text('location'),
   error: text('error'),
   fullProfile: jsonb('full_profile'),
+  tweets: jsonb('tweets'),
+  analysis: jsonb('analysis'),
 
   //Statuses
   profileScraped: boolean('profile_scraped').default(false),

@@ -18,6 +18,15 @@ export const insertUser = async ({ user }: { user: InsertUser }) => {
   await db.insert(users).values(user)
 }
 
+export const updateUser = async ({ user }: { user: InsertUser }) => {
+  console.log('🟣 | file: actions.ts:22 | updateUser | user:', user)
+  if (!user.username) {
+    throw new Error('Username is required for updating a user')
+  }
+
+  await db.update(users).set(user).where(eq(users.username, user.username))
+}
+
 export const handleNewUsername = async ({ username }: { username: string }) => {
   //First, check if the user already exist. If yes, just redirect to user's page.
   const user = await getUser({ username })
@@ -124,6 +133,39 @@ export const scrapeTweets = async ({ username }: { username: string }) => {
     return {
       data: null,
       error: error,
+    }
+  }
+}
+
+export const processScrapedUser = async ({ username }: { username: string }) => {
+  let user = await getUser({ username })
+
+  if (!user.tweetScrapeStarted) {
+    console.log('twitter scrap did not start')
+    user = {
+      ...user,
+      tweetScrapeStarted: true,
+    }
+    await updateUser({ user })
+    console.log('twitter scrap started')
+    const { data: tweets, error } = await scrapeTweets({ username })
+    console.log('🟣 | file: actions.ts:143 | processScrapedUser | tweets:', tweets?.length)
+    if (tweets && !error) {
+      user = {
+        ...user,
+        tweets: tweets,
+        tweetScrapeCompleted: true,
+      }
+      await updateUser({ user })
+      return tweets
+    }
+    if (error) {
+      user = {
+        ...user,
+        error: JSON.stringify(error),
+      }
+
+      await updateUser({ user })
     }
   }
 }

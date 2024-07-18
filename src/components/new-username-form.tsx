@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { PiSpinner } from 'react-icons/pi'
 import { z } from 'zod'
 
 import { handleNewUsername } from '@/actions/actions'
@@ -28,36 +29,44 @@ const NewUsernameForm = () => {
   }
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full max-w-sm space-y-8">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Your X handle or link</FormLabel>
-              <FormControl>
-                <div className="flex items-center gap-2">
-                  <Input
-                    className="w-full"
-                    placeholder="@username"
-                    {...field}
-                  />
-                  <Button
-                    disabled={form.formState.isSubmitting}
-                    type="submit">
-                    Submit
-                  </Button>
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </form>
-    </Form>
+    <div className="flex flex-col gap-4">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="w-full max-w-sm space-y-8">
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Your X handle or link</FormLabel>
+                <FormControl>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      className="w-full"
+                      placeholder="@username"
+                      {...field}
+                    />
+                    <Button
+                      disabled={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
+                      type="submit">
+                      Submit
+                    </Button>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </form>
+      </Form>
+      {(form.formState.isSubmitting || form.formState.isSubmitSuccessful) && (
+        <div className="flex items-center gap-2 text-sm">
+          <PiSpinner className="animate-spin" />
+          Looking for your X profile...
+        </div>
+      )}
+    </div>
   )
 }
 
