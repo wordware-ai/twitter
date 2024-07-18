@@ -67,3 +67,47 @@
     @apply bg-background text-foreground;
   }
 }
+
+.flex-center {
+  @apply flex items-center justify-center;
+}
+
+.flex-between {
+  @apply flex items-center justify-between;
+}
+
+.test-red {
+  @apply border-2 border-red-500;
+}
+
+.test-blue {
+  @apply border-2 border-blue-500;
+}
+
+.test-green {
+  @apply border-2 border-green-500;
+}
+
+.test-purple {
+  @apply border-2 border-purple-500;
+}
+
+.test-yellow {
+  @apply border-2 border-yellow-500;
+}
+
+.test-pink {
+  @apply border-2 border-pink-500;
+}
+
+.test-orange {
+  @apply border-2 border-orange-500;
+}
+
+.test-indigo {
+  @apply border-2 border-gray-500;
+}
+
+.test-black {
+  @apply border-2 border-black;
+}

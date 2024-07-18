@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -9,13 +8,13 @@ import { handleNewUsername } from '@/actions/actions'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { cleanUsername } from '@/lib/utils'
 
 const formSchema = z.object({
   username: z.string().min(3).max(50),
 })
 
 const NewUsernameForm = () => {
-  const [isLoading, setIsLoading] = useState(false)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -23,26 +22,9 @@ const NewUsernameForm = () => {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true)
-    const cleanUsername = (input: string) => {
-      // Remove https:// or http:// if present
-      let cleaned = input.replace(/^(https?:\/\/)?(www\.)?/, '')
-
-      // Remove twitter.com/ or x.com/ if present
-      cleaned = cleaned.replace(/^(twitter\.com\/|x\.com\/)/, '')
-
-      // Remove @ if present at the start
-      cleaned = cleaned.replace(/^@/, '')
-
-      // Split by / and take the last part (in case of full URLs)
-      cleaned = cleaned.split('/').pop() || ''
-
-      return cleaned.trim()
-    }
-
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     const cleanedUsername = cleanUsername(values.username)
-    handleNewUsername({ username: cleanedUsername })
+    await handleNewUsername({ username: cleanedUsername })
   }
 
   return (
@@ -64,7 +46,7 @@ const NewUsernameForm = () => {
                     {...field}
                   />
                   <Button
-                    disabled={form.formState.isSubmitting || isLoading}
+                    disabled={form.formState.isSubmitting}
                     type="submit">
                     Submit
                   </Button>

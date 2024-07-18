@@ -15,6 +15,7 @@
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@typescript-eslint/eslint-plugin": "^7.16.1",
+    "apify-client": "^2.9.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",

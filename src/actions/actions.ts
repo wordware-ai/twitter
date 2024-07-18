@@ -2,6 +2,7 @@
 
 import { unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { ApifyClient } from 'apify-client'
 import { eq } from 'drizzle-orm'
 
 import { db } from '@/drizzle/db'
@@ -18,11 +19,14 @@ export const insertUser = async ({ user }: { user: InsertUser }) => {
 }
 
 export const handleNewUsername = async ({ username }: { username: string }) => {
+  //First, check if the user already exist. If yes, just redirect to user's page.
   const user = await getUser({ username })
   if (user) redirect(`/${username}`)
 
+  //If user does not exist, scrape the profile and then redirect to user's page.
   const { data, error } = await scrapeProfile({ username })
 
+  //
   if (data && !error) {
     const user = {
       ...data,
@@ -43,40 +47,34 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
   redirect(`/${data?.username}`)
 }
 
+const apifyClient = new ApifyClient({
+  token: process.env.APIFY_API_KEY,
+})
+
 export const scrapeProfile = async ({ username }: { username: string }) => {
-  const url = `https://api.apify.com/v2/acts/V38PZzpEgOfeeWvZY/run-sync-get-dataset-items?token=${process.env.APIFY_API_KEY}`
-  const headers = {
-    'Content-Type': 'application/json',
-  }
-  const body = {
+  const input = {
     twitterHandles: [username],
     maxItems: 1,
     customMapFunction: '(object) => { return {...object} }',
   }
   try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(body),
-    })
-
-    const data = await response.json()
-    console.log('🟣 | file: actions.ts:63 | scrapeProfile | data:', data)
-    console.log('🟣 | file: actions.ts:63 | scrapeProfile | data:', response)
-
-    const profile = data[0]
+    const run = await apifyClient.actor('apidojo/twitter-user-scraper').call(input)
+    const { items: profiles } = await apifyClient.dataset(run.defaultDatasetId).listItems()
+    const profile = profiles[0]
+    const profilePicture = profile.profilePicture as string
 
     if (!profile || Object.keys(profile).length === 0) throw new Error('No profile found')
 
     return {
       error: null,
       data: {
-        username: profile.userName,
-        url: profile.url,
-        name: profile.name,
-        profilePicture: profile.profilePicture.replace('_normal.', '_400x400.'),
-        description: profile.description,
-        location: profile.location,
+        username: profile.userName as string,
+        url: profile.url as string,
+        name: profile.name as string,
+        profilePicture: profilePicture.replace('_normal.', '_400x400.'),
+        description: profile.description as string,
+        location: profile.location as string,
+        fullProfile: profile as object,
       },
     }
   } catch (error) {
@@ -88,15 +86,7 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
 }
 
 export const scrapeTweets = async ({ username }: { username: string }) => {
-  const url = `https://api.apify.com/v2/acts/61RPP7dywgiy0JPD0/run-sync-get-dataset-items?token=${process.env.APIFY_API_KEY}`
-
-  // Headers for the HTTP request
-  const headers = {
-    'Content-Type': 'application/json',
-  }
-
-  // Prepare the data for the POST request
-  const body = {
+  const input = {
     startUrls: [`https://twitter.com/${username}`],
     maxItems: 40,
     sort: 'Latest',
@@ -126,15 +116,10 @@ export const scrapeTweets = async ({ username }: { username: string }) => {
   }
 
   try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(body),
-    })
-    const data = await response.json()
-    console.log('🟣 | file: actions.ts:114 | scrapeTweets | data:', data)
+    const run = await apifyClient.actor('apidojo/tweet-scraper').call(input)
+    const { items: tweets } = await apifyClient.dataset(run.defaultDatasetId).listItems()
 
-    return { data: data, error: null }
+    return { data: tweets, error: null }
   } catch (error) {
     return {
       data: null,

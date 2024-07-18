@@ -1,5 +1,5 @@
 {
-  "id": "209aef80-46a3-4f8a-9438-bdb4d4bcc389",
+  "id": "44cfa5ac-025b-49ee-862e-eba512358286",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -27,21 +27,14 @@
           "notNull": true,
           "default": "now()"
         },
-        "profileScraped": {
-          "name": "profileScraped",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": false
-        },
         "name": {
           "name": "name",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "profilePicture": {
-          "name": "profilePicture",
+        "profile_picture": {
+          "name": "profile_picture",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -57,6 +50,53 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "error": {
+          "name": "error",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "full_profile": {
+          "name": "full_profile",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "profile_scraped": {
+          "name": "profile_scraped",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "tweet_scrape_started": {
+          "name": "tweet_scrape_started",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "tweet_scrape_completed": {
+          "name": "tweet_scrape_completed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "wordware_started": {
+          "name": "wordware_started",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "wordware_completed": {
+          "name": "wordware_completed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
         }
       },
       "indexes": {},

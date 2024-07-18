@@ -12,7 +12,7 @@ const ScrapeTweets = ({ username }: { username: string }) => {
   }
   return (
     <div>
-      <pre>{JSON.stringify(tweets, null, 2)}</pre>
+      <pre className="whitespace-pre-wrap">{JSON.stringify(tweets, null, 2)}</pre>
       <button onClick={handleScrape}>Scrape</button>
     </div>
   )
