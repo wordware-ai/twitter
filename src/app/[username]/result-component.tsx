@@ -45,7 +45,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
           tweetScrapeCompleted: true,
         }))
       }
-      if (!user.wordwareStarted) {
+      if (user.tweetScrapeCompleted && !user.wordwareStarted) {
         setSteps((prev) => ({
           ...prev,
           wordwareStarted: true,

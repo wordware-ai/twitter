@@ -2,6 +2,7 @@ import React from 'react'
 import { IconType } from 'react-icons'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { cn } from '@/lib/utils'
 
 type ContentItem = {
   title: string
@@ -53,6 +54,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ title, icon: Icon, content,
     return null
   }
 
+  const backgroundColor = `bg-${color}-500`
   const gradientClass = `bg-gradient-to-b from-white to-${color}-50`
   if (!content) return null
 
@@ -61,7 +63,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ title, icon: Icon, content,
       style={{
         gridColumn: `span ${colSpan}`,
       }}
-      className={`relative w-full overflow-hidden rounded-2xl bg-transparent bg-white pb-2 pt-2`}>
+      className={cn(`relative w-full overflow-hidden rounded-2xl bg-transparent pb-2 pt-2`, backgroundColor)}>
       <CardHeader className="flex w-full flex-col items-start p-4 pb-2 pl-8 pr-8">
         <CardTitle className="flex items-center py-2 pb-4 text-2xl">
           <span className={`text-xl font-light ${colorClass}`}>{title}</span>
