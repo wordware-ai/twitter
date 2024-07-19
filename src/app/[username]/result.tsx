@@ -2,7 +2,6 @@
 
 import {
   PiBarbell,
-  PiBrain,
   PiChatTeardrop,
   PiFire,
   PiFlame,
@@ -14,17 +13,15 @@ import {
   PiPawPrint,
   PiPlant,
   PiRocket,
-  PiSmiley,
   PiStar,
   PiUsers,
   PiWallet,
 } from 'react-icons/pi'
 
-import { Card, CardContent } from '@/components/ui/card'
-
 import AnalysisCard from './analysis-card'
 
 export type TwitterAnalysis = {
+  [key: string]: string | { title: string; subtitle: string }[] | string[] | undefined
   about?: string
   strengths?: {
     title: string
@@ -83,8 +80,6 @@ export default function Result({ userData }: { userData: TwitterAnalysis | undef
           />
         ))}
       </div>
-
-      {/* <Footer /> */}
     </div>
   )
 }

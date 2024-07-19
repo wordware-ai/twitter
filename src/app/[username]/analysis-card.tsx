@@ -61,10 +61,10 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ title, icon: Icon, content,
       style={{
         gridColumn: `span ${colSpan}`,
       }}
-      className={`relative w-full overflow-hidden bg-transparent pb-2 pt-2`}>
+      className={`relative w-full overflow-hidden rounded-2xl bg-transparent bg-white pb-2 pt-2`}>
       <CardHeader className="flex w-full flex-col items-start p-4 pb-2 pl-8 pr-8">
         <CardTitle className="flex items-center py-2 pb-4 text-2xl">
-          <span className={`font-semibold ${colorClass}`}>{title}</span>
+          <span className={`text-xl font-light ${colorClass}`}>{title}</span>
           <Icon
             className="ml-3 mr-3"
             size={26}

@@ -27,7 +27,7 @@ const Page = async ({ params }: { params: { username: string } }) => {
   const processedDescription = extractDescription({ fullProfile: data.fullProfile })
 
   return (
-    <div className="flex w-full flex-col items-center">
+    <div className="flex-center relative w-full flex-col gap-12 p-4 sm:p-12 md:p-24">
       <DotPattern className={cn('-z-50 [mask-image:radial-gradient(300px_circle_at_center,white,transparent)]')} />
       <div className="flex-center flex-col gap-6 py-12">
         <div className="text-center text-xl font-bold">Let&apos;s see what stars think about you...</div>
