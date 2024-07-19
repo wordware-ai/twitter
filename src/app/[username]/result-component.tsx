@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { PiCheckCircle, PiCircle, PiSpinner } from 'react-icons/pi'
 
 import { processScrapedUser } from '@/actions/actions'
@@ -27,8 +27,11 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
   })
 
   const [result, setResult] = useState<TwitterAnalysis | undefined>((user.analysis as TwitterAnalysis) || undefined)
+  const effectRan = useRef(false)
 
   useEffect(() => {
+    if (effectRan.current) return
+    effectRan.current = true
     ;(async () => {
       let tweets = user.tweets
       if (!user.tweetScrapeStarted) {
@@ -101,7 +104,6 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
 
   return (
     <div>
-      {/* <pre className="whitespace-pre-wrap text-xs">{JSON.stringify(steps, null, 2)}</pre> */}
       <div className="flex-center w-full gap-4">
         <div className="flex-center flex-col">
           <div>
@@ -166,8 +168,6 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
           <div>Wordware</div>
         </div>
       </div>
-
-      <pre className="whitespace-pre-wrap">{JSON.stringify(result, null, 2)}</pre>
 
       <Result userData={result} />
     </div>

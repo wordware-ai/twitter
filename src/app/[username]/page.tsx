@@ -1,4 +1,6 @@
 import { getUser } from '@/actions/actions'
+import DotPattern from '@/components/ui/dot-pattern'
+import { cn } from '@/lib/utils'
 
 import ResultComponent from './result-component'
 
@@ -26,6 +28,7 @@ const Page = async ({ params }: { params: { username: string } }) => {
 
   return (
     <div className="flex w-full flex-col items-center">
+      <DotPattern className={cn('-z-50 [mask-image:radial-gradient(300px_circle_at_center,white,transparent)]')} />
       <div className="flex-center flex-col gap-6 py-12">
         <div className="text-center text-xl font-bold">Let&apos;s see what stars think about you...</div>
         <div className="flex gap-4">

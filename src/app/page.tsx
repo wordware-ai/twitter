@@ -6,7 +6,7 @@ import Quote from '@/components/quote'
 const Page = () => {
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
-      <div className="flex flex-col justify-between bg-[#F9FAFB] p-8 pl-8 pt-16 md:block md:w-1/2 md:pl-14 md:pt-28">
+      <div className="flex flex-col justify-center bg-[#F9FAFB] p-8 md:w-1/2">
         <div>
           <h1 className="mb-8 text-4xl md:text-5xl 2xl:text-6xl">
             discover your <br />
