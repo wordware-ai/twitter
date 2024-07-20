@@ -6,6 +6,9 @@ import Quote from '@/components/quote'
 
 import TopList from './top-list'
 
+export const maxDuration = 300
+export const dynamic = 'force-dynamic'
+
 const Page = () => {
   return (
     <section>

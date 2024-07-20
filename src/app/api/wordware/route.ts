@@ -1,5 +1,7 @@
 import { getUser, updateUser } from '@/actions/actions'
 
+export const maxDuration = 300
+
 export async function POST(request: Request) {
   const { username } = await request.json()
 
