@@ -30,7 +30,7 @@ const Page = async ({ params }: { params: { username: string } }) => {
     <div className="flex-center relative min-h-screen w-full flex-col bg-[#F9FAFB] p-4 sm:p-12 md:p-24">
       {/* <DotPattern className={cn('-z-50 [mask-image:radial-gradient(300px_circle_at_center,white,transparent)]')} /> */}
       <div className="flex-center flex-col gap-6 py-12">
-        <div className="text-center text-xl font-bold">Let&apos;s see what stars think about you...</div>
+        <div className="text-center text-xl font-light">Let&apos;s see what stars think about you...</div>
         <div className="flex gap-4">
           <div className="flex-center grow">
             <img
@@ -51,6 +51,7 @@ const Page = async ({ params }: { params: { username: string } }) => {
           </div>
         </div>
       </div>
+
       <ResultComponent user={data} />
     </div>
   )

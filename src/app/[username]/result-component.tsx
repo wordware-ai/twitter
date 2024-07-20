@@ -1,9 +1,11 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { PiCheckCircle, PiCircle, PiSpinner } from 'react-icons/pi'
+import { PiCheckCircle, PiCircle, PiSpinner, PiXLogo } from 'react-icons/pi'
 
 import { processScrapedUser } from '@/actions/actions'
+import WordwareLogo from '@/components/logo'
+import { Button } from '@/components/ui/button'
 import { SelectUser } from '@/drizzle/schema'
 import { parsePartialJson } from '@/lib/parse-partial-json'
 
@@ -105,7 +107,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
   }
 
   return (
-    <div className="flex-center flex-col gap-4">
+    <div className="flex-center flex-col gap-8">
       <div className="flex-center w-full max-w-[280px] flex-col gap-4">
         <div className="flex-center w-full gap-4">
           {steps.profileScraped ? (
@@ -164,9 +166,63 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
             />
           )}
 
-          <div>Defining your future </div>
+          <div>Creating your Personality</div>
         </div>
       </div>
+      <div className="flex flex-col gap-6">
+        <h2 className="flex-center mt-6 gap-4 text-xl font-light">
+          Your Twitter Personality, created with
+          <a
+            href="https://wordware.ai/"
+            target="_blank">
+            <WordwareLogo
+              color="black"
+              width={134}
+            />
+          </a>
+        </h2>
+        <div className="flex-center gap-4">
+          <Button asChild>
+            <a
+              target="_blank"
+              className="flex-center gap-2"
+              href={`https://twitter.com/${user.username}`}>
+              <PiXLogo /> Profile
+            </a>
+          </Button>
+          {result?.about && (
+            <Button asChild>
+              <a
+                target="_blank"
+                className="flex-center gap-2"
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`AI says this is my Twitter Personality: 👀
+
+${result?.about}
+
+What's yours?
+
+https://twitter.wordware.ai/${user.username}`)}`}>
+                <PiXLogo /> Share
+              </a>
+            </Button>
+          )}
+
+          <Button asChild>
+            <a
+              className="flex-center gap-2"
+              target="_blank"
+              href="https://wordware.ai/">
+              <WordwareLogo
+                emblemOnly
+                color="white"
+                width={20}
+              />
+              Wordware
+            </a>
+          </Button>
+        </div>
+      </div>
+
       <Result userData={result} />
     </div>
   )

@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
 
+import WordwareLogo from '@/components/logo'
 import NewUsernameForm from '@/components/new-username-form'
 import Quote from '@/components/quote'
 
@@ -25,6 +26,17 @@ const Page = () => {
               </span>
               personality
             </h1>
+            <h2 className="flex items-center gap-4">
+              Built with{' '}
+              <a
+                href="https://wordware.ai/"
+                target="_blank">
+                <WordwareLogo
+                  color="black"
+                  width={134}
+                />
+              </a>
+            </h2>
 
             <div className="mb-8 flex items-center pt-2">
               <Suspense>

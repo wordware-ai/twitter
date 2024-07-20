@@ -46,29 +46,19 @@ export type TwitterAnalysis = {
   career?: string
   lifeSuggestion?: string
   roast?: string
+  emojis?: string
 }
 
 export default function Result({ userData }: { userData: TwitterAnalysis | undefined }) {
   return (
     <div className="w-full max-w-6xl">
-      <div className="mb-16 mt-12 text-center">
+      <div className="text-center text-4xl tracking-widest">{userData?.emojis}</div>
+      <div className="mb-16 mt-6 text-center">
         <div className="flex-center w-full">
-          <div className="w-full max-w-lg text-lg italic">
+          <div className="w-full max-w-xl text-lg font-light">
             <Markdown content={userData?.about || ''} />
           </div>
         </div>
-
-        {/* <div className="mx-auto mt-10 px-5 py-10 text-center md:text-left">
-          <div className="w-full border-t border-gray-300" />
-          <div className="mt-10 flex flex-col items-center justify-between md:flex-row">
-            <h3 className="mb-6 text-base font-normal md:text-lg">Would you like to get your own profile? try here</h3>
-            <a
-              href="https://twitter.wordware.ai/"
-              className="w-full rounded-none bg-black px-4 py-2 text-xs font-semibold text-white">
-              try with your own twitter!
-            </a>
-          </div>
-        </div> */}
       </div>
 
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
