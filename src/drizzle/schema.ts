@@ -1,4 +1,4 @@
-import { boolean, jsonb, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core'
+import { boolean, integer, jsonb, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core'
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -12,6 +12,7 @@ export const users = pgTable('users', {
   fullProfile: jsonb('full_profile'),
   tweets: jsonb('tweets'),
   analysis: jsonb('analysis'),
+  followers: integer('followers'),
 
   //Statuses
   profileScraped: boolean('profile_scraped').default(false),

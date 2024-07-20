@@ -1,6 +1,7 @@
 import React from 'react'
 import { IconType } from 'react-icons'
 
+import { Markdown } from '@/components/markdown'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 
@@ -24,7 +25,11 @@ interface AnalysisCardProps {
 const AnalysisCard: React.FC<AnalysisCardProps> = ({ title, icon: Icon, content, colorClass, color, wide = false, bg }) => {
   const renderContent = () => {
     if (typeof content === 'string') {
-      return <p className="space-y-2 pl-4 pr-4">{content}</p>
+      return (
+        <p className="space-y-2 pl-4 pr-4">
+          <Markdown content={content || ''} />
+        </p>
+      )
     } else if (Array.isArray(content)) {
       return (
         <ul className="list-none space-y-2 pl-4 pr-4">

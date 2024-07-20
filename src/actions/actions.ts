@@ -89,6 +89,7 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
         description: profile.description as string,
         location: profile.location as string,
         fullProfile: profile as object,
+        followers: profile.followers as number,
       },
     }
   } catch (error) {

@@ -18,6 +18,8 @@ import {
   PiWallet,
 } from 'react-icons/pi'
 
+import { Markdown } from '@/components/markdown'
+
 import AnalysisCard from './analysis-card'
 
 export type TwitterAnalysis = {
@@ -51,7 +53,9 @@ export default function Result({ userData }: { userData: TwitterAnalysis | undef
     <div className="w-full max-w-6xl">
       <div className="mb-16 mt-12 text-center">
         <div className="flex-center w-full">
-          <div className="w-full max-w-lg text-lg italic">{userData?.about}</div>
+          <div className="w-full max-w-lg text-lg italic">
+            <Markdown content={userData?.about || ''} />
+          </div>
         </div>
 
         {/* <div className="mx-auto mt-10 px-5 py-10 text-center md:text-left">
