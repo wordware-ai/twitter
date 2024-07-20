@@ -17,10 +17,11 @@ interface AnalysisCardProps {
   content: ContentType
   colorClass: string
   color: string
-  colSpan?: number
+  wide?: boolean
+  bg?: string
 }
 
-const AnalysisCard: React.FC<AnalysisCardProps> = ({ title, icon: Icon, content, colorClass, color, colSpan }) => {
+const AnalysisCard: React.FC<AnalysisCardProps> = ({ title, icon: Icon, content, colorClass, color, wide = false, bg }) => {
   const renderContent = () => {
     if (typeof content === 'string') {
       return <p className="space-y-2 pl-4 pr-4">{content}</p>
@@ -54,16 +55,12 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ title, icon: Icon, content,
     return null
   }
 
-  const backgroundColor = `bg-${color}-500`
+  // const backgroundColor = `bg-${color}-50`
   const gradientClass = `bg-gradient-to-b from-white to-${color}-50`
   if (!content) return null
 
   return (
-    <Card
-      style={{
-        gridColumn: `span ${colSpan}`,
-      }}
-      className={cn(`relative w-full overflow-hidden rounded-2xl bg-transparent pb-2 pt-2`, backgroundColor)}>
+    <Card className={cn(`relative w-full overflow-hidden rounded-2xl bg-opacity-5 pb-2 pt-2`, bg, wide && `sm:col-span-2`)}>
       <CardHeader className="flex w-full flex-col items-start p-4 pb-2 pl-8 pr-8">
         <CardTitle className="flex items-center py-2 pb-4 text-2xl">
           <span className={`text-xl font-light ${colorClass}`}>{title}</span>

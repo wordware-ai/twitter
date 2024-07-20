@@ -1,7 +1,8 @@
 import { getUser, updateUser } from '@/actions/actions'
 
 export async function POST(request: Request) {
-  const { tweets, profilePicture, profileInfo, username } = await request.json()
+  const { username } = await request.json()
+
   const user = await getUser({ username })
   if (user.wordwareStarted) {
     return Response.json({ error: 'Wordware already started' })
@@ -21,9 +22,9 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       inputs: {
-        tweets,
-        profilePicture,
-        profileInfo,
+        tweets: user.tweets,
+        profilePicture: user.profilePicture,
+        profileInfo: user.fullProfile,
         version: '^1.4',
       },
     }),

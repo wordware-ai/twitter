@@ -1,4 +1,4 @@
-import { PiGithubLogo } from 'react-icons/pi'
+// import { PiGithubLogo } from 'react-icons/pi'
 
 import { Button } from '@/components/ui/button'
 
@@ -6,7 +6,7 @@ import WordwareLogo from './logo'
 
 const Callout = () => {
   return (
-    <div className="flex-center relative w-full flex-col gap-12 p-4 sm:p-12 md:p-24">
+    <div className="flex-center relative w-full flex-col gap-12 bg-[#F9FAFB] p-4 sm:p-12 md:p-24">
       <h2 className="mb-4 w-full text-center text-2xl text-stone-500 md:text-4xl lg:text-5xl xl:text-6xl">
         This is a <span className="text-black">WordApp</span> - Wordware application
       </h2>
@@ -48,7 +48,7 @@ const Callout = () => {
           variant={'default'}
           asChild>
           <a
-            href="https://app.wordware.ai/r/a80ab6d8-c7a3-4eee-aaab-10d89cfe53db"
+            href="https://app.wordware.ai/share/aa3d8ee8-2042-4237-8e9f-d497844b6d91/playground"
             target="_blank"
             className="flex-center gap-2">
             <WordwareLogo
@@ -60,7 +60,7 @@ const Callout = () => {
           </a>
         </Button>
 
-        <Button
+        {/* <Button
           size={'lg'}
           variant={'secondary'}
           asChild>
@@ -71,7 +71,7 @@ const Callout = () => {
             <PiGithubLogo />
             GitHub Repo
           </a>
-        </Button>
+        </Button> */}
       </div>
     </div>
   )

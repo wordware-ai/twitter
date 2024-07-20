@@ -31,6 +31,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
 
   useEffect(() => {
     if (effectRan.current) return
+    let tweetScrapeCompleted = user.tweetScrapeCompleted
     effectRan.current = true
     ;(async () => {
       let tweets = user.tweets
@@ -44,8 +45,9 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
           ...prev,
           tweetScrapeCompleted: true,
         }))
+        tweetScrapeCompleted = true
       }
-      if (user.tweetScrapeCompleted && !user.wordwareStarted) {
+      if (tweetScrapeCompleted && !user.wordwareStarted) {
         setSteps((prev) => ({
           ...prev,
           wordwareStarted: true,
@@ -90,7 +92,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
         result += decoder.decode(value, { stream: true })
 
         const parsed = parsePartialJson(result) as TwitterAnalysis
-        console.log(parsed)
+
         setResult(parsed)
       }
     } catch (error) {
@@ -103,72 +105,68 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
   }
 
   return (
-    <div>
-      <div className="flex-center w-full gap-4">
-        <div className="flex-center flex-col">
-          <div>
-            {steps.profileScraped ? (
+    <div className="flex-center flex-col gap-4">
+      <div className="flex-center w-full max-w-[280px] flex-col gap-4">
+        <div className="flex-center w-full gap-4">
+          {steps.profileScraped ? (
+            <PiCheckCircle
+              className="text-green-500"
+              size={24}
+            />
+          ) : (
+            <PiCircle
+              className="text-gray-500"
+              size={24}
+            />
+          )}
+
+          <div>Checking who you are</div>
+        </div>
+        <div className="flex-center w-full gap-4">
+          {steps.tweetScrapeStarted ? (
+            steps.tweetScrapeCompleted ? (
               <PiCheckCircle
                 className="text-green-500"
                 size={24}
               />
             ) : (
-              <PiCircle
-                className="text-gray-500"
+              <PiSpinner
+                className="animate-spin text-blue-500"
                 size={24}
               />
-            )}
-          </div>
-          <div>Profile </div>
+            )
+          ) : (
+            <PiCircle
+              className="text-gray-500"
+              size={24}
+            />
+          )}
+
+          <div>Reading your Tweets</div>
         </div>
-        <div className="flex-center flex-col">
-          <div>
-            {steps.tweetScrapeStarted ? (
-              steps.tweetScrapeCompleted ? (
-                <PiCheckCircle
-                  className="text-green-500"
-                  size={24}
-                />
-              ) : (
-                <PiSpinner
-                  className="animate-spin text-blue-500"
-                  size={24}
-                />
-              )
-            ) : (
-              <PiCircle
-                className="text-gray-500"
+        <div className="flex-center w-full gap-4">
+          {steps.wordwareStarted ? (
+            steps.wordwareCompleted ? (
+              <PiCheckCircle
+                className="text-green-500"
                 size={24}
               />
-            )}
-          </div>
-          <div>Tweets</div>
-        </div>
-        <div className="flex-center flex-col">
-          <div>
-            {steps.wordwareStarted ? (
-              steps.wordwareCompleted ? (
-                <PiCheckCircle
-                  className="text-green-500"
-                  size={24}
-                />
-              ) : (
-                <PiSpinner
-                  className="animate-spin text-blue-500"
-                  size={24}
-                />
-              )
             ) : (
-              <PiCircle
-                className="text-gray-500"
+              <PiSpinner
+                className="animate-spin text-blue-500"
                 size={24}
               />
-            )}
-          </div>
-          <div>Wordware</div>
+            )
+          ) : (
+            <PiCircle
+              className="text-gray-500"
+              size={24}
+            />
+          )}
+
+          <div>Defining your future </div>
         </div>
       </div>
-
       <Result userData={result} />
     </div>
   )

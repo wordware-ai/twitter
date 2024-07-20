@@ -62,15 +62,20 @@ const apifyClient = new ApifyClient({
 
 export const scrapeProfile = async ({ username }: { username: string }) => {
   const input = {
+    startUrls: [`https://twitter.com/${username}`],
     twitterHandles: [username],
+    getFollowers: true,
+    getFollowing: true,
     maxItems: 1,
     customMapFunction: '(object) => { return {...object} }',
   }
   try {
     const run = await apifyClient.actor('apidojo/twitter-user-scraper').call(input)
+    console.log('🟣 | file: actions.ts:72 | scrapeProfile | run:', run)
     const { items: profiles } = await apifyClient.dataset(run.defaultDatasetId).listItems()
     const profile = profiles[0]
     const profilePicture = profile.profilePicture as string
+    console.log('🟣 | file: actions.ts:76 | scrapeProfile | profilePicture:', profilePicture)
 
     if (!profile || Object.keys(profile).length === 0) throw new Error('No profile found')
 
