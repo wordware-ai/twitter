@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import Link from 'next/link'
 
 import NewUsernameForm from '@/components/new-username-form'
@@ -23,7 +24,9 @@ const Page = () => {
             </h1>
 
             <div className="mb-8 flex items-center pt-2">
-              <NewUsernameForm />
+              <Suspense>
+                <NewUsernameForm />
+              </Suspense>
             </div>
 
             <p className="mb-8 pt-8 text-base 2xl:text-lg">
