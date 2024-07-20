@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { PiSpinner } from 'react-icons/pi'
@@ -16,10 +17,11 @@ const formSchema = z.object({
 })
 
 const NewUsernameForm = () => {
+  const searchParams = useSearchParams()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: '',
+      username: searchParams.get('u') || '',
     },
   })
 
@@ -43,6 +45,7 @@ const NewUsernameForm = () => {
                 <FormControl>
                   <div className="flex items-center gap-2">
                     <Input
+                      disabled={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
                       className="w-full"
                       placeholder="@username"
                       {...field}

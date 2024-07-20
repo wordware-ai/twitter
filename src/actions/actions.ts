@@ -3,7 +3,7 @@
 import { unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { ApifyClient } from 'apify-client'
-import { eq } from 'drizzle-orm'
+import { desc, eq } from 'drizzle-orm'
 
 import { db } from '@/drizzle/db'
 import { InsertUser, SelectUser, users } from '@/drizzle/schema'
@@ -14,12 +14,19 @@ export const getUser = async ({ username }: { username: SelectUser['username'] }
   return data[0]
 }
 
+export const getTop20 = async () => {
+  noStore()
+  const data = await db.select().from(users).orderBy(desc(users.followers)).limit(40)
+  // const kyzo = await db.select().from(users).where(eq(users.username, 'ky__zo'))
+  // const merged = [...data, ...kyzo]
+  return data
+}
+
 export const insertUser = async ({ user }: { user: InsertUser }) => {
   await db.insert(users).values(user)
 }
 
 export const updateUser = async ({ user }: { user: InsertUser }) => {
-  console.log('🟣 | file: actions.ts:22 | updateUser | user:', user)
   if (!user.username) {
     throw new Error('Username is required for updating a user')
   }
@@ -103,7 +110,7 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
 export const scrapeTweets = async ({ username }: { username: string }) => {
   const input = {
     startUrls: [`https://twitter.com/${username}`],
-    maxItems: 40,
+    maxItems: 20,
     sort: 'Latest',
     tweetLanguage: 'en',
     customMapFunction: `(object) => { 
@@ -122,10 +129,8 @@ export const scrapeTweets = async ({ username }: { username: string }) => {
         isReply: object.isReply,
         fastFollowersCount: object.fastFollowersCount,
         favouritesCount: object.favouritesCount,
-        extendedEntities: object.extendedEntities,
         isRetweet: object.isRetweet,
         isQuote: object.isQuote,
-        media: object.media
       }
     }`,
   }
@@ -133,6 +138,7 @@ export const scrapeTweets = async ({ username }: { username: string }) => {
   try {
     const run = await apifyClient.actor('apidojo/tweet-scraper').call(input)
     const { items: tweets } = await apifyClient.dataset(run.defaultDatasetId).listItems()
+    console.log('🟣 | file: actions.ts:143 | scrapeTweets | tweets:', tweets)
 
     return { data: tweets, error: null }
   } catch (error) {

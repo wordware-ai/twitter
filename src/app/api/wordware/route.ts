@@ -97,6 +97,12 @@ export async function POST(request: Request) {
                 console.log('Analysis saved to database')
               } catch (error) {
                 console.error('Error parsing or saving output:', error)
+                await updateUser({
+                  user: {
+                    ...user,
+                    wordwareStarted: false,
+                  },
+                })
               }
             }
 

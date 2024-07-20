@@ -26,9 +26,9 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ title, icon: Icon, content,
   const renderContent = () => {
     if (typeof content === 'string') {
       return (
-        <p className="space-y-2 pl-4 pr-4">
+        <div className="space-y-2 pl-4 pr-4">
           <Markdown content={content || ''} />
-        </p>
+        </div>
       )
     } else if (Array.isArray(content)) {
       return (
