@@ -2,7 +2,8 @@ import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next/types'
 
 import { getUser, getUsers } from '@/actions/actions'
-import { getURL } from '@/lib/config'
+
+// import { getURL } from '@/lib/config'
 
 import ResultComponent from './result-component'
 
