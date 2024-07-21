@@ -81,7 +81,7 @@ export async function generateMetadata({ params }: { params: { username?: string
   const name = user.name || ''
   const username = user.username || ''
   const picture = user.profilePicture || ''
-  const about = (user.analysis as any).about || ''
+  const about = (user.analysis as any).about.replace('*', '') || ''
   const emojis = (user.analysis as any).emojis || ''
 
   imageParams.set('name', name)
