@@ -196,7 +196,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
                 target="_blank"
                 className="flex-center gap-2"
                 href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`AI says this is my Twitter Personality: 👀
-
+${result?.emojis}
 ${result?.about}
 
 What's yours?

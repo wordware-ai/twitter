@@ -14,6 +14,12 @@ export const getUser = async ({ username }: { username: SelectUser['username'] }
   return data[0]
 }
 
+export const getUsers = async () => {
+  noStore()
+  const data = await db.select().from(users)
+  return data
+}
+
 export const getTop20 = async () => {
   noStore()
   const data = await db.select().from(users).orderBy(desc(users.followers)).limit(40)

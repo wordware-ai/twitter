@@ -1,8 +1,11 @@
 import { redirect } from 'next/navigation'
 
-import { getUser } from '@/actions/actions'
+import { getUser, getUsers } from '@/actions/actions'
 
 import ResultComponent from './result-component'
+
+export const maxDuration = 300
+export const dynamic = 'force-dynamic'
 
 const Page = async ({ params }: { params: { username: string } }) => {
   const data = await getUser({ username: params.username })
@@ -58,3 +61,10 @@ const Page = async ({ params }: { params: { username: string } }) => {
 }
 
 export default Page
+
+export async function generateStaticParams() {
+  const users = await getUsers()
+  return users.map((user) => ({
+    username: user.username,
+  }))
+}
