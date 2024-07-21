@@ -77,24 +77,28 @@ export async function generateMetadata({ params }: { params: { username?: string
   if (user == null) notFound()
   const imageParams = new URLSearchParams()
 
-  const description = user.description ?? ''
   const name = user.name || ''
   const username = user.username || ''
+  const picture = user.profilePicture || ''
+  const about = (user.analysis as any).about || ''
+  const emojis = (user.analysis as any).emojis || ''
 
   imageParams.set('name', name)
   imageParams.set('username', username)
-  imageParams.set('description', description)
+  imageParams.set('picture', picture)
+  imageParams.set('about', about)
+  imageParams.set('emojis', emojis)
 
   const image = {
     alt: 'Banner',
-    url: `${process.env.BASE_URL}/api/og/craftgen?${imageParams.toString()}`,
+    url: `${process.env.BASE_URL}/api/og?${imageParams.toString()}`,
     width: 1200,
     height: 630,
   }
 
   return {
     title: name,
-    description: description,
+    description: `Check out ${name}'s Twitter Personality.`,
     openGraph: {
       url: `/${username}`,
       images: image,
