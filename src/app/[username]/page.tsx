@@ -1,4 +1,5 @@
-import { redirect } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
+import { Metadata } from 'next/types'
 
 import { getUser, getUsers } from '@/actions/actions'
 
@@ -67,4 +68,39 @@ export async function generateStaticParams() {
   return users.map((user) => ({
     username: user.username,
   }))
+}
+
+export async function generateMetadata({ params }: { params: { username?: string } }) {
+  if (!params.username) return notFound()
+  const user = await getUser({ username: params.username })
+
+  if (user == null) notFound()
+  const imageParams = new URLSearchParams()
+
+  const description = user.description ?? ''
+  const name = user.name || ''
+  const username = user.username || ''
+
+  imageParams.set('name', name)
+  imageParams.set('username', username)
+  imageParams.set('description', description)
+
+  const image = {
+    alt: 'Banner',
+    url: `${process.env.BASE_URL}/api/og/craftgen?${imageParams.toString()}`,
+    width: 1200,
+    height: 630,
+  }
+
+  return {
+    title: name,
+    description: description,
+    openGraph: {
+      url: `/${username}`,
+      images: image,
+    },
+    twitter: {
+      images: image,
+    },
+  } satisfies Metadata
 }
