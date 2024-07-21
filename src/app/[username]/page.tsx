@@ -2,6 +2,7 @@ import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next/types'
 
 import { getUser, getUsers } from '@/actions/actions'
+import { getURL } from '@/lib/config'
 
 import ResultComponent from './result-component'
 
@@ -91,7 +92,8 @@ export async function generateMetadata({ params }: { params: { username?: string
 
   const image = {
     alt: 'Banner',
-    url: `${process.env.BASE_URL}/api/og?${imageParams.toString()}`,
+    url: `/api/og?${imageParams.toString()}`,
+    // url: `${getURL()}/api/og?${imageParams.toString()}`,
     width: 1200,
     height: 630,
   }
