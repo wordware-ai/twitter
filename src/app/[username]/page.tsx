@@ -79,11 +79,11 @@ export async function generateMetadata({ params }: { params: { username?: string
   if (user == null) notFound()
   const imageParams = new URLSearchParams()
 
-  const name = user.name || ''
-  const username = user.username || ''
-  const picture = user.profilePicture || ''
+  const name = user?.name || ''
+  const username = user?.username || ''
+  const picture = user?.profilePicture || ''
   const about = ((user.analysis as any)?.about?.replace('*', '') || '').trim()
-  const emojis = (user.analysis as any).emojis || ''
+  const emojis = ((user.analysis as any)?.emojis || '').trim()
 
   imageParams.set('name', name)
   imageParams.set('username', username)
