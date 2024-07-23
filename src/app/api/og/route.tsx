@@ -131,7 +131,7 @@ function generateOG({
   }
 
   return (
-    <div tw="flex flex-col w-full h-full p-12 bg-gray-100 ">
+    <div tw="flex flex-col w-full h-full p-6 bg-gray-100 ">
       <div tw={`flex flex-col bg-white relative h-full border rounded-2xl pb-12 px-12 pt-6 bg-opacity-10 ${bgClass}`}>
         <div tw="flex justify-end absolute top-10 right-10 items-center ">
           {picture && (
@@ -143,7 +143,7 @@ function generateOG({
           )}
           <div tw="flex ml-6 flex-col items-start justify-center ">
             <div tw="font-bold text-2xl">{name}</div>
-            <div tw="text-xl">{username}</div>
+            <div tw="text-xl">@{username}</div>
           </div>
         </div>
 
