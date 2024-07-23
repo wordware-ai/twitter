@@ -94,11 +94,11 @@ function generateOG({
                 key={index}
                 tw="flex flex-col">
                 {typeof item === 'string' ? (
-                  <div tw="text-xl">{item}</div>
+                  <div tw="text-2xl">{item}</div>
                 ) : (
-                  <div tw="flex items-center ">
-                    <div tw="text-2xl font-semibold">{item.title}</div>
-                    <div tw="text-xl ml-4 text-gray-800">{item.subtitle?.replace('*', '')}</div>
+                  <div tw="flex mt-2 items-center ">
+                    <div tw="text-3xl font-semibold">{item.title}</div>
+                    <div tw="text-2xl ml-4 text-gray-800">{item.subtitle?.replace('*', '')}</div>
                   </div>
                 )}
               </div>
@@ -107,10 +107,10 @@ function generateOG({
         )
       } else if (typeof parsedContent === 'object') {
         return (
-          <ul tw="list-none space-y-2 text-lg">
+          <ul tw="list-none space-y-2 ">
             {Object.entries(parsedContent).map(([key, value], index) => (
               <li key={index}>
-                <span tw="font-semibold text-4xl">{key}:</span> {typeof value === 'string' ? value.replace('*', '') : ''}
+                <span tw="font-semibold text-3xl">{key}:</span> {typeof value === 'string' ? value.replace('*', '') : ''}
               </li>
             ))}
           </ul>
@@ -122,7 +122,7 @@ function generateOG({
     }
 
     // Default case: treat content as a string
-    return <div tw="text-4xl whitespace-pre-wrap">{content?.replace('*', '')}</div>
+    return <div tw="text-3xl whitespace-pre-wrap">{content?.replace('*', '')}</div>
   }
 
   return (
