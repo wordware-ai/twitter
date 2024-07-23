@@ -147,7 +147,7 @@ export async function generateMetadata({ params, searchParams }: { params: { use
   imageParams.set('name', name)
   imageParams.set('username', username)
   imageParams.set('picture', picture)
-  imageParams.set('content', content)
+  imageParams.set('content', typeof content === 'string' ? content : JSON.stringify(content))
   imageParams.set('emojis', emojis)
   imageParams.set('section', section)
 
