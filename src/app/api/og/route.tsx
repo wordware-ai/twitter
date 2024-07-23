@@ -103,8 +103,7 @@ function generateOG({
                 ) : (
                   <div tw="flex mt-4 items-start">
                     <div tw="text-2xl font-semibold w-1/4">{item.title}</div>
-
-                    <div tw="text-2xl ml-4 text-gray-800 w-3/4">{item.subtitle?.replace('*', '')}</div>
+                    <div tw="text-2xl ml-4 text-gray-800 w-3/4">{item.subtitle?.replace(/\*/g, '')}</div>
                   </div>
                 )}
               </div>
@@ -116,7 +115,7 @@ function generateOG({
           <ul tw="list-none space-y-2 ">
             {Object.entries(parsedContent).map(([key, value], index) => (
               <li key={index}>
-                <span tw="font-semibold text-3xl">{key}:</span> {typeof value === 'string' ? value.replace('*', '') : ''}
+                <span tw="font-semibold text-3xl">{key}:</span> {typeof value === 'string' ? value.replace(/\*/g, '') : ''}
               </li>
             ))}
           </ul>
@@ -128,12 +127,12 @@ function generateOG({
     }
 
     // Default case: treat content as a string
-    return <div tw="text-3xl whitespace-pre-wrap">{content?.replace('*', '')}</div>
+    return <div tw="text-3xl whitespace-pre-wrap">{content?.replace(/\*/g, '')}</div>
   }
 
   return (
     <div tw="flex flex-col w-full h-full p-12 bg-gray-100 ">
-      <div tw={`flex flex-col bg-white relative h-full border rounded-2xl pb-12 px-12 pt-6 bg-opacity-20 ${bgClass}`}>
+      <div tw={`flex flex-col bg-white relative h-full border rounded-2xl pb-12 px-12 pt-6 bg-opacity-10 ${bgClass}`}>
         <div tw="flex justify-end absolute top-10 right-10 items-center ">
           {picture && (
             <img
