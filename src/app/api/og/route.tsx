@@ -191,8 +191,8 @@ import { PiRobot } from 'react-icons/pi'
 import { cardData } from '@/app/[username]/config'
 
 export const runtime = 'edge'
-const light = fetch(new URL('./Inter-light.ttf', import.meta.url)).then((res) => res.arrayBuffer())
-const bold = fetch(new URL('./Inter-semiBold.ttf', import.meta.url)).then((res) => res.arrayBuffer())
+const light = fetch(new URL('./Inter-Light.ttf', import.meta.url)).then((res) => res.arrayBuffer())
+const bold = fetch(new URL('./Inter-SemiBold.ttf', import.meta.url)).then((res) => res.arrayBuffer())
 
 /**
  * Handles GET requests to generate Open Graph images.
