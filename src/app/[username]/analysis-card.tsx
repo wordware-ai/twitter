@@ -80,7 +80,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ title, icon: Icon, content,
             />
           </div>
           <Button
-            // size={'md'}
+            size={'sm'}
             variant={'ghost'}
             className="border border-transparent transition-all duration-100 hover:border-black hover:bg-transparent"
             asChild>

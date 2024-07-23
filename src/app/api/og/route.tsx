@@ -73,11 +73,23 @@ function generateOG({
                 key={index}
                 tw="flex flex-col">
                 {typeof item === 'string' ? (
-                  <div tw="text-2xl">{item}</div>
+                  <div
+                    tw="text-2xl"
+                    style={{ fontWeight: 300 }}>
+                    {item}
+                  </div>
                 ) : (
                   <div tw="flex mt-4 items-start">
-                    <div tw="text-2xl font-semibold w-1/4">{item.title}</div>
-                    <div tw="text-2xl ml-4 text-gray-800 w-3/4">{item.subtitle?.replace(/\*/g, '')}</div>
+                    <div
+                      tw="text-2xl w-1/4"
+                      style={{ fontWeight: 300 }}>
+                      {item.title}
+                    </div>
+                    <div
+                      tw="text-2xl ml-4 text-gray-800 w-3/4"
+                      style={{ fontWeight: 300 }}>
+                      {item.subtitle?.replace(/\*/g, '')}
+                    </div>
                   </div>
                 )}
               </div>
@@ -89,7 +101,12 @@ function generateOG({
           <ul tw="list-none space-y-2 ">
             {Object.entries(parsedContent).map(([key, value], index) => (
               <li key={index}>
-                <span tw="font-semibold text-3xl">{key}:</span> {typeof value === 'string' ? value.replace(/\*/g, '') : ''}
+                <span
+                  tw="text-3xl"
+                  style={{ fontWeight: 300 }}>
+                  {key}:
+                </span>{' '}
+                {typeof value === 'string' ? value.replace(/\*/g, '') : ''}
               </li>
             ))}
           </ul>
@@ -101,7 +118,13 @@ function generateOG({
     }
 
     // Default case: treat content as a string
-    return <div tw="text-3xl ">{content?.length > 500 ? content.slice(0, 500).replace(/\*/g, '') + '...' : content?.replace(/\*/g, '')}</div>
+    return (
+      <div
+        tw="text-3xl"
+        style={{ fontWeight: 300 }}>
+        {content?.length > 500 ? content.slice(0, 500).replace(/\*/g, '') + '...' : content?.replace(/\*/g, '')}
+      </div>
+    )
   }
 
   return (
