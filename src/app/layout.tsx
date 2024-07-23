@@ -14,7 +14,7 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata = {
   metadataBase: new URL(getURL()),
   title: {
-    template: `%s • Twitter Personality`,
+    template: `%s • AI Agent Twitter Personality`,
     default: siteMetadata.title,
   },
   description: siteMetadata.description,
@@ -56,6 +56,7 @@ export default function RootLayout({
         {children}
         <Callout />
         <Footer />
+        {/* To-do add buttons for duplicate agents + repo + newslette loops */}
       </body>
     </html>
   )

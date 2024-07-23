@@ -7,7 +7,7 @@ import WordwareLogo from './logo'
 const Callout = () => {
   return (
     <div className="flex-center relative w-full flex-col gap-12 bg-[#F9FAFB] p-4 sm:p-12 md:p-24">
-      <h2 className="mb-4 w-full text-center text-3xl text-stone-500 md:text-5xl lg:text-6xl xl:text-7xl">
+      <h2 className="mb-4 w-full text-center text-2xl text-stone-500 md:text-4xl lg:text-5xl xl:text-6xl">
         This is a <span className="text-black">WordApp</span> - Wordware application
       </h2>
 

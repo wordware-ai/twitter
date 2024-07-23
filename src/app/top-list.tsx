@@ -13,7 +13,7 @@ const TopList = async () => {
           <Link
             href={`/${user.username}`}
             key={user.id}
-            className="block rounded-lg bg-white p-4 shadow-[5px_5px_30px_rgba(190,190,190,0.15),-5px_-5px_30px_rgba(255,255,255,0.15)] transition-all duration-100 hover:shadow-[5px_5px_30px_rgba(190,190,190,0.3),-5px_-5px_30px_rgba(255,255,255,0.3)]">
+            className="block border rounded-lg bg-white p-4 shadow-[5px_5px_30px_rgba(190,190,190,0.15),-5px_-5px_30px_rgba(255,255,255,0.15)] transition-all duration-100 hover:shadow-[5px_5px_30px_rgba(190,190,190,0.3),-5px_-5px_30px_rgba(255,255,255,0.3)]">
             <div className="flex w-full items-center gap-4">
               <img
                 src={user.profilePicture || ''}

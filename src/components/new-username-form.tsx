@@ -46,14 +46,14 @@ const NewUsernameForm = () => {
                   <div className="flex items-center">
                     <Input
                       disabled={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
-                      className="w-full rounded-none border-black"
+                      className="w-full rounded-l-sm rounded-r-none border-black"
                       placeholder="@username"
                       {...field}
                     />
                     <Button
                       disabled={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
                       type="submit"
-                      className="rounded-none">
+                      className="rounded-r-sm rounded-l-none">
                       Discover
                     </Button>
                   </div>

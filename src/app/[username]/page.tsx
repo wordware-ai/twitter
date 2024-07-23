@@ -6,6 +6,9 @@ import { getUser, getUsers } from '@/actions/actions'
 // import { getURL } from '@/lib/config'
 
 import ResultComponent from './result-component'
+import WordwareLogo from '@/components/logo'
+import { Button } from '@/components/ui/button'
+import { PiXLogo } from 'react-icons/pi'
 
 export const maxDuration = 300
 export const dynamic = 'force-dynamic'
@@ -34,9 +37,60 @@ const Page = async ({ params }: { params: { username: string } }) => {
 
   return (
     <div className="flex-center relative min-h-screen w-full flex-col bg-[#F9FAFB] p-4 sm:p-12 md:p-24">
+      <div className='fixed top-0 h-12 w-full border-b bg-white/80 backdrop-blur-sm z-50 flex-center shadow-[5px_5px_30px_rgba(190,190,190,0.15),-5px_-5px_30px_rgba(255,255,255,0.15)]'>
+        <div className='flex items-center justify-between px-12  w-full'>
+        <div className="flex items-center gap-2">
+              This agent has been built with 
+              <a
+                href="https://wordware.ai/"
+                target="_blank">
+                <WordwareLogo
+                  color="black"
+                  width={134}
+                />
+              </a>
+            </div>
+        <div className='flex-center gap-2'>
+        
+        <Button
+        size={'sm'}
+          variant={'default'}
+          asChild>
+          <a
+            href="https://app.wordware.ai/share/aa3d8ee8-2042-4237-8e9f-d497844b6d91/playground"
+            target="_blank"
+            className="flex-center gap-2">
+            <WordwareLogo
+              emblemOnly
+              color={'white'}
+              width={12}
+            />
+            Duplicate Project
+          </a>
+        </Button>
+        <Button
+        size={'sm'}
+          variant={'outline'}
+          asChild>
+          <a
+            href="https://x.com/wordware_ai"
+            target="_blank"
+            className="flex-center gap-2">
+            <PiXLogo size={18} /> Follow us
+            
+          </a>
+        </Button>
+        </div>
+        
+
+        </div>
+      
+
+      </div>
       {/* <DotPattern className={cn('-z-50 [mask-image:radial-gradient(300px_circle_at_center,white,transparent)]')} /> */}
       <div className="flex-center flex-col gap-6 py-12">
-        <div className="text-center text-xl font-light">Here&apos;s the AI analysis of your personality...</div>
+        <div className="text-center text-xl font-light">Here&apos;s the <span className='font-medium'>AI agent</span> analysis of your personality...</div>
+        
         <div className="flex gap-4">
           <div className="flex-center grow">
             <img
