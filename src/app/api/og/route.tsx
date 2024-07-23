@@ -126,9 +126,9 @@ function generateOG({
   }
 
   return (
-    <div tw="flex flex-col w-full h-full p-12 bg-gray-100 ">
+    <div tw="flex flex-col w-full h-full p-16 bg-gray-100 ">
       <div tw={`flex flex-col bg-white relative h-full border rounded-2xl pb-12 px-12 pt-6 bg-opacity-20 ${bgClass}`}>
-        <div tw="flex justify-end absolute top-8 right-8 items-center ">
+        <div tw="flex justify-end absolute top-12 right-12 items-center ">
           {picture && (
             <img
               src={picture}
