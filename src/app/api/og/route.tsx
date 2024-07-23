@@ -5,31 +5,7 @@ import { PiRobot } from 'react-icons/pi'
 import { cardData } from '@/app/[username]/config'
 
 export const runtime = 'edge'
-
-// const strengths = [
-//   {
-//     title: 'Visionary Leadership',
-//     subtitle: 'Guides Supabase with innovative ideas and strategic thinking',
-//   },
-//   {
-//     title: 'Open-Source Advocate',
-//     subtitle: 'Strongly supports and contributes to the open-source community',
-//   },
-//   {
-//     title: 'Technical Expertise',
-//     subtitle: 'Deep knowledge of databases, particularly PostgreSQL',
-//   },
-//   {
-//     title: 'Community Builder',
-//     subtitle: 'Fosters a strong developer community around Supabase',
-//   },
-//   {
-//     title: 'Entrepreneurial Spirit',
-//     subtitle: 'Successfully navigates the startup ecosystem',
-//   },
-// ]
-
-// "loveLife": "The stars align for a partnership with someone who shares your passion for innovation and growth. Look for a partner who challenges your ideas and brings a fresh perspective to your tech-centric world. Their complementary skills in areas like design or business strategy could create a power couple dynamic that propels both of you to new heights.",
+// export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl

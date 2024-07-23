@@ -1,7 +1,8 @@
 import { Suspense } from 'react'
+import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next/types'
-import { PiXLogo } from 'react-icons/pi'
+import { PiCaretLeft, PiXLogo } from 'react-icons/pi'
 
 import { getUser, getUsers } from '@/actions/actions'
 import WordwareLogo from '@/components/logo'
@@ -39,7 +40,20 @@ const Page = async ({ params }: { params: { username: string } }) => {
     <div className="flex-center relative min-h-screen w-full flex-col gap-12 bg-[#F9FAFB] px-4 py-28 sm:px-12 md:px-28 md:pt-24">
       <div className="flex-center fixed top-0 z-50 w-full border-b bg-white/80 py-2 shadow-[5px_5px_30px_rgba(190,190,190,0.15),-5px_-5px_30px_rgba(255,255,255,0.15)] backdrop-blur-sm">
         <div className="flex w-full flex-col items-center justify-between gap-4 px-2 md:flex-row md:px-12">
-          <div className="flex items-center gap-2">
+          <div className="flex w-full">
+            <Button
+              size={'sm'}
+              variant={'outline'}
+              asChild>
+              <Link
+                className="flex-center gap-2"
+                href={'/'}>
+                <PiCaretLeft />
+                Homepage
+              </Link>
+            </Button>
+          </div>
+          <div className="flex w-full items-center justify-center gap-2">
             This agent has been built with
             <a
               href="https://wordware.ai/"
@@ -50,7 +64,7 @@ const Page = async ({ params }: { params: { username: string } }) => {
               />
             </a>
           </div>
-          <div className="flex-center gap-2">
+          <div className="flex w-full items-center justify-end gap-2">
             <Button
               size={'sm'}
               variant={'default'}
