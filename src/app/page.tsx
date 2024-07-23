@@ -79,7 +79,7 @@ const Page = () => {
                 variant={'outline'}
                 asChild>
                 <a
-                  href="https://app.wordware.ai/share/aa3d8ee8-2042-4237-8e9f-d497844b6d91/playground"
+                  href={`https://app.wordware.ai/share/${process.env.WORDWARE_PROMPT_ID}/playground`}
                   target="_blank"
                   className="flex-center gap-2">
                   <WordwareLogo
