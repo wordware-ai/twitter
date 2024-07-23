@@ -186,12 +186,17 @@
 
 import { ImageResponse } from 'next/og'
 import type { NextRequest } from 'next/server'
-import { PiRobot, PiXLogo } from 'react-icons/pi'
+import { PiRobot } from 'react-icons/pi'
 
 import { cardData } from '@/app/[username]/config'
 
 export const runtime = 'edge'
 
+/**
+ * Handles GET requests to generate Open Graph images.
+ * @param {NextRequest} request - The incoming request object.
+ * @returns {Promise<ImageResponse|Response>} The generated image or an error response.
+ */
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
   const picture = searchParams.get('picture') || ''
@@ -220,6 +225,16 @@ export async function GET(request: NextRequest) {
   }
 }
 
+/**
+ * Generates the Open Graph image content.
+ * @param {Object} params - The parameters for generating the OG image.
+ * @param {string} params.picture - URL of the user's profile picture.
+ * @param {string} params.name - User's name.
+ * @param {string} params.username - User's username.
+ * @param {string} params.content - Content to be displayed in the image.
+ * @param {string} params.section - Section identifier for styling.
+ * @returns {React.ReactElement} The React element representing the OG image.
+ */
 function generateOG({
   picture,
   name,
@@ -245,6 +260,10 @@ function generateOG({
     title: 'Persona',
   }
 
+  /**
+   * Renders the content based on its type and structure.
+   * @returns {React.ReactElement} The rendered content.
+   */
   const renderContent = () => {
     try {
       const parsedContent = JSON.parse(content)
@@ -278,6 +297,7 @@ function generateOG({
       console.error('Failed to parse content:', e)
     }
 
+    // Fallback for unparseable content
     return (
       <div style={{ fontSize: '24px', fontWeight: 300 }}>
         {content?.length > 500 ? content.slice(0, 500).replace(/\*/g, '') + '...' : content?.replace(/\*/g, '')}
@@ -301,13 +321,13 @@ function generateOG({
         style={{
           display: 'flex',
           flexDirection: 'column',
-          // backgroundColor: 'white',
           borderRadius: '16px',
           padding: '36px',
           height: '100%',
           position: 'relative',
           border: '1px solid #e5e7eb',
         }}>
+        {/* Header section */}
         <div
           style={{
             display: 'flex',
@@ -323,12 +343,14 @@ function generateOG({
           </div>
         </div>
 
-        {/* How can I make this div: to grow as high as possible? */}
+        {/* Content section */}
         <div
           tw="items-center"
           style={{ marginTop: '24px', color: '#374151', display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
           {renderContent()}
         </div>
+
+        {/* User info section */}
         <div
           style={{
             position: 'absolute',
