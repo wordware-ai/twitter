@@ -6,6 +6,7 @@ import Callout from '@/components/callout'
 import Footer from '@/components/footer'
 import { NewsletterForm } from '@/components/newsletter-form'
 import { getURL } from '@/lib/config'
+import Providers from '@/lib/providers'
 import { cn } from '@/lib/utils'
 
 import siteMetadata from './metadata'
@@ -67,21 +68,25 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(inter.className, 'bg-[#F9FAFB] font-light')}>
-        {/* Main content area */}
-        {children}
+        <Providers>
+          <>
+            {/* Main content area */}
+            {children}
 
-        {/* Callout section */}
-        <section className="w-full">
-          <Callout />
-        </section>
+            {/* Callout section */}
+            <section className="w-full">
+              <Callout />
+            </section>
 
-        {/* Newsletter form section */}
-        <section className="pb-24">
-          <NewsletterForm />
-        </section>
+            {/* Newsletter form section */}
+            <section className="pb-24">
+              <NewsletterForm />
+            </section>
 
-        {/* Footer component */}
-        <Footer />
+            {/* Footer component */}
+            <Footer />
+          </>
+        </Providers>
       </body>
     </html>
   )
