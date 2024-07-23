@@ -28,12 +28,17 @@ const strengths = [
   },
 ]
 
+// "loveLife": "The stars align for a partnership with someone who shares your passion for innovation and growth. Look for a partner who challenges your ideas and brings a fresh perspective to your tech-centric world. Their complementary skills in areas like design or business strategy could create a power couple dynamic that propels both of you to new heights.",
+
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
   const picture = searchParams.get('picture') || 'https://pbs.twimg.com/profile_images/1726431958891466752/JaDcBy6P_400x400.jpg'
   const name = searchParams.get('name') || 'Kyzo'
   const username = searchParams.get('username') || '@ky__zo'
-  const content = searchParams.get('content') || JSON.stringify(strengths)
+  const content =
+    searchParams.get('content') ||
+    'The stars align for a partnership with someone who shares your passion for innovation and growth. Look for a partner who challenges your ideas and brings a fresh perspective to your tech-centric world. Their complementary skills in areas like design or business strategy could create a power couple dynamic that propels both of you to new heights.' ||
+    JSON.stringify(strengths)
   const emojis = searchParams.get('emojis') || `👨‍💻🏝️🚀💼🌴`
   const section = searchParams.get('section') || 'strengths'
 
@@ -96,9 +101,10 @@ function generateOG({
                 {typeof item === 'string' ? (
                   <div tw="text-2xl">{item}</div>
                 ) : (
-                  <div tw="flex mt-2 items-center ">
-                    <div tw="text-3xl font-semibold">{item.title}</div>
-                    <div tw="text-2xl ml-4 text-gray-800">{item.subtitle?.replace('*', '')}</div>
+                  <div tw="flex mt-4 items-start">
+                    <div tw="text-2xl font-semibold w-1/4">{item.title}</div>
+
+                    <div tw="text-2xl ml-4 text-gray-800 w-3/4">{item.subtitle?.replace('*', '')}</div>
                   </div>
                 )}
               </div>
@@ -126,9 +132,9 @@ function generateOG({
   }
 
   return (
-    <div tw="flex flex-col w-full h-full p-16 bg-gray-100 ">
+    <div tw="flex flex-col w-full h-full p-12 bg-gray-100 ">
       <div tw={`flex flex-col bg-white relative h-full border rounded-2xl pb-12 px-12 pt-6 bg-opacity-20 ${bgClass}`}>
-        <div tw="flex justify-end absolute top-12 right-12 items-center ">
+        <div tw="flex justify-end absolute top-10 right-10 items-center ">
           {picture && (
             <img
               src={picture}
@@ -146,7 +152,7 @@ function generateOG({
           <div tw={`text-4xl h-28 flex items-center  ${colorClass}`}>
             <Icon size={32} /> <span tw="pl-6">My {title} according to the AI Agent</span>
           </div>
-          <div tw="border-b w-full border-gray-300" />
+          {/* <div tw="border-b w-full border-gray-300" /> */}
 
           <div tw="mt-6 flex">{renderContent()}</div>
         </div>
