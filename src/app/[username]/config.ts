@@ -114,7 +114,7 @@ export const cardData = [
     bg: 'bg-fuchsia-500',
   },
   {
-    title: 'Your Career',
+    title: 'Career',
     icon: PiLightbulb,
     contentKey: 'career',
     colorClass: 'text-amber-500',

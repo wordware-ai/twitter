@@ -94,12 +94,12 @@ function generateOG({
       if (Array.isArray(parsedContent)) {
         return (
           <div tw="flex flex-col ">
-            {parsedContent.map((item, index) => (
+            {parsedContent.slice(0, 5).map((item, index) => (
               <div
                 key={index}
                 tw="flex flex-col">
                 {typeof item === 'string' ? (
-                  <div tw="text-2xl">{item}</div>
+                  <div tw="text-3xl mt-6">{item}</div>
                 ) : (
                   <div tw="flex mt-4 items-start">
                     <div tw="text-2xl font-semibold w-1/4">{item.title}</div>
@@ -127,7 +127,7 @@ function generateOG({
     }
 
     // Default case: treat content as a string
-    return <div tw="text-3xl whitespace-pre-wrap">{content?.replace(/\*/g, '')}</div>
+    return <div tw="text-3xl whitespace-pre-wrap">{content?.length > 550 ? content.slice(0, 550).replace(/\*/g, '') + '...' : content?.replace(/\*/g, '')}</div>
   }
 
   return (
@@ -149,7 +149,7 @@ function generateOG({
 
         <div tw="flex flex-col">
           <div tw={`text-4xl h-28 flex items-center  ${colorClass}`}>
-            <Icon size={32} /> <span tw="pl-6">My {title} according to the AI Agent</span>
+            <Icon size={32} /> <span tw="pl-6">{title} by the AI Agent</span>
           </div>
           {/* <div tw="border-b w-full border-gray-300" /> */}
 
