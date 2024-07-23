@@ -149,7 +149,7 @@ function generateOG({
             <Icon size={36} /> <span tw="pl-6">My {title} by the AI Agent</span>
           </div>
 
-          <div tw="mt-6 flex">{renderContent()}</div>
+          <div tw="mt-6 flex items-center grow">{renderContent()}</div>
         </div>
       </div>
     </div>
