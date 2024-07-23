@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button'
 import TopList from './top-list'
 
 export const maxDuration = 300
-export const dynamic = 'force-dynamic'
 
 const Page = () => {
   return (

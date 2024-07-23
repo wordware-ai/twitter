@@ -20,11 +20,18 @@ export const getUsers = async () => {
   return data
 }
 
-export const getTop20 = async () => {
+export const getTop = async () => {
   noStore()
-  const data = await db.select().from(users).orderBy(desc(users.followers)).limit(40)
+  const data = await db.select().from(users).orderBy(desc(users.followers)).limit(12)
   // const kyzo = await db.select().from(users).where(eq(users.username, 'ky__zo'))
   // const merged = [...data, ...kyzo]
+  return data
+}
+
+export const getFeatured = async () => {
+  noStore()
+  const data = await db.select().from(users).orderBy(desc(users.followers)).limit(12)
+
   return data
 }
 
@@ -194,7 +201,7 @@ export const createLoopsContact = async ({ email }: { email: string }) => {
     headers: { Authorization: `Bearer ${process.env.LOOPS_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       email: email,
-      source: 'audioscribe',
+      source: 'twitter-personality',
       subscribed: true,
     }),
   }
