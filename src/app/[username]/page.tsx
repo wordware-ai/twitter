@@ -141,7 +141,7 @@ export async function generateMetadata({ params, searchParams }: { params: { use
   const username = user?.username || ''
   const picture = user?.profilePicture || ''
   const section = searchParams.section || 'about'
-  const content = ((user.analysis as any)?.[section]?.replace('*', '') || '').trim()
+  const content = (user.analysis as any)?.[section]
   const emojis = ((user.analysis as any)?.emojis || '').trim()
 
   imageParams.set('name', name)

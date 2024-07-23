@@ -97,7 +97,7 @@ function generateOG({
                 ) : (
                   <div tw="flex flex-col">
                     <span tw="text-2xl font-semibold">{item.title}</span>
-                    <span tw="text-xl text-gray-600">{item.subtitle}</span>
+                    <span tw="text-xl text-gray-600">{item.subtitle?.replace('*', '')}</span>
                   </div>
                 )}
               </div>
@@ -109,7 +109,7 @@ function generateOG({
           <ul tw="list-none space-y-2 text-lg">
             {Object.entries(parsedContent).map(([key, value], index) => (
               <li key={index}>
-                <span tw="font-semibold">{key}:</span> {value as string}
+                <span tw="font-semibold text-2xl">{key}:</span> {typeof value === 'string' ? value.replace('*', '') : ''}
               </li>
             ))}
           </ul>
@@ -121,7 +121,7 @@ function generateOG({
     }
 
     // Default case: treat content as a string
-    return <div tw="text-lg whitespace-pre-wrap">{content}</div>
+    return <div tw="text-2xl whitespace-pre-wrap">{content?.replace('*', '')}</div>
   }
 
   return (
