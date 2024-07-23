@@ -5,6 +5,7 @@ import './globals.css'
 import Callout from '@/components/callout'
 import Footer from '@/components/footer'
 import { getURL } from '@/lib/config'
+import { cn } from '@/lib/utils'
 
 import siteMetadata from './metadata'
 
@@ -51,7 +52,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={cn(inter.className, 'font-light')}>
         {children}
         <Callout />
         <Footer />

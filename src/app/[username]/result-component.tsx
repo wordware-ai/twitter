@@ -8,6 +8,7 @@ import WordwareLogo from '@/components/logo'
 import { Button } from '@/components/ui/button'
 import { SelectUser } from '@/drizzle/schema'
 import { parsePartialJson } from '@/lib/parse-partial-json'
+import { cn } from '@/lib/utils'
 
 import Result, { TwitterAnalysis } from './result'
 
@@ -108,8 +109,8 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
 
   return (
     <div className="flex-center flex-col gap-8">
-      <div className="flex-center w-full max-w-[280px] flex-col gap-4">
-        <div className="flex-center w-full gap-4">
+      <div className={cn('w-full max-w-[280px] flex-col items-center justify-center gap-4', steps.wordwareCompleted ? 'hidden' : 'flex')}>
+        <div className="flex-center w-full gap-8">
           {steps.profileScraped ? (
             <PiCheckCircle
               className="text-green-500"
@@ -170,7 +171,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
         </div>
       </div>
       <div className="flex flex-col gap-6">
-        <h2 className="flex-center mt-6 gap-4 text-xl font-light">
+        {/* <h2 className="flex-center mt-6 gap-4 text-xl font-light">
           Your Twitter Personality, created with
           <a
             href="https://wordware.ai/"
@@ -180,9 +181,11 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
               width={134}
             />
           </a>
-        </h2>
+        </h2> */}
         <div className="flex-center gap-4">
-          <Button asChild>
+          <Button
+            size={'sm'}
+            asChild>
             <a
               target="_blank"
               className="flex-center gap-2"
@@ -191,7 +194,9 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
             </a>
           </Button>
           {result?.about && (
-            <Button asChild>
+            <Button
+              size={'sm'}
+              asChild>
               <a
                 target="_blank"
                 className="flex-center gap-2"
@@ -207,7 +212,9 @@ https://twitter.wordware.ai/${user.username}`)}`}>
             </Button>
           )}
 
-          <Button asChild>
+          <Button
+            size={'sm'}
+            asChild>
             <a
               className="flex-center gap-2"
               target="_blank"

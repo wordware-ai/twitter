@@ -1,7 +1,6 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
 
-import WordwareLogo from '@/components/logo'
 import NewUsernameForm from '@/components/new-username-form'
 import Quote from '@/components/quote'
 
@@ -13,8 +12,8 @@ export const dynamic = 'force-dynamic'
 const Page = () => {
   return (
     <section>
-      <div className="flex min-h-screen flex-col md:flex-row">
-        <div className="flex flex-col justify-center bg-[#F9FAFB] p-8 md:w-1/2">
+      <div className="flex flex-col md:flex-row">
+        <div className="flex min-h-screen flex-col justify-center bg-[#F9FAFB] p-8 sm:p-12 md:w-1/2 md:p-24">
           <div>
             <h1 className="mb-8 text-4xl md:text-5xl 2xl:text-6xl">
               discover your <br />
@@ -26,7 +25,7 @@ const Page = () => {
               </span>
               personality
             </h1>
-            <h2 className="flex items-center gap-4">
+            {/* <h2 className="flex items-center gap-4">
               Built with{' '}
               <a
                 href="https://wordware.ai/"
@@ -36,7 +35,7 @@ const Page = () => {
                   width={134}
                 />
               </a>
-            </h2>
+            </h2> */}
 
             <div className="mb-8 flex items-center pt-2">
               <Suspense>
@@ -47,7 +46,7 @@ const Page = () => {
             <p className="mb-8 pt-8 text-base 2xl:text-lg">
               we built an AI agent that analyzes your tweets
               <br />
-              <strong>to reveal the unique traits that make you, you.</strong>
+              <span className="font-medium">to reveal the unique traits that make you, you.</span>
               <br />
               <br />
               plus, we provide you with interesting insights about

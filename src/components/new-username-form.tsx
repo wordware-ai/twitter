@@ -8,7 +8,7 @@ import { z } from 'zod'
 
 import { handleNewUsername } from '@/actions/actions'
 import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { cleanUsername } from '@/lib/utils'
 
@@ -41,19 +41,20 @@ const NewUsernameForm = () => {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Your X handle or link</FormLabel>
+                {/* <FormLabel>Your X handle or link</FormLabel> */}
                 <FormControl>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center">
                     <Input
                       disabled={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
-                      className="w-full"
+                      className="w-full rounded-none border-black"
                       placeholder="@username"
                       {...field}
                     />
                     <Button
                       disabled={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
-                      type="submit">
-                      Submit
+                      type="submit"
+                      className="rounded-none">
+                      Discover
                     </Button>
                   </div>
                 </FormControl>
