@@ -16,7 +16,10 @@ export async function POST(request: Request) {
     },
   })
 
-  const runResponse = await fetch('https://app.wordware.ai/api/released-app/aa3d8ee8-2042-4237-8e9f-d497844b6d91/run', {
+  //old app: aa3d8ee8-2042-4237-8e9f-d497844b6d91
+  //new app: 9d647046-a84b-4b9f-9fc1-7ee32a5b6f0b
+
+  const runResponse = await fetch('https://app.wordware.ai/api/released-app/9d647046-a84b-4b9f-9fc1-7ee32a5b6f0b/run', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -27,7 +30,7 @@ export async function POST(request: Request) {
         tweets: user.tweets,
         profilePicture: user.profilePicture,
         profileInfo: user.fullProfile,
-        version: '^1.4',
+        version: '^1.10',
       },
     }),
   })
@@ -51,6 +54,7 @@ export async function POST(request: Request) {
           }
 
           const chunk = decoder.decode(value)
+          console.log('🟣 | file: route.ts:54 | start | chunk:', chunk)
 
           for (let i = 0, len = chunk.length; i < len; ++i) {
             const isChunkSeparator = chunk[i] === '\n'
@@ -86,14 +90,14 @@ export async function POST(request: Request) {
               console.log(value.values.output)
               try {
                 console.log('parsing:')
-                const parsedOutput = JSON.parse(value.values.output)
-                console.log('🟣 | file: route.ts:87 | start | parsedOutput:', parsedOutput)
+                // const parsedOutput = JSON.parse(value.values.output)
+                // console.log('🟣 | file: route.ts:87 | start | parsedOutput:', parsedOutput)
                 await updateUser({
                   user: {
                     ...user,
                     wordwareStarted: true,
                     wordwareCompleted: true,
-                    analysis: parsedOutput,
+                    analysis: value.values.output,
                   },
                 })
                 console.log('Analysis saved to database')
