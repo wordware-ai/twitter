@@ -1,46 +1,44 @@
 import { ImageResponse } from 'next/og'
 import type { NextRequest } from 'next/server'
+import { PiRobot } from 'react-icons/pi'
 
 import { cardData } from '@/app/[username]/config'
 
 export const runtime = 'edge'
 
-const strengths = [
-  {
-    title: 'Visionary Leadership',
-    subtitle: 'Guides Supabase with innovative ideas and strategic thinking',
-  },
-  {
-    title: 'Open-Source Advocate',
-    subtitle: 'Strongly supports and contributes to the open-source community',
-  },
-  {
-    title: 'Technical Expertise',
-    subtitle: 'Deep knowledge of databases, particularly PostgreSQL',
-  },
-  {
-    title: 'Community Builder',
-    subtitle: 'Fosters a strong developer community around Supabase',
-  },
-  {
-    title: 'Entrepreneurial Spirit',
-    subtitle: 'Successfully navigates the startup ecosystem',
-  },
-]
+// const strengths = [
+//   {
+//     title: 'Visionary Leadership',
+//     subtitle: 'Guides Supabase with innovative ideas and strategic thinking',
+//   },
+//   {
+//     title: 'Open-Source Advocate',
+//     subtitle: 'Strongly supports and contributes to the open-source community',
+//   },
+//   {
+//     title: 'Technical Expertise',
+//     subtitle: 'Deep knowledge of databases, particularly PostgreSQL',
+//   },
+//   {
+//     title: 'Community Builder',
+//     subtitle: 'Fosters a strong developer community around Supabase',
+//   },
+//   {
+//     title: 'Entrepreneurial Spirit',
+//     subtitle: 'Successfully navigates the startup ecosystem',
+//   },
+// ]
 
 // "loveLife": "The stars align for a partnership with someone who shares your passion for innovation and growth. Look for a partner who challenges your ideas and brings a fresh perspective to your tech-centric world. Their complementary skills in areas like design or business strategy could create a power couple dynamic that propels both of you to new heights.",
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
-  const picture = searchParams.get('picture') || 'https://pbs.twimg.com/profile_images/1726431958891466752/JaDcBy6P_400x400.jpg'
-  const name = searchParams.get('name') || 'Kyzo'
-  const username = searchParams.get('username') || '@ky__zo'
-  const content =
-    searchParams.get('content') ||
-    'The stars align for a partnership with someone who shares your passion for innovation and growth. Look for a partner who challenges your ideas and brings a fresh perspective to your tech-centric world. Their complementary skills in areas like design or business strategy could create a power couple dynamic that propels both of you to new heights.The stars align for a partnership with someone who shares your passion for innovation and growth. Look for a partner who challenges your ideas and brings a fresh perspective to your tech-centric world. Their complementary skills in areas like design or business strategy could create a power couple dynamic that propels both of you to new heights.' ||
-    JSON.stringify(strengths)
-  const emojis = searchParams.get('emojis') || `👨‍💻🏝️🚀💼🌴`
-  const section = searchParams.get('section') || 'strengths'
+  const picture = searchParams.get('picture') || ''
+  const name = searchParams.get('name') || ''
+  const username = searchParams.get('username') || ''
+  const content = searchParams.get('content') || ''
+  const emojis = searchParams.get('emojis') || ''
+  const section = searchParams.get('section') || ''
 
   console.log('Generating OG image with params:', { picture, name, username, content, emojis, section })
 
@@ -83,10 +81,10 @@ function generateOG({
   } catch (e) {
     console.log('Failed to parse content:', e)
   }
-  const Icon = cardData.filter((card) => card.contentKey === section)[0].icon
-  const bgClass = cardData.filter((card) => card.contentKey === section)[0].bg
-  const colorClass = cardData.filter((card) => card.contentKey === section)[0].colorClass
-  const title = cardData.filter((card) => card.contentKey === section)[0].title
+  const Icon = cardData.filter((card) => card.contentKey === section)[0]?.icon || PiRobot
+  const bgClass = cardData.filter((card) => card.contentKey === section)[0]?.bg || 'bg-white-100 border border-black '
+  const colorClass = cardData.filter((card) => card.contentKey === section)[0]?.colorClass || 'text-gray-800'
+  const title = cardData.filter((card) => card.contentKey === section)[0]?.title || 'Persona'
 
   const renderContent = () => {
     try {
