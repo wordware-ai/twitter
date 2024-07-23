@@ -1,6 +1,6 @@
 # Twitter Personality 🐦🧠
 
-![Twitter Personality](https://twitter-personality.wordware.ai/social/og.png)
+![Twitter Personality](https://twitter.wordware.ai/social/og.png)
 
 Twitter Personality is a web application that analyzes your Twitter handle to create a personalized personality profile using Wordware AI Agent. This project leverages cutting-edge AI technologies to provide users with unique insights into their Twitter persona. 🚀
 
