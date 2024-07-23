@@ -1,8 +1,10 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
 
+import WordwareLogo from '@/components/logo'
 import NewUsernameForm from '@/components/new-username-form'
 import Quote from '@/components/quote'
+import { Button } from '@/components/ui/button'
 
 import TopList from './top-list'
 
@@ -13,7 +15,7 @@ const Page = () => {
   return (
     <section>
       <div className="flex flex-col md:flex-row">
-        <div className="flex min-h-screen flex-col justify-center bg-[#F9FAFB] p-8 sm:p-12 md:w-1/2 md:p-24">
+        <div className="relative flex min-h-screen flex-col justify-center bg-[#F9FAFB] p-8 sm:p-12 md:w-1/2 md:p-20 lg:p-24">
           <div>
             <h1 className="mb-8 text-4xl md:text-5xl 2xl:text-6xl">
               discover your <br />
@@ -54,8 +56,8 @@ const Page = () => {
               your love life, goals, or how others perceive you.
             </p>
           </div>
-          {/* To-do move this section to the bottom of this component and add button "Duplicate AI Agent" */}
-          <div className="">
+
+          <div className="bottom-6 md:absolute">
             <hr className="mb-4" />
             <p className="2xl:text-md mb-2 text-sm">
               this app is powered by Wordware.
@@ -72,22 +74,24 @@ const Page = () => {
                 </Link>
               </span>
             </p>
-            {/* <Button
-          size={'lg'}
-          variant={'default'}
-          asChild>
-          <a
-            href="https://app.wordware.ai/share/aa3d8ee8-2042-4237-8e9f-d497844b6d91/playground"
-            target="_blank"
-            className="flex-center gap-2">
-            <WordwareLogo
-              emblemOnly
-              color={'white'}
-              width={12}
-            />
-            Duplicate Wordware Project
-          </a>
-        </Button> */}
+            <div className="flex">
+              <Button
+                size={'sm'}
+                variant={'outline'}
+                asChild>
+                <a
+                  href="https://app.wordware.ai/share/aa3d8ee8-2042-4237-8e9f-d497844b6d91/playground"
+                  target="_blank"
+                  className="flex-center gap-2">
+                  <WordwareLogo
+                    emblemOnly
+                    color={'black'}
+                    width={12}
+                  />
+                  Duplicate this AI Agent
+                </a>
+              </Button>
+            </div>
           </div>
         </div>
 
