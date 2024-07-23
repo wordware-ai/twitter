@@ -319,7 +319,7 @@ function generateOG({
         width: '100%',
         height: '100%',
         padding: '48px',
-        backgroundColor: '#f3f4f6',
+        backgroundColor: '#fafafa',
         fontFamily: 'Inter, sans-serif',
       }}>
       <div
