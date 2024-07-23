@@ -8,8 +8,6 @@ import WordwareLogo from '@/components/logo'
 import NewUsernameForm from '@/components/new-username-form'
 import { Button } from '@/components/ui/button'
 
-// import { getURL } from '@/lib/config'
-
 import ResultComponent from './result-component'
 
 export const maxDuration = 300
@@ -83,7 +81,6 @@ const Page = async ({ params }: { params: { username: string } }) => {
           </div>
         </div>
       </div>
-      {/* <DotPattern className={cn('-z-50 [mask-image:radial-gradient(300px_circle_at_center,white,transparent)]')} /> */}
       <div className="flex-center flex-col gap-6">
         <div className="text-center text-xl font-light">
           Here&apos;s the <span className="font-medium">AI agent</span> analysis of your personality...
@@ -133,7 +130,7 @@ export async function generateStaticParams() {
   }))
 }
 
-export async function generateMetadata({ params }: { params: { username?: string } }) {
+export async function generateMetadata({ params, searchParams }: { params: { username?: string }; searchParams: { section?: string } }) {
   if (!params.username) return notFound()
   const user = await getUser({ username: params.username })
 
@@ -143,28 +140,29 @@ export async function generateMetadata({ params }: { params: { username?: string
   const name = user?.name || ''
   const username = user?.username || ''
   const picture = user?.profilePicture || ''
-  const about = ((user.analysis as any)?.about?.replace('*', '') || '').trim()
+  const section = searchParams.section || 'about'
+  const content = ((user.analysis as any)?.[section]?.replace('*', '') || '').trim()
   const emojis = ((user.analysis as any)?.emojis || '').trim()
 
   imageParams.set('name', name)
   imageParams.set('username', username)
   imageParams.set('picture', picture)
-  imageParams.set('about', about)
+  imageParams.set('content', content)
   imageParams.set('emojis', emojis)
+  imageParams.set('section', section)
 
   const image = {
     alt: 'Banner',
     url: `/api/og?${imageParams.toString()}`,
-    // url: `${getURL()}/api/og?${imageParams.toString()}`,
     width: 1200,
     height: 630,
   }
 
   return {
-    title: name,
-    description: `Check out ${name}'s Twitter Personality.`,
+    title: `${name}'s ${section.charAt(0).toUpperCase() + section.slice(1)} Analysis`,
+    description: `Check out ${name}'s ${section} analysis.`,
     openGraph: {
-      url: `/${username}`,
+      url: `/${username}?section=${section}`,
       images: image,
     },
     twitter: {

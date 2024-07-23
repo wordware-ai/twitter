@@ -65,11 +65,12 @@ export default function Result({ userData }: { userData: TwitterAnalysis | undef
         {cardData.map((card, index) => (
           <AnalysisCard
             key={index}
+            contentKey={card.contentKey}
             title={card.title}
             icon={card.icon}
             content={userData?.[card.contentKey] || ''}
             colorClass={card.colorClass}
-            color={card.color}
+            // color={card.color}
             wide={card.wide}
             bg={card.bg}
           />
