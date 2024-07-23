@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
   const username = searchParams.get('username') || '@ky__zo'
   const content =
     searchParams.get('content') ||
-    'The stars align for a partnership with someone who shares your passion for innovation and growth. Look for a partner who challenges your ideas and brings a fresh perspective to your tech-centric world. Their complementary skills in areas like design or business strategy could create a power couple dynamic that propels both of you to new heights.' ||
+    'The stars align for a partnership with someone who shares your passion for innovation and growth. Look for a partner who challenges your ideas and brings a fresh perspective to your tech-centric world. Their complementary skills in areas like design or business strategy could create a power couple dynamic that propels both of you to new heights.The stars align for a partnership with someone who shares your passion for innovation and growth. Look for a partner who challenges your ideas and brings a fresh perspective to your tech-centric world. Their complementary skills in areas like design or business strategy could create a power couple dynamic that propels both of you to new heights.' ||
     JSON.stringify(strengths)
   const emojis = searchParams.get('emojis') || `👨‍💻🏝️🚀💼🌴`
   const section = searchParams.get('section') || 'strengths'
@@ -99,7 +99,7 @@ function generateOG({
                 key={index}
                 tw="flex flex-col">
                 {typeof item === 'string' ? (
-                  <div tw="text-3xl mt-6">{item}</div>
+                  <div tw="text-2xl">{item}</div>
                 ) : (
                   <div tw="flex mt-4 items-start">
                     <div tw="text-2xl font-semibold w-1/4">{item.title}</div>
@@ -127,11 +127,11 @@ function generateOG({
     }
 
     // Default case: treat content as a string
-    return <div tw="text-3xl whitespace-pre-wrap">{content?.length > 550 ? content.slice(0, 550).replace(/\*/g, '') + '...' : content?.replace(/\*/g, '')}</div>
+    return <div tw="text-3xl ">{content?.length > 500 ? content.slice(0, 500).replace(/\*/g, '') + '...' : content?.replace(/\*/g, '')}</div>
   }
 
   return (
-    <div tw="flex flex-col w-full h-full p-6 bg-gray-100 ">
+    <div tw="flex flex-col w-full h-full p-12 bg-gray-100 ">
       <div tw={`flex flex-col bg-white relative h-full border rounded-2xl pb-12 px-12 pt-6 bg-opacity-10 ${bgClass}`}>
         <div tw="flex justify-end absolute top-10 right-10 items-center ">
           {picture && (
@@ -143,15 +143,14 @@ function generateOG({
           )}
           <div tw="flex ml-6 flex-col items-start justify-center ">
             <div tw="font-bold text-2xl">{name}</div>
-            <div tw="text-xl">@{username}</div>
+            <div tw="text-xl">{username}</div>
           </div>
         </div>
 
         <div tw="flex flex-col">
-          <div tw={`text-4xl h-28 flex items-center  ${colorClass}`}>
-            <Icon size={32} /> <span tw="pl-6">{title} by the AI Agent</span>
+          <div tw={`text-4xl h-24 flex items-center  ${colorClass}`}>
+            <Icon size={36} /> <span tw="pl-6">My {title} by the AI Agent</span>
           </div>
-          {/* <div tw="border-b w-full border-gray-300" /> */}
 
           <div tw="mt-6 flex">{renderContent()}</div>
         </div>
