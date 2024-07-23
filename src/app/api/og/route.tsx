@@ -191,6 +191,8 @@ import { PiRobot } from 'react-icons/pi'
 import { cardData } from '@/app/[username]/config'
 
 export const runtime = 'edge'
+const light = fetch(new URL('./Inter-light.ttf', import.meta.url)).then((res) => res.arrayBuffer())
+const bold = fetch(new URL('./Inter-semiBold.ttf', import.meta.url)).then((res) => res.arrayBuffer())
 
 /**
  * Handles GET requests to generate Open Graph images.
@@ -217,6 +219,10 @@ export async function GET(request: NextRequest) {
       {
         width: 1200,
         height: 630,
+        fonts: [
+          { name: 'Inter', data: await bold, weight: 600 },
+          { name: 'Inter', data: await light, weight: 300 },
+        ],
       },
     ) as any
   } catch (error) {
@@ -317,24 +323,27 @@ function generateOG({
         fontFamily: 'Inter, sans-serif',
       }}>
       <div
-        tw={`${bg} bg-opacity-10`}
+        tw={`${bg === 'bg-white' ? bg : `${bg} bg-opacity-10`} `}
         style={{
           display: 'flex',
           flexDirection: 'column',
           borderRadius: '16px',
           padding: '36px',
+          // paddingBottom: '44px',
+          paddingTop: '32px',
           height: '100%',
           position: 'relative',
           border: '1px solid #e5e7eb',
         }}>
         {/* Header section */}
         <div
+          tw="border-b border-gray-300"
           style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            borderBottom: '1px solid #0d0d0d',
-            paddingBottom: '16px',
+            // borderBottom: '1px solid #0d0d0d',
+            paddingBottom: '24px',
           }}>
           <div
             tw={`${colorClass}`}
@@ -345,7 +354,7 @@ function generateOG({
 
         {/* Content section */}
         <div
-          tw="items-center"
+          tw="items-center font-light"
           style={{ marginTop: '24px', color: '#374151', display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
           {renderContent()}
         </div>
@@ -368,8 +377,16 @@ function generateOG({
             />
           )}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ fontWeight: 'bold', fontSize: '20px' }}>{name}</div>
-            <div style={{ display: 'flex', fontSize: '18px' }}>@{username}</div>
+            <div
+              tw="font-bold"
+              style={{ fontWeight: 'bold', fontSize: '20px' }}>
+              {name}
+            </div>
+            <div
+              tw="font-bold"
+              style={{ display: 'flex', fontSize: '18px' }}>
+              @{username}
+            </div>
           </div>
         </div>
       </div>
