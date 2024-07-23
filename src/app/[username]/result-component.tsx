@@ -12,6 +12,15 @@ import { cn } from '@/lib/utils'
 
 import Result, { TwitterAnalysis } from './result'
 
+/**
+ * Represents the steps in the Twitter analysis process
+ * @typedef {Object} Steps
+ * @property {boolean} profileScraped - Whether the user's profile has been scraped
+ * @property {boolean} tweetScrapeStarted - Whether the tweet scraping process has started
+ * @property {boolean} tweetScrapeCompleted - Whether the tweet scraping process has completed
+ * @property {boolean} wordwareStarted - Whether the Wordware analysis has started
+ * @property {boolean} wordwareCompleted - Whether the Wordware analysis has completed
+ */
 type Steps = {
   profileScraped: boolean
   tweetScrapeStarted: boolean
@@ -20,7 +29,13 @@ type Steps = {
   wordwareCompleted: boolean
 }
 
+/**
+ * ResultComponent - Renders the result of Twitter analysis
+ * @param {Object} props - Component props
+ * @param {SelectUser} props.user - User data
+ */
 const ResultComponent = ({ user }: { user: SelectUser }) => {
+  // State to track the progress of analysis steps
   const [steps, setSteps] = useState<Steps>({
     profileScraped: user.profileScraped || false,
     tweetScrapeStarted: user.tweetScrapeStarted || false,
@@ -29,6 +44,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
     wordwareCompleted: user.wordwareCompleted || false,
   })
 
+  // State to store the result of Twitter analysis
   const [result, setResult] = useState<TwitterAnalysis | undefined>((user.analysis as TwitterAnalysis) || undefined)
   const effectRan = useRef(false)
 
@@ -69,6 +85,14 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
     })()
   }, [user])
 
+  /**
+   * Handles the tweet analysis process
+   * @param {Object} props - Analysis props
+   * @param {string} props.tweets - JSON string of user's tweets
+   * @param {string} props.profilePicture - URL of user's profile picture
+   * @param {string} props.profileInfo - JSON string of user's profile info
+   * @param {string} props.username - User's Twitter username
+   */
   const handleTweetAnalysis = async (props: { tweets: string; profilePicture: string; profileInfo: string; username: string }) => {
     const response = await fetch('/api/wordware', {
       method: 'POST',
@@ -109,7 +133,9 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
 
   return (
     <div className="flex-center flex-col gap-8">
+      {/* Progress indicator */}
       <div className={cn('w-full max-w-[280px] flex-col items-center justify-center gap-4', steps.wordwareCompleted ? 'hidden' : 'flex')}>
+        {/* Profile check step */}
         <div className="flex-center w-full gap-8">
           {steps.profileScraped ? (
             <PiCheckCircle
@@ -125,6 +151,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
 
           <div>Checking who you are</div>
         </div>
+        {/* Tweet scraping step */}
         <div className="flex-center w-full gap-4">
           {steps.tweetScrapeStarted ? (
             steps.tweetScrapeCompleted ? (
@@ -147,6 +174,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
 
           <div>Reading your Tweets</div>
         </div>
+        {/* Wordware analysis step */}
         <div className="flex-center w-full gap-4">
           {steps.wordwareStarted ? (
             steps.wordwareCompleted ? (
@@ -170,8 +198,10 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
           <div>Creating your Personality</div>
         </div>
       </div>
+      {/* Action buttons */}
       <div className="flex flex-col gap-6">
-        {/* <h2 className="flex-center mt-6 gap-4 text-xl font-light">
+        {/* Commented out header
+        <h2 className="flex-center mt-6 gap-4 text-xl font-light">
           Your Twitter Personality, created with
           <a
             href="https://wordware.ai/"
@@ -183,6 +213,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
           </a>
         </h2> */}
         <div className="flex-center gap-4">
+          {/* Twitter Profile Button */}
           <Button
             size={'sm'}
             asChild>
@@ -193,6 +224,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
               <PiXLogo /> Profile
             </a>
           </Button>
+          {/* Share Button (only visible if result is available) */}
           {result?.about && (
             <Button
               size={'sm'}
@@ -211,7 +243,7 @@ https://twitter.wordware.ai/${user.username}`)}`}>
               </a>
             </Button>
           )}
-
+          {/* Wordware Button */}
           <Button
             size={'sm'}
             asChild>
@@ -230,6 +262,7 @@ https://twitter.wordware.ai/${user.username}`)}`}>
         </div>
       </div>
 
+      {/* Render the analysis result */}
       <Result userData={result} />
     </div>
   )

@@ -1,9 +1,9 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
 
+import Quote from '@/app/quote'
 import WordwareLogo from '@/components/logo'
 import NewUsernameForm from '@/components/new-username-form'
-import Quote from '@/components/quote'
 import { Button } from '@/components/ui/button'
 
 import TopList from './top-list'

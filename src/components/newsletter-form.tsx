@@ -10,11 +10,19 @@ import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
+/**
+ * Zod schema for form validation
+ */
 const FormSchema = z.object({
   email: z.string().email(),
 })
 
+/**
+ * NewsletterForm component
+ * Renders a form for users to sign up for a newsletter
+ */
 export function NewsletterForm() {
+  // Initialize form with react-hook-form and zod resolver
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -22,7 +30,12 @@ export function NewsletterForm() {
     },
   })
 
+  /**
+   * Handle form submission
+   * @param {z.infer<typeof FormSchema>} values - Form values
+   */
   async function onSubmit(values: z.infer<typeof FormSchema>) {
+    // Attempt to create a contact in Loops
     const { success } = await createLoopsContact({ email: values.email })
     if (!success) {
       toast.error('Something went wrong')
@@ -34,7 +47,7 @@ export function NewsletterForm() {
   return (
     <div className="flex-center container mx-auto flex-col space-y-4 px-4">
       <h2 className="text-center text-2xl font-light">Sign up for the newsletter</h2>
-      <p className="font-light">If you’d like to get notified about our upcoming project or exploring different WordApps, leave your email here.</p>
+      <p className="font-light">If you&apos;d like to get notified about our upcoming project or exploring different WordApps, leave your email here.</p>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -56,6 +69,7 @@ export function NewsletterForm() {
                       className="min-w-[120px] rounded-l-none rounded-r-sm"
                       disabled={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
                       type="submit">
+                      {/* Dynamic button text based on form state */}
                       {form.formState.isSubmitting ? 'Submitting...' : form.formState.isSubmitSuccessful ? 'Subscribed' : 'Sign up'}
                     </Button>
                   </div>

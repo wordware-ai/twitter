@@ -8,37 +8,66 @@ import { desc, eq } from 'drizzle-orm'
 import { db } from '@/drizzle/db'
 import { InsertUser, SelectUser, users } from '@/drizzle/schema'
 
+/**
+ * Retrieves a user from the database by their username.
+ * @param {Object} params - The parameters for the function.
+ * @param {SelectUser['username']} params.username - The username of the user to retrieve.
+ * @returns {Promise<SelectUser | undefined>} The user object if found, undefined otherwise.
+ */
 export const getUser = async ({ username }: { username: SelectUser['username'] }) => {
   noStore()
   const data = await db.select().from(users).where(eq(users.username, username))
   return data[0]
 }
 
+/**
+ * Retrieves all users from the database.
+ * @returns {Promise<SelectUser[]>} An array of all user objects.
+ */
 export const getUsers = async () => {
   noStore()
   const data = await db.select().from(users)
   return data
 }
 
+/**
+ * Retrieves the top 12 users based on follower count.
+ * @returns {Promise<SelectUser[]>} An array of the top 12 user objects.
+ */
 export const getTop = async () => {
   noStore()
   const data = await db.select().from(users).orderBy(desc(users.followers)).limit(12)
+  // Uncomment the following lines if you want to include a specific user in the results
   // const kyzo = await db.select().from(users).where(eq(users.username, 'ky__zo'))
   // const merged = [...data, ...kyzo]
   return data
 }
 
+/**
+ * Retrieves 12 featured users based on follower count.
+ * @returns {Promise<SelectUser[]>} An array of 12 featured user objects.
+ */
 export const getFeatured = async () => {
   noStore()
   const data = await db.select().from(users).orderBy(desc(users.followers)).limit(12)
-
   return data
 }
 
+/**
+ * Inserts a new user into the database.
+ * @param {Object} params - The parameters for the function.
+ * @param {InsertUser} params.user - The user object to insert.
+ */
 export const insertUser = async ({ user }: { user: InsertUser }) => {
   await db.insert(users).values(user)
 }
 
+/**
+ * Updates an existing user in the database.
+ * @param {Object} params - The parameters for the function.
+ * @param {InsertUser} params.user - The user object with updated information.
+ * @throws {Error} If the username is not provided.
+ */
 export const updateUser = async ({ user }: { user: InsertUser }) => {
   if (!user.username) {
     throw new Error('Username is required for updating a user')
@@ -47,15 +76,20 @@ export const updateUser = async ({ user }: { user: InsertUser }) => {
   await db.update(users).set(user).where(eq(users.username, user.username))
 }
 
+/**
+ * Handles the process of adding a new username to the system.
+ * If the user exists, redirects to their page. If not, scrapes their profile and adds them.
+ * @param {Object} params - The parameters for the function.
+ * @param {string} params.username - The username to process.
+ */
 export const handleNewUsername = async ({ username }: { username: string }) => {
-  //First, check if the user already exist. If yes, just redirect to user's page.
+  // First, check if the user already exists. If yes, just redirect to user's page.
   const user = await getUser({ username })
   if (user) redirect(`/${username}`)
 
-  //If user does not exist, scrape the profile and then redirect to user's page.
+  // If user does not exist, scrape the profile and then redirect to user's page.
   const { data, error } = await scrapeProfile({ username })
 
-  //
   if (data && !error) {
     const user = {
       ...data,
@@ -76,10 +110,17 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
   redirect(`/${data?.username}`)
 }
 
+// Initialize the Apify client with the API key
 const apifyClient = new ApifyClient({
   token: process.env.APIFY_API_KEY,
 })
 
+/**
+ * Scrapes a Twitter profile using the Apify API.
+ * @param {Object} params - The parameters for the function.
+ * @param {string} params.username - The Twitter username to scrape.
+ * @returns {Promise<{error: string | null, data: object | null}>} The scraped profile data or an error.
+ */
 export const scrapeProfile = async ({ username }: { username: string }) => {
   const input = {
     startUrls: [`https://twitter.com/${username}`],
@@ -120,6 +161,12 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
   }
 }
 
+/**
+ * Scrapes tweets from a Twitter profile using the Apify API.
+ * @param {Object} params - The parameters for the function.
+ * @param {string} params.username - The Twitter username to scrape tweets from.
+ * @returns {Promise<{data: object[] | null, error: any}>} The scraped tweets or an error.
+ */
 export const scrapeTweets = async ({ username }: { username: string }) => {
   const input = {
     startUrls: [`https://twitter.com/${username}`],
@@ -162,6 +209,12 @@ export const scrapeTweets = async ({ username }: { username: string }) => {
   }
 }
 
+/**
+ * Processes a scraped user by updating their information and scraping their tweets.
+ * @param {Object} params - The parameters for the function.
+ * @param {string} params.username - The username of the user to process.
+ * @returns {Promise<object[] | undefined>} The scraped tweets if successful, undefined otherwise.
+ */
 export const processScrapedUser = async ({ username }: { username: string }) => {
   let user = await getUser({ username })
 
@@ -195,6 +248,12 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
   }
 }
 
+/**
+ * Creates a contact in Loops.so with the given email.
+ * @param {Object} params - The parameters for the function.
+ * @param {string} params.email - The email address of the contact to create.
+ * @returns {Promise<{success: boolean, error?: any}>} An object indicating success or failure.
+ */
 export const createLoopsContact = async ({ email }: { email: string }) => {
   const options = {
     method: 'POST',

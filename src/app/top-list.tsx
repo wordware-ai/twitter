@@ -4,6 +4,13 @@ import Link from 'next/link'
 import { getFeatured, getTop } from '@/actions/actions'
 import { SelectUser } from '@/drizzle/schema'
 
+/**
+ * UserCard component displays a card with user information.
+ *
+ * @param {Object} props - The component props
+ * @param {SelectUser} props.user - The user object containing user details
+ * @returns {JSX.Element} A link component containing user information
+ */
 const UserCard = ({ user }: { user: SelectUser }) => (
   <Link
     href={`/${user.username}`}
@@ -26,6 +33,14 @@ const UserCard = ({ user }: { user: SelectUser }) => (
   </Link>
 )
 
+/**
+ * UserGrid component displays a grid of UserCard components.
+ *
+ * @param {Object} props - The component props
+ * @param {SelectUser[]} props.users - An array of user objects to display
+ * @param {string} props.title - The title for the grid section
+ * @returns {JSX.Element} A div containing a title and a grid of UserCard components
+ */
 const UserGrid = ({ users, title }: { users: SelectUser[]; title: string }) => (
   <div className="flex-center w-full flex-col gap-4">
     <h2 className="mb-4 text-2xl md:text-2xl 2xl:text-4xl">{title}</h2>
@@ -40,15 +55,26 @@ const UserGrid = ({ users, title }: { users: SelectUser[]; title: string }) => (
   </div>
 )
 
+/**
+ * TopList is an async component that fetches and displays top and featured users.
+ *
+ * @returns {Promise<JSX.Element>} A div containing UserGrid components for top and featured users
+ */
 const TopList = async () => {
+  // Fetch top users from the backend
   const top = await getTop()
+
+  // Fetch featured users from the backend
   const featured = await getFeatured()
+
   return (
     <div className="flex-center w-full flex-col gap-16 p-4 py-40 sm:p-12 md:p-24">
+      {/* Display grid of top users */}
       <UserGrid
         users={top}
         title="Popular Tweeters"
       />
+      {/* Display grid of featured users */}
       <UserGrid
         users={featured}
         title="Featured"

@@ -1,14 +1,26 @@
 import { getUser, updateUser } from '@/actions/actions'
 
+/**
+ * Maximum duration for the API route execution (in seconds)
+ */
 export const maxDuration = 300
 
+/**
+ * POST handler for the Wordware API route
+ * @param {Request} request - The incoming request object
+ * @returns {Promise<Response>} The response object
+ */
 export async function POST(request: Request) {
+  // Extract username from the request body
   const { username } = await request.json()
 
+  // Fetch user data and check if Wordware has already been started
   const user = await getUser({ username })
   if (user.wordwareStarted) {
     return Response.json({ error: 'Wordware already started' })
   }
+
+  // Update user to indicate Wordware has started
   await updateUser({
     user: {
       ...user,
@@ -16,6 +28,7 @@ export async function POST(request: Request) {
     },
   })
 
+  // Make a request to the Wordware API
   const runResponse = await fetch(`https://app.wordware.ai/api/released-app/${process.env.WORDWARE_PROMPT_ID}/run`, {
     method: 'POST',
     headers: {
@@ -32,13 +45,16 @@ export async function POST(request: Request) {
     }),
   })
 
+  // Get the reader from the response body
   const reader = runResponse.body?.getReader()
   if (!reader) return Response.json({ error: 'No reader' })
 
+  // Set up decoder and buffer for processing the stream
   const decoder = new TextDecoder()
   let buffer: string[] = []
   let finalOutput = false
 
+  // Create a readable stream to process the response
   const stream = new ReadableStream({
     async start(controller) {
       try {
@@ -53,6 +69,7 @@ export async function POST(request: Request) {
           const chunk = decoder.decode(value)
           console.log('🟣 | file: route.ts:54 | start | chunk:', chunk)
 
+          // Process the chunk character by character
           for (let i = 0, len = chunk.length; i < len; ++i) {
             const isChunkSeparator = chunk[i] === '\n'
 
@@ -63,9 +80,11 @@ export async function POST(request: Request) {
 
             const line = buffer.join('').trimEnd()
 
+            // Parse the JSON content of each line
             const content = JSON.parse(line)
             const value = content.value
 
+            // Handle different types of messages in the stream
             if (value.type === 'generation') {
               if (value.state === 'start') {
                 if (value.label === 'output') {
@@ -87,8 +106,7 @@ export async function POST(request: Request) {
               console.log(value.values.output)
               try {
                 console.log('parsing:')
-                // const parsedOutput = JSON.parse(value.values.output)
-                // console.log('🟣 | file: route.ts:87 | start | parsedOutput:', parsedOutput)
+                // Update user with the analysis from Wordware
                 await updateUser({
                   user: {
                     ...user,
@@ -100,6 +118,7 @@ export async function POST(request: Request) {
                 console.log('Analysis saved to database')
               } catch (error) {
                 console.error('Error parsing or saving output:', error)
+                // Reset wordwareStarted if there's an error
                 await updateUser({
                   user: {
                     ...user,
@@ -109,15 +128,18 @@ export async function POST(request: Request) {
               }
             }
 
+            // Reset buffer for the next line
             buffer = []
           }
         }
       } finally {
+        // Ensure the reader is released when done
         reader.releaseLock()
       }
     },
   })
 
+  // Return the stream as the response
   return new Response(stream, {
     headers: { 'Content-Type': 'text/plain' },
   })

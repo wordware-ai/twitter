@@ -12,12 +12,22 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Input } from '@/components/ui/input'
 import { cleanUsername } from '@/lib/utils'
 
+/**
+ * Zod schema for form validation
+ */
 const formSchema = z.object({
   username: z.string().min(3).max(50),
 })
 
+/**
+ * NewUsernameForm component
+ * Renders a form for entering a new username
+ * @returns {JSX.Element}
+ */
 const NewUsernameForm = () => {
   const searchParams = useSearchParams()
+
+  // Initialize form with react-hook-form and zod resolver
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -25,6 +35,10 @@ const NewUsernameForm = () => {
     },
   })
 
+  /**
+   * Handle form submission
+   * @param {z.infer<typeof formSchema>} values - Form values
+   */
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const cleanedUsername = cleanUsername(values.username)
     await handleNewUsername({ username: cleanedUsername })
@@ -41,6 +55,7 @@ const NewUsernameForm = () => {
             name="username"
             render={({ field }) => (
               <FormItem>
+                {/* Note: FormLabel is commented out, consider removing if not needed */}
                 {/* <FormLabel>Your X handle or link</FormLabel> */}
                 <FormControl>
                   <div className="flex items-center">
@@ -53,7 +68,7 @@ const NewUsernameForm = () => {
                     <Button
                       disabled={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
                       type="submit"
-                      className="rounded-r-sm rounded-l-none">
+                      className="rounded-l-none rounded-r-sm">
                       Discover
                     </Button>
                   </div>
@@ -64,6 +79,7 @@ const NewUsernameForm = () => {
           />
         </form>
       </Form>
+      {/* Display loading spinner when form is submitting or submission is successful */}
       {(form.formState.isSubmitting || form.formState.isSubmitSuccessful) && (
         <div className="flex items-center gap-2 text-sm">
           <PiSpinner className="animate-spin" />

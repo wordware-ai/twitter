@@ -10,8 +10,13 @@ import { cn } from '@/lib/utils'
 
 import siteMetadata from './metadata'
 
+// Initialize the Inter font with Latin subset
 const inter = Inter({ subsets: ['latin'] })
 
+/**
+ * Metadata configuration for the application
+ * This object defines various metadata properties used for SEO and social sharing
+ */
 export const metadata = {
   metadataBase: new URL(getURL()),
   title: {
@@ -46,6 +51,14 @@ export const metadata = {
   },
 }
 
+/**
+ * RootLayout component
+ * This component serves as the main layout wrapper for the entire application
+ *
+ * @param {Object} props - Component props
+ * @param {React.ReactNode} props.children - Child components to be rendered within the layout
+ * @returns {JSX.Element} The root layout structure of the application
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -54,13 +67,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(inter.className, 'bg-[#F9FAFB] font-light')}>
+        {/* Main content area */}
         {children}
+
+        {/* Callout section */}
         <section className="w-full">
           <Callout />
         </section>
+
+        {/* Newsletter form section */}
         <section className="pb-24">
           <NewsletterForm />
         </section>
+
+        {/* Footer component */}
         <Footer />
       </body>
     </html>

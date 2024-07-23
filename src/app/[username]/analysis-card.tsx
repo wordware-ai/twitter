@@ -8,13 +8,24 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 
+/**
+ * Represents an item in the content array with a title and subtitle.
+ */
 type ContentItem = {
   title: string
   subtitle: string
 }
 
+/**
+ * Defines the possible types for the content prop.
+ * It can be a string, an array of strings, an array of ContentItems,
+ * or an object with string keys and string values.
+ */
 type ContentType = string | string[] | ContentItem[] | { [key: string]: string }
 
+/**
+ * Props for the AnalysisCard component.
+ */
 interface AnalysisCardProps {
   title: string
   icon: IconType
@@ -26,9 +37,17 @@ interface AnalysisCardProps {
   bg?: string
 }
 
+/**
+ * AnalysisCard component displays a card with analysis content.
+ * It can render different types of content based on the ContentType.
+ */
 const AnalysisCard: React.FC<AnalysisCardProps> = ({ title, icon: Icon, content, colorClass, contentKey, wide = false, bg }) => {
   const { username } = useParams()
 
+  /**
+   * Renders the content based on its type.
+   * @returns JSX.Element | null
+   */
   const renderContent = () => {
     if (typeof content === 'string') {
       return (
@@ -66,6 +85,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ title, icon: Icon, content,
     return null
   }
 
+  // If there's no content, don't render the card
   if (!content) return null
 
   return (
@@ -79,6 +99,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ title, icon: Icon, content,
               size={26}
             />
           </div>
+          {/* Share button */}
           <Button
             size={'sm'}
             variant={'ghost'}
@@ -95,7 +116,6 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ title, icon: Icon, content,
         <div className="w-full border-b border-gray-300" />
       </CardHeader>
       <CardContent className="flex flex-col text-gray-700">{renderContent()}</CardContent>
-      {/* <div className={`${gradientClass} absolute bottom-0 -z-10 h-20 w-full`} /> */}
     </Card>
   )
 }

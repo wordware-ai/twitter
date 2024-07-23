@@ -16,6 +16,24 @@ import {
   PiWallet,
 } from 'react-icons/pi'
 
+/**
+ * Configuration for card data used in the application.
+ * Each object in the array represents a card with specific properties.
+ *
+ * @typedef {Object} CardConfig
+ * @property {string} title - The title of the card.
+ * @property {IconType} icon - The icon component from react-icons/pi.
+ * @property {string} contentKey - The key used to fetch content for this card.
+ * @property {string} colorClass - The Tailwind CSS class for text color.
+ * @property {string} color - The color name used for styling.
+ * @property {string} bg - The Tailwind CSS class for background color.
+ * @property {boolean} [wide] - Optional. If true, the card will be wider.
+ */
+
+/**
+ * Array of card configurations.
+ * @type {CardConfig[]}
+ */
 export const cardData = [
   {
     title: 'Strengths',
@@ -136,6 +154,11 @@ export const cardData = [
     colorClass: 'text-red-500',
     color: 'red',
     bg: 'bg-red-500',
-    wide: true,
+    wide: true, // This card will be displayed wider than others
   },
 ]
+
+// Note: This configuration is used to generate cards in the UI.
+// Each card represents a different aspect or category of information.
+// The 'icon', 'colorClass', and 'bg' properties are used for styling.
+// The 'contentKey' is used to fetch the appropriate content for each card.
