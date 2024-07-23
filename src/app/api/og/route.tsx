@@ -94,11 +94,11 @@ function generateOG({
                 key={index}
                 tw="flex flex-col">
                 {typeof item === 'string' ? (
-                  <span tw="text-xl">{item}</span>
+                  <div tw="text-xl">{item}</div>
                 ) : (
-                  <div tw="flex flex-col">
-                    <span tw="text-2xl font-semibold">{item.title}</span>
-                    <span tw="text-xl text-gray-600">{item.subtitle?.replace('*', '')}</span>
+                  <div tw="flex items-center ">
+                    <div tw="text-2xl font-semibold">{item.title}</div>
+                    <div tw="text-xl ml-4 text-gray-800">{item.subtitle?.replace('*', '')}</div>
                   </div>
                 )}
               </div>
@@ -148,7 +148,7 @@ function generateOG({
           </div>
           <div tw="border-b w-full border-gray-300" />
 
-          <div tw="font-bold text-2xl mt-6 flex">{renderContent()}</div>
+          <div tw="mt-6 flex">{renderContent()}</div>
         </div>
       </div>
     </div>
