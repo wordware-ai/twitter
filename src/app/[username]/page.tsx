@@ -1,14 +1,16 @@
+import { Suspense } from 'react'
 import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next/types'
+import { PiXLogo } from 'react-icons/pi'
 
 import { getUser, getUsers } from '@/actions/actions'
+import WordwareLogo from '@/components/logo'
+import NewUsernameForm from '@/components/new-username-form'
+import { Button } from '@/components/ui/button'
 
 // import { getURL } from '@/lib/config'
 
 import ResultComponent from './result-component'
-import WordwareLogo from '@/components/logo'
-import { Button } from '@/components/ui/button'
-import { PiXLogo } from 'react-icons/pi'
 
 export const maxDuration = 300
 export const dynamic = 'force-dynamic'
@@ -36,61 +38,57 @@ const Page = async ({ params }: { params: { username: string } }) => {
   const processedDescription = extractDescription({ fullProfile: data.fullProfile })
 
   return (
-    <div className="flex-center relative min-h-screen w-full flex-col bg-[#F9FAFB] p-4 sm:p-12 md:p-24">
-      <div className='fixed top-0 h-12 w-full border-b bg-white/80 backdrop-blur-sm z-50 flex-center shadow-[5px_5px_30px_rgba(190,190,190,0.15),-5px_-5px_30px_rgba(255,255,255,0.15)]'>
-        <div className='flex items-center justify-between px-12  w-full'>
-        <div className="flex items-center gap-2">
-              This agent has been built with 
+    <div className="flex-center relative min-h-screen w-full flex-col gap-12 bg-[#F9FAFB] px-4 py-28 sm:px-12 md:px-28 md:pt-24">
+      <div className="flex-center fixed top-0 z-50 w-full border-b bg-white/80 py-2 shadow-[5px_5px_30px_rgba(190,190,190,0.15),-5px_-5px_30px_rgba(255,255,255,0.15)] backdrop-blur-sm">
+        <div className="flex w-full flex-col items-center justify-between gap-4 px-2 md:flex-row md:px-12">
+          <div className="flex items-center gap-2">
+            This agent has been built with
+            <a
+              href="https://wordware.ai/"
+              target="_blank">
+              <WordwareLogo
+                color="black"
+                width={134}
+              />
+            </a>
+          </div>
+          <div className="flex-center gap-2">
+            <Button
+              size={'sm'}
+              variant={'default'}
+              asChild>
               <a
-                href="https://wordware.ai/"
-                target="_blank">
+                href={`https://app.wordware.ai/share/${process.env.WORDWARE_PROMPT_ID}/playground`}
+                target="_blank"
+                className="flex-center gap-2">
                 <WordwareLogo
-                  color="black"
-                  width={134}
+                  emblemOnly
+                  color={'white'}
+                  width={12}
                 />
+                Duplicate Project
               </a>
-            </div>
-        <div className='flex-center gap-2'>
-        
-        <Button
-        size={'sm'}
-          variant={'default'}
-          asChild>
-          <a
-            href="https://app.wordware.ai/share/aa3d8ee8-2042-4237-8e9f-d497844b6d91/playground"
-            target="_blank"
-            className="flex-center gap-2">
-            <WordwareLogo
-              emblemOnly
-              color={'white'}
-              width={12}
-            />
-            Duplicate Project
-          </a>
-        </Button>
-        <Button
-        size={'sm'}
-          variant={'outline'}
-          asChild>
-          <a
-            href="https://x.com/wordware_ai"
-            target="_blank"
-            className="flex-center gap-2">
-            <PiXLogo size={18} /> Follow us
-            
-          </a>
-        </Button>
+            </Button>
+            <Button
+              size={'sm'}
+              variant={'outline'}
+              asChild>
+              <a
+                href="https://x.com/wordware_ai"
+                target="_blank"
+                className="flex-center gap-2">
+                <PiXLogo size={18} /> Follow us
+              </a>
+            </Button>
+          </div>
         </div>
-        
-
-        </div>
-      
-
       </div>
       {/* <DotPattern className={cn('-z-50 [mask-image:radial-gradient(300px_circle_at_center,white,transparent)]')} /> */}
-      <div className="flex-center flex-col gap-6 py-12">
-        <div className="text-center text-xl font-light">Here&apos;s the <span className='font-medium'>AI agent</span> analysis of your personality...</div>
-        
+      <div className="flex-center flex-col gap-6">
+        <div className="text-center text-xl font-light">
+          Here&apos;s the <span className="font-medium">AI agent</span> analysis of your personality...
+        </div>
+
         <div className="flex gap-4">
           <div className="flex-center grow">
             <img
@@ -113,6 +111,15 @@ const Page = async ({ params }: { params: { username: string } }) => {
       </div>
 
       <ResultComponent user={data} />
+
+      <div className="flex-center container mx-auto flex-col space-y-4 px-4">
+        <div className="text-center text-2xl font-light">Try with your own profile</div>
+        <div className="flex-center">
+          <Suspense>
+            <NewUsernameForm />
+          </Suspense>
+        </div>
+      </div>
     </div>
   )
 }

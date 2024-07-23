@@ -16,10 +16,7 @@ export async function POST(request: Request) {
     },
   })
 
-  //old app: aa3d8ee8-2042-4237-8e9f-d497844b6d91
-  //new app: 9d647046-a84b-4b9f-9fc1-7ee32a5b6f0b
-
-  const runResponse = await fetch('https://app.wordware.ai/api/released-app/9d647046-a84b-4b9f-9fc1-7ee32a5b6f0b/run', {
+  const runResponse = await fetch(`https://app.wordware.ai/api/released-app/${process.env.WORDWARE_PROMPT_ID}/run`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

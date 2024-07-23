@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { Suspense } from 'react'
+import Link from 'next/link'
 
 import NewUsernameForm from '@/components/new-username-form'
 import Quote from '@/components/quote'
@@ -13,7 +13,7 @@ const Page = () => {
   return (
     <section>
       <div className="flex flex-col md:flex-row">
-        <div className="flex min-h-screen flex-col justify-center bg-[#F9FAFB] p-8 sm:p-12 md:w-1/2 md:p-24 ">
+        <div className="flex min-h-screen flex-col justify-center bg-[#F9FAFB] p-8 sm:p-12 md:w-1/2 md:p-24">
           <div>
             <h1 className="mb-8 text-4xl md:text-5xl 2xl:text-6xl">
               discover your <br />
@@ -55,7 +55,7 @@ const Page = () => {
             </p>
           </div>
           {/* To-do move this section to the bottom of this component and add button "Duplicate AI Agent" */}
-          <div className=''>
+          <div className="">
             <hr className="mb-4" />
             <p className="2xl:text-md mb-2 text-sm">
               this app is powered by Wordware.
@@ -89,7 +89,6 @@ const Page = () => {
           </a>
         </Button> */}
           </div>
-          
         </div>
 
         <div className="flex h-full w-full items-center justify-center bg-[#F6F0F0] md:h-auto md:w-1/2">

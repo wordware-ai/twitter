@@ -4,6 +4,7 @@ import './globals.css'
 
 import Callout from '@/components/callout'
 import Footer from '@/components/footer'
+import { NewsletterForm } from '@/components/newsletter-form'
 import { getURL } from '@/lib/config'
 import { cn } from '@/lib/utils'
 
@@ -52,11 +53,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, 'font-light')}>
+      <body className={cn(inter.className, 'bg-[#F9FAFB] font-light')}>
         {children}
-        <Callout />
+        <section className="w-full">
+          <Callout />
+        </section>
+        <section className="pb-24">
+          <NewsletterForm />
+        </section>
         <Footer />
-        {/* To-do add buttons for duplicate agents + repo + newslette loops */}
       </body>
     </html>
   )

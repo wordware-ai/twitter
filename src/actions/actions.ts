@@ -187,3 +187,24 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
     }
   }
 }
+
+export const createLoopsContact = async ({ email }: { email: string }) => {
+  const options = {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${process.env.LOOPS_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: email,
+      source: 'audioscribe',
+      subscribed: true,
+    }),
+  }
+
+  try {
+    const response = await fetch('https://app.loops.so/api/v1/contacts/create', options)
+    await response.json()
+
+    return { success: true }
+  } catch (error) {
+    return { success: false, error: error }
+  }
+}
