@@ -81,6 +81,7 @@ function generateOG({
   const Icon = cardData.filter((card) => card.contentKey === section)[0].icon
   const bgClass = cardData.filter((card) => card.contentKey === section)[0].bg
   const colorClass = cardData.filter((card) => card.contentKey === section)[0].colorClass
+  const title = cardData.filter((card) => card.contentKey === section)[0].title
 
   const renderContent = () => {
     try {
@@ -143,7 +144,7 @@ function generateOG({
 
         <div tw="flex flex-col">
           <div tw={`text-4xl h-28 flex items-center  ${colorClass}`}>
-            <Icon size={32} /> <span tw="pl-6">My {section.charAt(0).toUpperCase() + section.slice(1)} according to AI</span>
+            <Icon size={32} /> <span tw="pl-6">My {title} according to AI</span>
           </div>
           <div tw="border-b w-full border-gray-300" />
 
