@@ -79,7 +79,7 @@ function generateOG({
                     {item}
                   </div>
                 ) : (
-                  <div tw="flex mt-4 items-start">
+                  <div tw="flex mt-2 items-start">
                     <div
                       tw="text-2xl w-1/4"
                       style={{ fontWeight: 300 }}>
