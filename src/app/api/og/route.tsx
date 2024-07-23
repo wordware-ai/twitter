@@ -280,7 +280,7 @@ function generateOG({
               <div
                 key={index}
                 style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-                <div style={{ fontSize: '24px', fontWeight: 300, width: '25%' }}>{typeof item === 'string' ? item : item.title}</div>
+                <div style={{ fontSize: '30px', fontWeight: 600, width: '25%' }}>{typeof item === 'string' ? item : item.title}</div>
                 {typeof item !== 'string' && <div style={{ fontSize: '24px', fontWeight: 300, width: '75%' }}>{item.subtitle?.replace(/\*/g, '')}</div>}
               </div>
             ))}
@@ -292,7 +292,7 @@ function generateOG({
             {Object.entries(parsedContent).map(([key, value], index) => (
               <div
                 key={index}
-                style={{ fontSize: '24px', fontWeight: 300 }}>
+                style={{ fontSize: '30px', fontWeight: 300 }}>
                 <span>{key}:</span> {typeof value === 'string' ? value.replace(/\*/g, '') : ''}
               </div>
             ))}
@@ -305,7 +305,7 @@ function generateOG({
 
     // Fallback for unparseable content
     return (
-      <div style={{ fontSize: '24px', fontWeight: 300 }}>
+      <div style={{ fontSize: '30px', fontWeight: 300 }}>
         {content?.length > 500 ? content.slice(0, 500).replace(/\*/g, '') + '...' : content?.replace(/\*/g, '')}
       </div>
     )
@@ -330,7 +330,7 @@ function generateOG({
           borderRadius: '16px',
           padding: '36px',
           // paddingBottom: '44px',
-          paddingTop: '32px',
+          paddingTop: '36px',
           height: '100%',
           position: 'relative',
           border: '1px solid #e5e7eb',
@@ -343,7 +343,7 @@ function generateOG({
             alignItems: 'center',
             justifyContent: 'space-between',
             // borderBottom: '1px solid #0d0d0d',
-            paddingBottom: '24px',
+            paddingBottom: '26px',
           }}>
           <div
             tw={`${colorClass}`}
@@ -355,7 +355,7 @@ function generateOG({
         {/* Content section */}
         <div
           tw="items-center font-light"
-          style={{ marginTop: '24px', color: '#374151', display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
+          style={{ marginTop: '24px', color: '#1a1a1a', display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
           {renderContent()}
         </div>
 
@@ -383,8 +383,8 @@ function generateOG({
               {name}
             </div>
             <div
-              tw="font-bold"
-              style={{ display: 'flex', fontSize: '18px' }}>
+              tw="font-bold "
+              style={{ display: 'flex', fontSize: '18px', color: '#7e7e7e' }}>
               @{username}
             </div>
           </div>
