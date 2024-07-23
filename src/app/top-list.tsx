@@ -26,7 +26,7 @@ const TopList = async () => {
               <div className="w-full">
                 <p className="text-start font-semibold">{user.name || user.username}</p>
                 <p className="text-start text-sm text-gray-500">@{user.username}</p>
-                <p className="text-start text-sm text-gray-500">{user.followers} followers</p>
+                <p className="text-start text-sm text-gray-500">{user.followers?.toLocaleString()} followers</p>
               </div>
             </div>
           </Link>
@@ -50,7 +50,7 @@ const TopList = async () => {
               <div className="w-full">
                 <p className="text-start font-semibold">{user.name || user.username}</p>
                 <p className="text-start text-sm text-gray-500">@{user.username}</p>
-                <p className="text-start text-sm text-gray-500">{user.followers} followers</p>
+                <p className="text-start text-sm text-gray-500">{user.followers?.toLocaleString()} followers</p>
               </div>
             </div>
           </Link>
