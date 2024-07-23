@@ -144,7 +144,7 @@ function generateOG({
 
         <div tw="flex flex-col">
           <div tw={`text-4xl h-28 flex items-center  ${colorClass}`}>
-            <Icon size={32} /> <span tw="pl-6">My {title} according to AI</span>
+            <Icon size={32} /> <span tw="pl-6">My {title} according to the AI Agent</span>
           </div>
           <div tw="border-b w-full border-gray-300" />
 
