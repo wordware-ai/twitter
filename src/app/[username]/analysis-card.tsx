@@ -93,22 +93,22 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ title, icon: Icon, content,
       <CardHeader className="flex w-full flex-col items-start">
         <CardTitle className="flex w-full items-center justify-between py-2 pb-4 text-2xl">
           <div className="flex items-center gap-2">
-            <span className={`text-xl font-light ${colorClass}`}>{title}</span>
             <Icon
-              className="ml-3 mr-3"
+              className={cn('', colorClass)}
               size={26}
             />
+            <span className={`text-xl font-light ${colorClass}`}>{title}</span>
           </div>
           {/* Share button */}
           <Button
             size={'sm'}
             variant={'ghost'}
-            className="border border-transparent transition-all duration-100 hover:border-black hover:bg-transparent"
+            className={`border border-transparent transition-all duration-100 hover:border-black hover:bg-transparent ${bg} `}
             asChild>
             <a
               target="_blank"
-              className={cn(`flex-center gap-2 text-lg`, colorClass)}
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`this is my Twitter Personality analysis by AI Agent, built on @wordware_ai`)}&url=${encodeURIComponent(`https://twitter.wordware.ai/${username}?section=${contentKey}`)}`}>
+              className={cn(`flex-center gap-2 text-lg text-white`)}
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`this is my Twitter Personality analysis by AI Agent, built on@wordware_ai`)}&url=${encodeURIComponent(`https://twitter.wordware.ai/${username}?section=${contentKey}`)}`}>
               <PiXLogo /> Share
             </a>
           </Button>

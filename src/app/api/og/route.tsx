@@ -305,8 +305,8 @@ function generateOG({
 
     // Fallback for unparseable content
     return (
-      <div style={{ fontSize: '30px', fontWeight: 300 }}>
-        {content?.length > 500 ? content.slice(0, 500).replace(/\*/g, '') + '...' : content?.replace(/\*/g, '')}
+      <div style={{ fontSize: '36px', fontWeight: 300 }}>
+        {content?.length > 300 ? content.slice(0, 500).replace(/\*/g, '') + '...' : content?.replace(/\*/g, '')}
       </div>
     )
   }
