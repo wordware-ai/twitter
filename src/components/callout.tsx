@@ -58,7 +58,7 @@ const Callout = () => {
               color={'white'}
               width={12}
             />
-            Duplicate Wordware Project
+            Duplicate Wordware AI Agent
           </a>
         </Button>
 

@@ -78,7 +78,7 @@ const Page = async ({ params }: { params: { username: string } }) => {
                   color={'white'}
                   width={12}
                 />
-                Duplicate Project
+                Duplicate this AI Agent
               </a>
             </Button>
             <Button

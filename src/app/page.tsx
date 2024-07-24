@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import Link from 'next/link'
+import { PiGithubLogo } from 'react-icons/pi'
 
 import Quote from '@/app/quote'
 import WordwareLogo from '@/components/logo'
@@ -45,11 +45,10 @@ const Page = () => {
             </p>
           </div>
 
-          <div className="bottom-6 md:absolute">
-            <hr className="mb-4" />
-            <p className="2xl:text-md mb-2 text-sm">
-              this app is powered by Wordware.
-              <br />
+          <div className="bottom-6 border-t md:absolute">
+            <p className="2xl:text-md py-4 text-sm">
+              this app is powered by Wordware - an IDE for building AI agents.
+              {/* <br />
               you can build your own AI app in ~15 minutes.{' '}
               <span
                 className="bg-clip-text font-bold text-transparent"
@@ -60,9 +59,9 @@ const Page = () => {
                   rel="noopener noreferrer">
                   try here!
                 </Link>
-              </span>
+              </span> */}
             </p>
-            <div className="flex">
+            <div className="flex items-center justify-start gap-2">
               <Button
                 size={'sm'}
                 variant={'outline'}
@@ -77,6 +76,18 @@ const Page = () => {
                     width={12}
                   />
                   Duplicate this AI Agent
+                </a>
+              </Button>
+              <Button
+                size={'sm'}
+                variant={'outline'}
+                asChild>
+                <a
+                  href="https://github.com/wordware-ai/twitter"
+                  target="_blank"
+                  className="flex-center gap-2">
+                  <PiGithubLogo />
+                  GitHub Repo
                 </a>
               </Button>
             </div>

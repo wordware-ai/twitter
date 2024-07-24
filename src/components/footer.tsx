@@ -14,7 +14,7 @@ const Footer = () => {
           <a
             href="mailto:hello@wordware.ai"
             target="_blank"
-            className="flex-center gap-2 text-white transition-all duration-150 hover:underline">
+            className="flex-center gap-2 text-white">
             <PiEnvelope size={18} />
             Email us
           </a>
@@ -22,7 +22,7 @@ const Footer = () => {
           <a
             href="https://discord.gg/6Zm5FGC2kR"
             target="_blank"
-            className="flex-center gap-2 text-white transition-all duration-150 hover:underline">
+            className="flex-center gap-2 text-white">
             <PiDiscordLogo size={18} />
             Join Discord
           </a>
@@ -30,14 +30,14 @@ const Footer = () => {
           <a
             href="https://x.com/wordware_ai"
             target="_blank"
-            className="flex-center gap-2 text-white transition-all duration-150 hover:underline">
+            className="flex-center gap-2 text-white">
             <PiXLogo size={18} />X (fka. Twitter)
           </a>
 
           <a
             href="https://www.linkedin.com/company/wordware/"
             target="_blank"
-            className="flex-center gap-2 text-white transition-all duration-150 hover:underline">
+            className="flex-center gap-2 text-white">
             <PiLinkedinLogo size={18} />
             LinkedIn
           </a>
