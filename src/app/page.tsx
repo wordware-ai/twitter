@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import Link from 'next/link'
 import { PiGithubLogo } from 'react-icons/pi'
 
 import Quote from '@/app/quote'
@@ -48,7 +49,7 @@ const Page = () => {
           <div className="bottom-6 border-t md:absolute">
             <p className="2xl:text-md py-4 text-sm">
               this app is powered by Wordware - an IDE for building AI agents.
-              {/* <br />
+              <br />
               you can build your own AI app in ~15 minutes.{' '}
               <span
                 className="bg-clip-text font-bold text-transparent"
@@ -59,7 +60,7 @@ const Page = () => {
                   rel="noopener noreferrer">
                   try here!
                 </Link>
-              </span> */}
+              </span>
             </p>
             <div className="flex items-center justify-start gap-2">
               <Button
