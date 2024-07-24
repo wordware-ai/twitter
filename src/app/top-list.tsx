@@ -72,12 +72,12 @@ const TopList = async () => {
       {/* Display grid of top users */}
       <UserGrid
         users={top}
-        title="Popular Tweeters"
+        title="Most Popular"
       />
       {/* Display grid of featured users */}
       <UserGrid
         users={featured}
-        title="Featured"
+        title="AI Agents Luminaries"
       />
     </div>
   )
