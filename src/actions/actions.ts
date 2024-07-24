@@ -3,7 +3,7 @@
 import { unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { ApifyClient } from 'apify-client'
-import { desc, eq } from 'drizzle-orm'
+import { desc, eq, inArray, sql } from 'drizzle-orm'
 
 import { db } from '@/drizzle/db'
 import { InsertUser, SelectUser, users } from '@/drizzle/schema'
@@ -30,26 +30,24 @@ export const getUsers = async () => {
   return data
 }
 
+const featuredUsernames = ['yoheinakajima', 'MattPRD', 'benparr', 'jowyang', 'saranormous', 'swyx', 'azeem', 'ky__zo', 'unable0_', 'bertie_ai', 'kozerafilip']
 /**
  * Retrieves the top 12 users based on follower count.
- * @returns {Promise<SelectUser[]>} An array of the top 12 user objects.
  */
-export const getTop = async () => {
+export const getTop = async (): Promise<SelectUser[]> => {
   noStore()
-  const data = await db.select().from(users).orderBy(desc(users.followers)).limit(12)
-  // Uncomment the following lines if you want to include a specific user in the results
-  // const kyzo = await db.select().from(users).where(eq(users.username, 'ky__zo'))
-  // const merged = [...data, ...kyzo]
+  const data = await db
+    .select()
+    .from(users)
+    .where(sql`${users.username} NOT IN ${featuredUsernames}`)
+    .orderBy(desc(users.followers))
+    .limit(12)
   return data
 }
 
-/**
- * Retrieves 12 featured users based on follower count.
- * @returns {Promise<SelectUser[]>} An array of 12 featured user objects.
- */
-export const getFeatured = async () => {
+export const getFeatured = async (): Promise<SelectUser[]> => {
   noStore()
-  const data = await db.select().from(users).orderBy(desc(users.followers)).limit(12)
+  const data = await db.select().from(users).where(inArray(users.username, featuredUsernames)).orderBy(desc(users.followers))
   return data
 }
 
