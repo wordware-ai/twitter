@@ -21,7 +21,7 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata = {
   metadataBase: new URL(getURL()),
   title: {
-    template: `%s • AI Agent Twitter Personality`,
+    template: `%s’s Twitter Personality Analysis by AI Agent`,
     default: siteMetadata.title,
   },
   description: siteMetadata.description,

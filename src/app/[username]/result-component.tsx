@@ -232,13 +232,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
               <a
                 target="_blank"
                 className="flex-center gap-2"
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`AI says this is my Twitter Personality: 👀
-${result?.emojis}
-${result?.about}
-
-What's yours?
-
-https://twitter.wordware.ai/${user.username}`)}`}>
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`this is my Twitter Personality analysis by AI Agent, built on @wordware_ai`)}&url=${encodeURIComponent(`https://twitter.wordware.ai/${user.username}`)}`}>
                 <PiXLogo /> Share
               </a>
             </Button>

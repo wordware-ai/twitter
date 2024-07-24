@@ -1,7 +1,7 @@
 import { getURL } from '@/lib/config'
 
 const siteMetadata = {
-  title: 'Twitter Personality · AI Agent',
+  title: 'Twitter Personality - AI Agent by Wordware',
   author: 'Wordware',
   headerTitle: 'Twitter Personality',
   description:
