@@ -2,6 +2,7 @@
 
 import posthog from 'posthog-js'
 import { PostHogProvider } from 'posthog-js/react'
+import { Toaster } from 'sonner'
 
 if (typeof window !== 'undefined') {
   if (process.env.NEXT_PUBLIC_POSTHOG_KEY !== '...' && process.env.NEXT_PUBLIC_POSTHOG_HOST !== '...') {
@@ -15,5 +16,13 @@ if (typeof window !== 'undefined') {
 }
 
 export default function Providers({ children }: { children: React.ReactNode }) {
-  return <PostHogProvider client={posthog}>{children}</PostHogProvider>
+  return (
+    <PostHogProvider client={posthog}>
+      <Toaster
+        richColors
+        position="top-left"
+      />
+      {children}
+    </PostHogProvider>
+  )
 }

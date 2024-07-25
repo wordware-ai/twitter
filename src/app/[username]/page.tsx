@@ -188,8 +188,8 @@ export async function generateMetadata({ params, searchParams }: { params: { use
   }
 
   return {
-    title: `${name}'s ${section.charAt(0).toUpperCase() + section.slice(1)} Analysis`,
-    description: `Check out ${name}'s ${section} analysis.`,
+    title: `${name}`,
+    description: `Check out ${name}'s analysis.`,
     openGraph: {
       url: `/${username}?section=${section}`,
       images: image,

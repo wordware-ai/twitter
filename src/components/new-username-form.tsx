@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { PiSpinner } from 'react-icons/pi'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { handleNewUsername } from '@/actions/actions'
@@ -41,7 +42,11 @@ const NewUsernameForm = () => {
    */
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const cleanedUsername = cleanUsername(values.username)
-    await handleNewUsername({ username: cleanedUsername })
+    const response = await handleNewUsername({ username: cleanedUsername })
+    console.log('🟣 | file: new-username-form.tsx:46 | onSubmit | response:', response)
+    if (response?.error) {
+      toast.error(response.error)
+    }
   }
 
   return (
@@ -60,13 +65,13 @@ const NewUsernameForm = () => {
                 <FormControl>
                   <div className="flex items-center">
                     <Input
-                      disabled={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
+                      disabled={form.formState.isSubmitting}
                       className="w-full rounded-l-sm rounded-r-none border-black"
                       placeholder="@username"
                       {...field}
                     />
                     <Button
-                      disabled={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
+                      disabled={form.formState.isSubmitting}
                       type="submit"
                       className="rounded-l-none rounded-r-sm">
                       Discover
@@ -80,7 +85,7 @@ const NewUsernameForm = () => {
         </form>
       </Form>
       {/* Display loading spinner when form is submitting or submission is successful */}
-      {(form.formState.isSubmitting || form.formState.isSubmitSuccessful) && (
+      {form.formState.isSubmitting && (
         <div className="flex items-center gap-2 text-sm">
           <PiSpinner className="animate-spin" />
           Looking for your X profile...

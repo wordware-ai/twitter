@@ -87,6 +87,8 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
 
   // If user does not exist, scrape the profile and then redirect to user's page.
   const { data, error } = await scrapeProfile({ username })
+  console.log('🟣 | file: actions.ts:90 | handleNewUsername | error:', error)
+  console.log('🟣 | file: actions.ts:90 | handleNewUsername | data:', data)
 
   if (data && !error) {
     const user = {
@@ -95,17 +97,14 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
       error: null,
     }
     await insertUser({ user })
+    redirect(`/${data?.username}`)
   }
   if (!data && error) {
-    const user = {
-      username,
-      error: `We couldn't find your profile. Please try again with a different username.`,
-      profileScraped: false,
+    return {
+      data: null,
+      error: error,
     }
-    await insertUser({ user })
   }
-
-  redirect(`/${data?.username}`)
 }
 
 // Initialize the Apify client with the API key
@@ -129,12 +128,14 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
     customMapFunction: '(object) => { return {...object} }',
   }
   try {
+    console.log('Scraping...')
     const run = await apifyClient.actor('apidojo/twitter-user-scraper').call(input)
     console.log('🟣 | file: actions.ts:72 | scrapeProfile | run:', run)
+    if (run.status === 'FAILED') throw new Error(`Scraping Error: ${run.statusMessage}`)
+
     const { items: profiles } = await apifyClient.dataset(run.defaultDatasetId).listItems()
     const profile = profiles[0]
     const profilePicture = profile.profilePicture as string
-    console.log('🟣 | file: actions.ts:76 | scrapeProfile | profilePicture:', profilePicture)
 
     if (!profile || Object.keys(profile).length === 0) throw new Error('No profile found')
 
@@ -154,7 +155,7 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
   } catch (error) {
     return {
       data: null,
-      error: 'No profile found',
+      error: error instanceof Error ? error.message : 'No profile found',
     }
   }
 }
