@@ -30,7 +30,20 @@ export const getUsers = async () => {
   return data
 }
 
-const featuredUsernames = ['yoheinakajima', 'MattPRD', 'benparr', 'jowyang', 'saranormous', 'swyx', 'azeem', 'ky__zo', 'unable0_', 'bertie_ai', 'kozerafilip']
+const featuredUsernames = [
+  'yoheinakajima',
+  'MattPRD',
+  'benparr',
+  'jowyang',
+  'saranormous',
+  'swyx',
+  'azeem',
+  'unable0_',
+  'bertie_ai',
+  'kozerafilip',
+  'AlexReibman',
+  'bentossell',
+]
 /**
  * Retrieves the top 12 users based on follower count.
  */
@@ -39,9 +52,16 @@ export const getTop = async (): Promise<SelectUser[]> => {
   const data = await db
     .select()
     .from(users)
-    .where(sql`${users.username} NOT IN ${featuredUsernames}`)
+    .where(sql`${users.username} NOT IN ${[...featuredUsernames, 'ky__zo']}`)
     .orderBy(desc(users.followers))
-    .limit(12)
+    .limit(11)
+
+  const au = await db.select().from(users).where(eq(users.username, 'ky__zo')).limit(1)
+
+  if (au.length > 0) {
+    data.push(au[0])
+  }
+
   return data
 }
 
