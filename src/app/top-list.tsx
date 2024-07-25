@@ -2,7 +2,10 @@ import React from 'react'
 import Link from 'next/link'
 
 import { getFeatured, getTop } from '@/actions/actions'
+import WordwareLogo from '@/components/logo'
 import { SelectUser } from '@/drizzle/schema'
+
+const wordwareBoys = ['kozerafilip', 'bertie_ai', 'unable0_']
 
 /**
  * UserCard component displays a card with user information.
@@ -15,7 +18,7 @@ const UserCard = ({ user }: { user: SelectUser }) => (
   <Link
     href={`/${user.username}`}
     key={user.id}
-    className="block w-full rounded-lg border bg-white p-4 shadow-[5px_5px_30px_rgba(190,190,190,0.15),-5px_-5px_30px_rgba(255,255,255,0.15)] transition-all duration-100 hover:shadow-[5px_5px_30px_rgba(190,190,190,0.3),-5px_-5px_30px_rgba(255,255,255,0.3)]">
+    className="relative block w-full rounded-lg border bg-white p-4 shadow-[5px_5px_30px_rgba(190,190,190,0.15),-5px_-5px_30px_rgba(255,255,255,0.15)] transition-all duration-100 hover:shadow-[5px_5px_30px_rgba(190,190,190,0.3),-5px_-5px_30px_rgba(255,255,255,0.3)]">
     <div className="flex w-full items-center gap-4">
       <img
         src={user.profilePicture || ''}
@@ -29,6 +32,16 @@ const UserCard = ({ user }: { user: SelectUser }) => (
         <p className="text-start text-sm text-gray-500">@{user.username}</p>
         <p className="text-start text-sm text-gray-500">{user.followers?.toLocaleString()} followers</p>
       </div>
+
+      {wordwareBoys.includes(user.username) && (
+        <div className="absolute bottom-4 right-4">
+          <WordwareLogo
+            emblemOnly
+            color="black"
+            width={20}
+          />
+        </div>
+      )}
     </div>
   </Link>
 )
