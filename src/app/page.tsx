@@ -47,7 +47,7 @@ const Page = () => {
               </Suspense>
             </div>
 
-            <p className="mb-8 pt-8 text-base 2xl:text-lg">
+            <p className="mb-8 pt-6 text-base 2xl:text-lg">
               we built an AI agent that analyzes your tweets
               <br />
               <span className="font-medium">to reveal the unique traits that make you, you.</span>
