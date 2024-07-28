@@ -16,6 +16,19 @@ const Page = () => {
     <section>
       <div className="flex flex-col md:flex-row">
         <div className="relative flex min-h-screen flex-col justify-center bg-[#F9FAFB] p-8 sm:p-12 md:w-1/2 md:p-20 lg:p-24">
+          <a
+            className="top-12 pb-4 lg:absolute"
+            href="https://www.producthunt.com/posts/twitter-personality-analysis-ai-agent?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-twitter&#0045;personality&#0045;analysis&#0045;ai&#0045;agent"
+            target="_blank">
+            <img
+              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=474144&theme=dark"
+              alt="Twitter&#0032;Personality&#0032;Analysis&#0032;&#0045;&#0032;AI&#0032;agent - AI&#0032;agent&#0032;that&#0032;analyzes&#0032;tweets&#0032;to&#0032;reveal&#0032;your&#0032;unique&#0032;traits&#0046; | Product Hunt"
+              style={{ width: '166px', height: '36px' }}
+              width={166}
+              height={36}
+            />
+          </a>
+
           <div>
             <h1 className="mb-8 text-4xl md:text-5xl 2xl:text-6xl">
               discover your <br />
@@ -46,8 +59,8 @@ const Page = () => {
             </p>
           </div>
 
-          <div className="bottom-6 border-t md:absolute">
-            <p className="2xl:text-md py-4 text-sm">
+          <div className="bottom-6 space-y-3 border-t xl:absolute">
+            <p className="pt-3 text-sm">
               this app is powered by Wordware - an IDE for building AI agents.
               <br />
               you can build your own AI app in ~15 minutes.{' '}
@@ -91,6 +104,20 @@ const Page = () => {
                   GitHub Repo
                 </a>
               </Button>
+            </div>
+            <div className="flex flex-col gap-2">
+              <p className="text-sm">Support the Wordware launch this Friday!</p>
+              <a
+                href="https://www.producthunt.com/posts/wordware-yc-s24?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-wordware&#0045;yc&#0045;s24"
+                target="_blank">
+                <img
+                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=474117&theme=dark"
+                  alt="Wordware&#0032;&#0040;YC&#0032;S24&#0041; - web&#0045;hosted&#0032;IDE&#0032;for&#0032;building&#0032;AI&#0032;agents | Product Hunt"
+                  style={{ width: '166px', height: '36px' }}
+                  width={166}
+                  height={36}
+                />
+              </a>
             </div>
           </div>
         </div>

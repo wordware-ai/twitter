@@ -4,7 +4,7 @@
 
 Twitter Personality is a web application that analyzes your Twitter handle to create a personalized personality profile using Wordware AI Agent. This project leverages cutting-edge AI technologies to provide users with unique insights into their Twitter persona. 🚀
 
-You can explore the AI agent and prompts used in this app by visiting [this Wordware link](https://app.wordware.ai/share/9d647046-a84b-4b9f-9fc1-7ee32a5b6f0b/playground).
+You can explore the AI agent and prompts used in this app by visiting [this Wordware link](https://app.wordware.ai/share/2436ad08-5374-4750-a0f9-105080ff97ea/playground).
 
 ## Setting Up the Project 🛠️
 
