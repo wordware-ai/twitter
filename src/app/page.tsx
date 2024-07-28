@@ -105,8 +105,14 @@ const Page = () => {
                 </a>
               </Button>
             </div>
-            <div className="flex flex-col gap-2">
-              <p className="text-sm">Support the Wordware launch this Friday!</p>
+            <div className="flex flex-col gap-6"> 
+                <p className="text-sm">
+                  <span
+                    className="bg-clip-text font-bold text-transparent"
+                    style={{ backgroundColor: '#CB9F9F' }}>
+                    Support the Wordware launch this Friday!
+                  </span>
+                </p>
               <a
                 href="https://www.producthunt.com/posts/wordware-yc-s24?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-wordware&#0045;yc&#0045;s24"
                 target="_blank">
