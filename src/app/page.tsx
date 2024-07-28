@@ -106,11 +106,12 @@ const Page = () => {
               </Button>
             </div>
             <div className="flex flex-col gap-6"> 
-                <p className="text-sm">
+              <div className="flex flex-col gap-2">
+                <p className="text-sm mt-2">
                   <span
                     className="bg-clip-text font-bold text-transparent"
                     style={{ backgroundColor: '#CB9F9F' }}>
-                    Support the Wordware launch this Friday!
+                    support the Wordware launch this Friday!
                   </span>
                 </p>
               <a
