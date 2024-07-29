@@ -29,7 +29,7 @@ export const getUser = async ({ username }: { username: SelectUser['username'] }
  */
 export const getUsers = async () => {
   noStore()
-  const data = await db.select().from(users)
+  const data = await db.select({ username: users.username }).from(users)
   return data
 }
 

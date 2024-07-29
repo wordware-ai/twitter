@@ -154,9 +154,7 @@ export default Page
 
 export async function generateStaticParams() {
   const users = await getUsers()
-  return users.map((user) => ({
-    username: user.username,
-  }))
+  return users
 }
 
 export async function generateMetadata({ params, searchParams }: { params: { username?: string }; searchParams: { section?: string } }) {
