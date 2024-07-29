@@ -29,6 +29,7 @@ import { cardData } from './config'
 export type TwitterAnalysis = {
   [key: string]: string | { title: string; subtitle: string }[] | string[] | undefined
   about?: string
+  roast?: string
   strengths?: {
     title: string
     subtitle: string
@@ -49,7 +50,6 @@ export type TwitterAnalysis = {
   fiftyDollarThing?: string
   career?: string
   lifeSuggestion?: string
-  roast?: string
   emojis?: string
 }
 

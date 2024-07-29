@@ -36,6 +36,15 @@ import {
  */
 export const cardData = [
   {
+    title: 'Roast',
+    icon: PiFire,
+    contentKey: 'roast',
+    colorClass: 'text-red-500',
+    color: 'red',
+    bg: 'bg-red-500',
+    wide: true, // This card will be displayed wider than others
+  },
+  {
     title: 'Strengths',
     icon: PiFlame,
     contentKey: 'strengths',
@@ -146,15 +155,6 @@ export const cardData = [
     colorClass: 'text-teal-500',
     color: 'teal',
     bg: 'bg-teal-500',
-  },
-  {
-    title: 'Roast',
-    icon: PiFire,
-    contentKey: 'roast',
-    colorClass: 'text-red-500',
-    color: 'red',
-    bg: 'bg-red-500',
-    wide: true, // This card will be displayed wider than others
   },
 ]
 
