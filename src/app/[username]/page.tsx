@@ -4,7 +4,7 @@ import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next/types'
 import { PiCaretLeft, PiXLogo } from 'react-icons/pi'
 
-import { getUser } from '@/actions/actions'
+import { getUser, getUsers } from '@/actions/actions'
 import WordwareLogo from '@/components/logo'
 import NewUsernameForm from '@/components/new-username-form'
 import { Button } from '@/components/ui/button'
@@ -152,10 +152,10 @@ const Page = async ({ params }: { params: { username: string } }) => {
 
 export default Page
 
-// export async function generateStaticParams() {
-//   const users = await getUsers()
-//   return users
-// }
+export async function generateStaticParams() {
+  const users = await getUsers()
+  return users
+}
 
 export async function generateMetadata({ params, searchParams }: { params: { username?: string }; searchParams: { section?: string } }) {
   if (!params.username) return notFound()
