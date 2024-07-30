@@ -4,6 +4,7 @@ import { unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { ApifyClient } from 'apify-client'
 import { desc, eq, inArray, sql } from 'drizzle-orm'
+import { toast } from 'sonner'
 
 import { db } from '@/drizzle/db'
 import { InsertUser, SelectUser, users } from '@/drizzle/schema'
@@ -234,7 +235,33 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
     }
     await updateUser({ user })
     // console.log('twitter scrap started')
-    const { data: tweets, error } = await scrapeTweets({ username })
+    let tweets
+    let error
+    try {
+      const res = await scrapeTweets({ username })
+      tweets = res.data
+      error = res.error
+      if (!tweets) throw new Error('No tweets found')
+    } catch (e) {
+      error = e
+      toast.warning('Tweet scraping failed. Trying again...)')
+      try {
+        const res = await scrapeTweets({ username })
+        tweets = res.data
+        error = res.error
+        console.error('🟣 | file: actions.ts:252 | processScrapedUserFirst | e:', e)
+        if (!tweets) throw new Error('No tweets found')
+      } catch (e) {
+        console.error('🟣 | file: actions.ts:255 | processScrapedUserSecond | e:', e)
+        toast.warning(
+          "Tweet scraping failed a second time. Apologies - we're experiencing very high traffic at the moment. Please check that the linked profile has tweets and try again in a few minutes. Thank you for your patience.",
+        )
+        return {
+          ...user,
+          error: JSON.stringify(e),
+        }
+      }
+    }
     console.log('🟣 | file: actions.ts:143 | processScrapedUser | tweets:', tweets?.length)
     if (tweets && !error) {
       user = {
