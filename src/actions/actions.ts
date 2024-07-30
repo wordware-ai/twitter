@@ -181,7 +181,7 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
 export const scrapeTweets = async ({ username }: { username: string }) => {
   const input = {
     startUrls: [`https://twitter.com/${username}`],
-    maxItems: 20,
+    maxItems: 14,
     sort: 'Latest',
     tweetLanguage: 'en',
     customMapFunction: `(object) => { 
