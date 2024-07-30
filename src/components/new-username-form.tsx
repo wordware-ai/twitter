@@ -45,7 +45,8 @@ const NewUsernameForm = () => {
     const response = await handleNewUsername({ username: cleanedUsername })
     console.log('🟣 | file: new-username-form.tsx:46 | onSubmit | response:', response)
     if (response?.error) {
-      toast.error(response.error)
+      toast.error(`We're experiencing high traffic at the moment. Please try again in a few minutes. Thank you for your patience.`)
+      console.log(response.error)
     }
   }
 

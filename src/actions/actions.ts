@@ -1,12 +1,12 @@
 'use server'
 
-import {unstable_noStore as noStore} from 'next/cache'
-import {redirect} from 'next/navigation'
-import {ApifyClient} from 'apify-client'
-import {desc, eq, inArray, sql} from 'drizzle-orm'
+import { unstable_noStore as noStore } from 'next/cache'
+import { redirect } from 'next/navigation'
+import { ApifyClient } from 'apify-client'
+import { desc, eq, inArray, sql } from 'drizzle-orm'
 
-import {db} from '@/drizzle/db'
-import {InsertUser, SelectUser, users} from '@/drizzle/schema'
+import { db } from '@/drizzle/db'
+import { InsertUser, SelectUser, users } from '@/drizzle/schema'
 
 /**
  * Retrieves a user from the database by their username.
@@ -14,9 +14,12 @@ import {InsertUser, SelectUser, users} from '@/drizzle/schema'
  * @param {SelectUser['username']} params.username - The username of the user to retrieve.
  * @returns {Promise<SelectUser | undefined>} The user object if found, undefined otherwise.
  */
-export const getUser = async ({username}: { username: SelectUser['username'] }) => {
+export const getUser = async ({ username }: { username: SelectUser['username'] }) => {
   noStore()
-  const data = await db.select().from(users).where(eq(users.username, username))
+  const data = await db
+    .select()
+    .from(users)
+    .where(sql`LOWER(${users.username}) = LOWER(${username})`)
   return data[0]
 }
 
@@ -26,7 +29,7 @@ export const getUser = async ({username}: { username: SelectUser['username'] }) 
  */
 export const getUsers = async () => {
   noStore()
-  const data = await db.select().from(users)
+  const data = await db.select({ username: users.username }).from(users)
   return data
 }
 
@@ -42,25 +45,14 @@ const featuredUsernames = [
   'bertie_ai',
   'kozerafilip',
   'AlexReibman',
-  'bentossell'
+  'bentossell',
 ]
 /**
  * Retrieves the top 12 users based on follower count.
  */
 export const getTop = async (): Promise<SelectUser[]> => {
   noStore()
-  const data = await db
-    .select()
-    .from(users)
-    .where(sql`${users.username} NOT IN ${[...featuredUsernames, 'ky__zo']}`)
-    .orderBy(desc(users.followers))
-    .limit(11)
-
-  const au = await db.select().from(users).where(eq(users.username, 'ky__zo')).limit(1)
-
-  if (au.length > 0) {
-    data.push(au[0])
-  }
+  const data = await db.select().from(users).orderBy(desc(users.followers)).limit(12)
 
   return data
 }
@@ -76,7 +68,7 @@ export const getFeatured = async (): Promise<SelectUser[]> => {
  * @param {Object} params - The parameters for the function.
  * @param {InsertUser} params.user - The user object to insert.
  */
-export const insertUser = async ({user}: { user: InsertUser }) => {
+export const insertUser = async ({ user }: { user: InsertUser }) => {
   await db.insert(users).values(user)
 }
 
@@ -86,7 +78,7 @@ export const insertUser = async ({user}: { user: InsertUser }) => {
  * @param {InsertUser} params.user - The user object with updated information.
  * @throws {Error} If the username is not provided.
  */
-export const updateUser = async ({user}: { user: InsertUser }) => {
+export const updateUser = async ({ user }: { user: InsertUser }) => {
   if (!user.username) {
     throw new Error('Username is required for updating a user')
   }
@@ -100,15 +92,14 @@ export const updateUser = async ({user}: { user: InsertUser }) => {
  * @param {Object} params - The parameters for the function.
  * @param {string} params.username - The username to process.
  */
-export const handleNewUsername = async ({username}: { username: string }) => {
+export const handleNewUsername = async ({ username }: { username: string }) => {
   // First, check if the user already exists. If yes, just redirect to user's page.
-  const user = await getUser({username})
+  const user = await getUser({ username })
   if (user) redirect(`/${username}`)
 
   // If user does not exist, scrape the profile and then redirect to user's page.
-  const {data, error} = await scrapeProfile({username})
-  console.log('🟣 | file: actions.ts:90 | handleNewUsername | error:', error)
-  console.log('🟣 | file: actions.ts:90 | handleNewUsername | data:', data)
+  const { data, error } = await scrapeProfile({ username })
+  console.log('🟣 | file: actions.ts:90 | handleNewUsername | error:', error, 'data', data)
 
   if (data && !error) {
     const user = {
@@ -116,7 +107,7 @@ export const handleNewUsername = async ({username}: { username: string }) => {
       profileScraped: true,
       error: null,
     }
-    await insertUser({user})
+    await insertUser({ user })
     redirect(`/${data?.username}`)
   }
   if (!data && error) {
@@ -138,7 +129,7 @@ const apifyClient = new ApifyClient({
  * @param {string} params.username - The Twitter username to scrape.
  * @returns {Promise<{error: string | null, data: object | null}>} The scraped profile data or an error.
  */
-export const scrapeProfile = async ({username}: { username: string }) => {
+export const scrapeProfile = async ({ username }: { username: string }) => {
   const input = {
     startUrls: [`https://twitter.com/${username}`],
     twitterHandles: [username],
@@ -148,12 +139,11 @@ export const scrapeProfile = async ({username}: { username: string }) => {
     customMapFunction: '(object) => { return {...object} }',
   }
   try {
-    console.log('Scraping...')
     const run = await apifyClient.actor('apidojo/twitter-user-scraper').call(input)
-    console.log('🟣 | file: actions.ts:72 | scrapeProfile | run:', run)
+    // console.log('🟣 | file: actions.ts:72 | scrapeProfile | run:', run)
     if (run.status === 'FAILED') throw new Error(`Scraping Error: ${run.statusMessage}`)
 
-    const {items: profiles} = await apifyClient.dataset(run.defaultDatasetId).listItems()
+    const { items: profiles } = await apifyClient.dataset(run.defaultDatasetId).listItems()
     const profile = profiles[0]
     const profilePicture = profile.profilePicture as string
 
@@ -186,10 +176,10 @@ export const scrapeProfile = async ({username}: { username: string }) => {
  * @param {string} params.username - The Twitter username to scrape tweets from.
  * @returns {Promise<{data: object[] | null, error: any}>} The scraped tweets or an error.
  */
-export const scrapeTweets = async ({username}: { username: string }) => {
+export const scrapeTweets = async ({ username }: { username: string }) => {
   const input = {
     startUrls: [`https://twitter.com/${username}`],
-    maxItems: 20,
+    maxItems: 12,
     sort: 'Latest',
     tweetLanguage: 'en',
     customMapFunction: `(object) => { 
@@ -216,10 +206,10 @@ export const scrapeTweets = async ({username}: { username: string }) => {
 
   try {
     const run = await apifyClient.actor('apidojo/tweet-scraper').call(input)
-    const {items: tweets} = await apifyClient.dataset(run.defaultDatasetId).listItems()
-    console.log('🟣 | file: actions.ts:143 | scrapeTweets | tweets:', tweets)
+    const { items: tweets } = await apifyClient.dataset(run.defaultDatasetId).listItems()
+    // console.log('🟣 | file: actions.ts:143 | scrapeTweets | tweets:', tweets)
 
-    return {data: tweets, error: null}
+    return { data: tweets, error: null }
   } catch (error) {
     return {
       data: null,
@@ -234,18 +224,17 @@ export const scrapeTweets = async ({username}: { username: string }) => {
  * @param {string} params.username - The username of the user to process.
  * @returns {Promise<object[] | undefined>} The scraped tweets if successful, undefined otherwise.
  */
-export const processScrapedUser = async ({username}: { username: string }) => {
-  let user = await getUser({username})
+export const processScrapedUser = async ({ username }: { username: string }) => {
+  let user = await getUser({ username })
 
   if (!user.tweetScrapeStarted) {
-    console.log('twitter scrap did not start')
     user = {
       ...user,
       tweetScrapeStarted: true,
     }
-    await updateUser({user})
-    console.log('twitter scrap started')
-    const {data: tweets, error} = await scrapeTweets({username})
+    await updateUser({ user })
+    // console.log('twitter scrap started')
+    const { data: tweets, error } = await scrapeTweets({ username })
     console.log('🟣 | file: actions.ts:143 | processScrapedUser | tweets:', tweets?.length)
     if (tweets && !error) {
       user = {
@@ -253,7 +242,7 @@ export const processScrapedUser = async ({username}: { username: string }) => {
         tweets: tweets,
         tweetScrapeCompleted: true,
       }
-      await updateUser({user})
+      await updateUser({ user })
       return tweets
     }
     if (error) {
@@ -262,7 +251,7 @@ export const processScrapedUser = async ({username}: { username: string }) => {
         error: JSON.stringify(error),
       }
 
-      await updateUser({user})
+      await updateUser({ user })
     }
   }
 }
@@ -273,10 +262,10 @@ export const processScrapedUser = async ({username}: { username: string }) => {
  * @param {string} params.email - The email address of the contact to create.
  * @returns {Promise<{success: boolean, error?: any}>} An object indicating success or failure.
  */
-export const createLoopsContact = async ({email}: { email: string }) => {
+export const createLoopsContact = async ({ email }: { email: string }) => {
   const options = {
     method: 'POST',
-    headers: {Authorization: `Bearer ${process.env.LOOPS_API_KEY}`, 'Content-Type': 'application/json'},
+    headers: { Authorization: `Bearer ${process.env.LOOPS_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
       email: email,
       source: 'twitter-personality',
@@ -288,8 +277,8 @@ export const createLoopsContact = async ({email}: { email: string }) => {
     const response = await fetch('https://app.loops.so/api/v1/contacts/create', options)
     await response.json()
 
-    return {success: true}
+    return { success: true }
   } catch (error) {
-    return {success: false, error: error}
+    return { success: false, error: error }
   }
 }
