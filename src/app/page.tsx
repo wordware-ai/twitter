@@ -15,7 +15,7 @@ const Page = () => {
   return (
     <section>
       <div className="flex flex-col md:flex-row">
-        <div className="relative flex min-h-screen flex-col justify-center bg-[#F9FAFB] p-8 sm:p-12 md:w-1/2 md:p-20 lg:p-24">
+        <div className="relative flex min-h-screen flex-col justify-center bg-[#F9FAFB] p-8 sm:p-12 md:w-1/2 md:p-16 lg:p-24">
           <a
             className="top-12 pb-4 lg:absolute"
             href="https://www.producthunt.com/posts/twitter-personality-analysis-ai-agent?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-twitter&#0045;personality&#0045;analysis&#0045;ai&#0045;agent"
@@ -28,6 +28,7 @@ const Page = () => {
               height={36}
             />
           </a>
+          <div className="grow" />
 
           <div>
             <h1 className="mb-8 text-4xl md:text-5xl 2xl:text-6xl">
@@ -58,8 +59,9 @@ const Page = () => {
               your love life, goals, or how others perceive you.
             </p>
           </div>
+          <div className="grow" />
 
-          <div className="bottom-6 space-y-3 border-t xl:absolute">
+          <div className="bottom-6 space-y-3 border-t">
             <p className="pt-3 text-sm">
               this app is powered by Wordware - an IDE for building AI agents.
               <br />
