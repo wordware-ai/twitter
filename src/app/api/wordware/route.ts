@@ -89,19 +89,19 @@ export async function POST(request: Request) {
                 if (value.label === 'output') {
                   finalOutput = true
                 }
-                console.log('\nNEW GENERATION -', value.label)
+                // console.log('\nNEW GENERATION -', value.label)
               } else {
                 if (value.label === 'output') {
                   finalOutput = false
                 }
-                console.log('\nEND GENERATION -', value.label)
+                // console.log('\nEND GENERATION -', value.label)
               }
             } else if (value.type === 'chunk') {
               if (finalOutput) {
                 controller.enqueue(value.value ?? '')
               }
             } else if (value.type === 'outputs') {
-              console.log('✨ here:', value.values.output, '. Now parsing')
+              // console.log('✨ here:', value.values.output, ". Now parsing")
               try {
                 // Update user with the analysis from Wordware
                 await updateUser({
@@ -112,7 +112,7 @@ export async function POST(request: Request) {
                     analysis: value.values.output,
                   },
                 })
-                console.log('Analysis saved to database')
+                // console.log('Analysis saved to database')
               } catch (error) {
                 console.error('Error parsing or saving output:', error)
                 // Reset wordwareStarted if there's an error

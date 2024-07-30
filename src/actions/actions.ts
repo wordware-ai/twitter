@@ -99,8 +99,7 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
 
   // If user does not exist, scrape the profile and then redirect to user's page.
   const { data, error } = await scrapeProfile({ username })
-  console.log('🟣 | file: actions.ts:90 | handleNewUsername | error:', error)
-  console.log('🟣 | file: actions.ts:90 | handleNewUsername | data:', data)
+  console.log('🟣 | file: actions.ts:90 | handleNewUsername | error:', error, 'data', data)
 
   if (data && !error) {
     const user = {
@@ -140,9 +139,8 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
     customMapFunction: '(object) => { return {...object} }',
   }
   try {
-    console.log('Scraping...')
     const run = await apifyClient.actor('apidojo/twitter-user-scraper').call(input)
-    console.log('🟣 | file: actions.ts:72 | scrapeProfile | run:', run)
+    // console.log('🟣 | file: actions.ts:72 | scrapeProfile | run:', run)
     if (run.status === 'FAILED') throw new Error(`Scraping Error: ${run.statusMessage}`)
 
     const { items: profiles } = await apifyClient.dataset(run.defaultDatasetId).listItems()
@@ -209,7 +207,7 @@ export const scrapeTweets = async ({ username }: { username: string }) => {
   try {
     const run = await apifyClient.actor('apidojo/tweet-scraper').call(input)
     const { items: tweets } = await apifyClient.dataset(run.defaultDatasetId).listItems()
-    console.log('🟣 | file: actions.ts:143 | scrapeTweets | tweets:', tweets)
+    // console.log('🟣 | file: actions.ts:143 | scrapeTweets | tweets:', tweets)
 
     return { data: tweets, error: null }
   } catch (error) {
@@ -230,13 +228,12 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
   let user = await getUser({ username })
 
   if (!user.tweetScrapeStarted) {
-    console.log('twitter scrap did not start')
     user = {
       ...user,
       tweetScrapeStarted: true,
     }
     await updateUser({ user })
-    console.log('twitter scrap started')
+    // console.log('twitter scrap started')
     const { data: tweets, error } = await scrapeTweets({ username })
     console.log('🟣 | file: actions.ts:143 | processScrapedUser | tweets:', tweets?.length)
     if (tweets && !error) {
