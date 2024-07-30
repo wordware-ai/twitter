@@ -67,7 +67,6 @@ export async function POST(request: Request) {
           }
 
           const chunk = decoder.decode(value)
-          // console.log('🟣 | file: route.ts:54 | start | chunk:', chunk) // THIS log too verbose in production
 
           // Process the chunk character by character
           for (let i = 0, len = chunk.length; i < len; ++i) {
@@ -102,7 +101,7 @@ export async function POST(request: Request) {
                 controller.enqueue(value.value ?? '')
               }
             } else if (value.type === 'outputs') {
-              console.log('✨ here:', value.values.output, ". Now parsing")
+              console.log('✨ here:', value.values.output, '. Now parsing')
               try {
                 // Update user with the analysis from Wordware
                 await updateUser({
