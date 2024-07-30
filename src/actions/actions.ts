@@ -54,7 +54,7 @@ const featuredUsernames = [
 export const getTop = async (): Promise<SelectUser[]> => {
   noStore()
   return db.query.users.findMany({
-    orderBy: users.followers,
+    orderBy: desc(users.followers),
     limit: 12,
   })
 }
