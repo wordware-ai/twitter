@@ -52,18 +52,7 @@ const featuredUsernames = [
  */
 export const getTop = async (): Promise<SelectUser[]> => {
   noStore()
-  const data = await db
-    .select()
-    .from(users)
-    .where(sql`${users.username} NOT IN ${[...featuredUsernames, 'ky__zo']}`)
-    .orderBy(desc(users.followers))
-    .limit(11)
-
-  const au = await db.select().from(users).where(eq(users.username, 'ky__zo')).limit(1)
-
-  if (au.length > 0) {
-    data.push(au[0])
-  }
+  const data = await db.select().from(users).orderBy(desc(users.followers)).limit(12)
 
   return data
 }
