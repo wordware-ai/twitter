@@ -29,6 +29,13 @@
       "when": 1721449535431,
       "tag": "0003_milky_wallflower",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1722380483012,
+      "tag": "0004_low_scarlet_spider",
+      "breakpoints": true
     }
   ]
 }
