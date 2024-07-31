@@ -149,7 +149,7 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
     twitterHandles: [username],
     getFollowers: true,
     getFollowing: true,
-    maxItems: 10,
+    maxItems: 1,
     customMapFunction: '(object) => { return {...object} }',
   }
   try {
