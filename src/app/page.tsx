@@ -48,64 +48,25 @@ const Page = () => {
             </div>
 
             <p className="mb-8 pt-8 text-base 2xl:text-lg">
-              we built an AI agent that analyzes your tweets
-              <br />
-              <span className="font-medium">to reveal the unique traits that make you, you.</span>
-              <br />
-              <br />
-              plus, we provide you with interesting insights about
-              <br />
-              your love life, goals, or how others perceive you.
+              This is an AI Agent built with{' '}
+              <a
+                className="font-medium underline-offset-4 hover:underline"
+                target="_blank"
+                href="https://wordware.ai">
+                Wordware
+              </a>
+              , it will:
+              <ul className="mt-2 list-disc space-y-1 pl-8">
+                <li>find your twitter account online</li>
+                <li>an AI agent will read your tweets</li>
+                <li>then it will use Large Language Models - like the ones in ChatGPT - to analyse your personality</li>
+                <li>finally, it'll create a website with the analysis</li>
+              </ul>
             </p>
           </div>
           <div className="grow" />
 
           <div className="bottom-6 space-y-3 border-t">
-            <p className="pt-3 text-sm">
-              this app is powered by Wordware - an IDE for building AI agents.
-              <br />
-              you can build your own AI app in ~15 minutes.{' '}
-              <span
-                className="bg-clip-text font-bold text-transparent"
-                style={{ backgroundColor: '#CB9F9F' }}>
-                <Link
-                  href="https://www.wordware.ai/"
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  try here!
-                </Link>
-              </span>
-            </p>
-            <div className="flex items-center justify-start gap-2">
-              <Button
-                size={'sm'}
-                variant={'outline'}
-                asChild>
-                <a
-                  href={process.env.NEXT_PUBLIC_SHARED_APP_URL}
-                  target="_blank"
-                  className="flex-center gap-2">
-                  <WordwareLogo
-                    emblemOnly
-                    color={'black'}
-                    width={12}
-                  />
-                  Duplicate this AI Agent
-                </a>
-              </Button>
-              <Button
-                size={'sm'}
-                variant={'outline'}
-                asChild>
-                <a
-                  href="https://github.com/wordware-ai/twitter"
-                  target="_blank"
-                  className="flex-center gap-2">
-                  <PiGithubLogo />
-                  GitHub Repo
-                </a>
-              </Button>
-            </div>
             <div className="flex flex-col gap-2">
               <p className="mt-8 text-sm">
                 <span

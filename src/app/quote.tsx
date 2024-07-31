@@ -1,31 +1,39 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import WordwareLogo from '@/components/logo'
+import { Button } from '@/components/ui/button'
 
 const Quote: React.FC = () => {
   return (
     <div className="font-inter flex flex-col items-center space-y-8 rounded-lg p-8 text-center">
-      <p className="text-3xl font-normal text-[#1a1a1a]">
-        omg, this is spot on!
-        <br />
-        how does twitter know
-        <br />
-        me so well?!
-      </p>
-      <div className="flex flex-col items-center space-y-4">
-        <Avatar className="h-24 w-24">
-          <AvatarImage src="https://pbs.twimg.com/profile_images/1720918552721661952/Opqp--Su_400x400.jpg" />
-          <AvatarFallback>FK</AvatarFallback>
-        </Avatar>
-        <div className="pt-3 text-lg font-medium text-[#1a1a1a]">
-          Filip Kozera{' '}
-          <span className="text-gray-500">
-            <a
-              href="https://x.com/kozerafilip"
-              target="_blank">
-              (@kozerafilip)
-            </a>
-          </span>
+      <div className="flex flex-col items-center p-8">
+        <WordwareLogo
+          color="black"
+          width={400}
+        />
+        <p className="my-12 text-2xl font-normal text-[#1a1a1a]">— The easiest way to build AI apps —</p>
+
+        <div className="mt-4 space-y-4 text-lg">
+          <p>The only programming language you need is plain English.</p>
+          <p>Edit the AI powering this app and see how easy it is:</p>
+          <div className="pt-4">
+            <Button
+              size={'sm'}
+              variant={'outline'}
+              asChild>
+              <a
+                href={process.env.NEXT_PUBLIC_SHARED_APP_URL}
+                target="_blank"
+                className="flex-center gap-2">
+                <WordwareLogo
+                  emblemOnly
+                  color={'black'}
+                  width={12}
+                />
+                Edit this AI app
+              </a>
+            </Button>
+            <div className="mt-2 text-sm text-gray-500">No credit card required</div>
+          </div>
         </div>
-        <div className="text-md text-gray-500">CEO & Co-founder, Wordware</div>
       </div>
     </div>
   )
