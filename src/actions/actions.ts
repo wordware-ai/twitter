@@ -17,9 +17,7 @@ import { InsertUser, SelectUser, users } from '@/drizzle/schema'
  */
 export const getUser = async ({ username }: { username: SelectUser['username'] }) => {
   noStore()
-  const user = await db.query.users.findFirst({ where: sql`LOWER(${users.username}) = ${username.toLowerCase()}` })
-
-  return user
+  return await db.query.users.findFirst({ where: sql`LOWER(${users.username}) = ${username.toLowerCase()}` })
 }
 
 /**
@@ -226,6 +224,10 @@ export const scrapeTweets = async ({ username }: { username: string }) => {
  */
 export const processScrapedUser = async ({ username }: { username: string }) => {
   let user = await getUser({ username })
+
+  if (!user) {
+    throw Error(`User not found: ${username}`)
+  }
 
   if (!user.tweetScrapeStarted) {
     user = {

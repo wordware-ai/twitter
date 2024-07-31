@@ -16,6 +16,11 @@ export async function POST(request: Request) {
 
   // Fetch user data and check if Wordware has already been started
   const user = await getUser({ username })
+
+  if (!user) {
+    throw Error(`User not found: ${username}`)
+  }
+
   if (user.wordwareStarted) {
     return Response.json({ error: 'Wordware already started' })
   }
