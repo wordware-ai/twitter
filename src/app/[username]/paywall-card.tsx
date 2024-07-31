@@ -46,6 +46,10 @@ export const PaywallCard: React.FC = () => {
     }
   }
 
+  if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('success')) {
+    console.log('Conversion successful')
+    posthog.capture('conversion')
+  }
   return (
     <Card className={cn(`relative w-full overflow-hidden rounded-2xl border bg-blue-600 bg-opacity-5 px-4 pb-4`)}>
       <CardHeader className="flex w-full flex-col items-start">
