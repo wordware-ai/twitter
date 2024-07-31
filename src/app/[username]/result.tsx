@@ -80,7 +80,7 @@ export default function Result({ userData }: { userData: TwitterAnalysis | undef
         {cardData.map((card, index) => {
           return (
             <>
-              {index === 2 && userData?.[card.contentKey] && <WordwareCard />}
+              {(index === 2 || index === 8) && userData?.[card.contentKey] && <WordwareCard />}
               <AnalysisCard
                 key={index}
                 contentKey={card.contentKey}
