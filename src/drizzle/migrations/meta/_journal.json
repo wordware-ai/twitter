@@ -57,6 +57,13 @@
       "when": 1722406099356,
       "tag": "0007_chemical_black_bird",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1722462514405,
+      "tag": "0008_broken_squirrel_girl",
+      "breakpoints": true
     }
   ]
 }

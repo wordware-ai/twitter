@@ -18,17 +18,7 @@ import { InsertUser, SelectUser, users } from '@/drizzle/schema'
  */
 export const getUser = async ({ username }: { username: SelectUser['username'] }) => {
   noStore()
-  return await db.query.users.findFirst({ where: sql`LOWER(${users.username}) = ${username.toLowerCase()}` })
-}
-
-/**
- * Retrieves all users from the database.
- * @returns {Promise<SelectUser[]>} An array of all user objects.
- */
-export const getUsers = async () => {
-  noStore()
-  const data = await db.select({ username: users.username }).from(users)
-  return data
+  return await db.query.users.findFirst({ where: eq(users.lowercaseUsername, username.toLowerCase()) })
 }
 
 const featuredUsernames = [
@@ -97,7 +87,7 @@ export const updateUser = async ({ user }: { user: InsertUser }) => {
     throw new Error('Username is required for updating a user')
   }
 
-  await db.update(users).set(user).where(eq(users.username, user.username))
+  await db.update(users).set(user).where(eq(users.lowercaseUsername, user.lowercaseUsername))
 }
 
 /**
@@ -120,11 +110,12 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
   if (data && !error) {
     const user = {
       ...data,
+      lowercaseUsername: data.username.toLowerCase(),
       profileScraped: true,
       error: null,
     }
     await insertUser({ user })
-    redirect(`/${data?.username}`)
+    redirect(`/${data.username}`)
   }
   if (!data && error) {
     return {
@@ -397,7 +388,7 @@ export const unlockUser = async ({ username, unlockType }: { username: string; u
         unlocked: true,
         unlockType: unlockType,
       })
-      .where(eq(users.username, username))
+      .where(eq(users.lowercaseUsername, username.toLowerCase()))
       .returning({
         id: users.id,
       })

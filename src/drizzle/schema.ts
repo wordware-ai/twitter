@@ -8,6 +8,7 @@ export const users = pgTable(
       .primaryKey()
       .default(sql`concat('usr_', uuid_generate_v4())`),
     username: text('username').notNull().unique(),
+    lowercaseUsername: text('lowercase_username').notNull().unique(),
     createdAt: timestamp('created_at').notNull().defaultNow(),
     name: text('name'),
     profilePicture: text('profile_picture'),
@@ -33,6 +34,7 @@ export const users = pgTable(
   (table) => {
     return {
       usernameIdx: index('username_idx').on(table.username),
+      lowercaseUsernameIdx: index('lowercase_username_idx').on(table.lowercaseUsername),
     }
   },
 )
