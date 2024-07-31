@@ -50,6 +50,7 @@ const featuredUsernames = [
  */
 export const getTop = cache(async (): Promise<UserCardData[]> => {
   return db.query.users.findMany({
+    where: eq(users.wordwareCompleted, true),
     orderBy: desc(users.followers),
     limit: 12,
     columns: {
