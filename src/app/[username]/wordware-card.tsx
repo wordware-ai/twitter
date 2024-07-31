@@ -26,7 +26,7 @@ export const WordwareCard: React.FC = () => {
           Edit this agent to <span className="font-semibold">win a prize</span>! No coding skills necessary.
         </p>
         <p>
-          Our editor makes it super easy to create an AI app that checks your (romantic 🧐?) compatibility with another Twitter user. All of this with Natrual
+          Our editor makes it super easy to create an AI app that checks your (romantic 🧐?) compatibility with another Twitter user. All of this with Natural
           Language Programming.
         </p>
         <div className="mt-8 py-4">

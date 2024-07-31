@@ -144,17 +144,32 @@ const apifyClient = new ApifyClient({
  * @returns {Promise<{error: string | null, data: object | null}>} The scraped profile data or an error.
  */
 export const scrapeProfile = async ({ username }: { username: string }) => {
+  // const input = {
+  //   startUrls: [`https://twitter.com/${username}`],
+  //   twitterHandles: [username],
+  //   getFollowers: true,
+  //   getFollowing: true,
+  //   maxItems: 10,
+  //   maxPaidItems: 10,
+  //   customMapFunction: '(object) => { return {...object} }',
+  // }
+
   const input = {
-    startUrls: [`https://twitter.com/${username}`],
-    twitterHandles: [username],
-    getFollowers: true,
-    getFollowing: true,
-    maxItems: 10,
-    maxPaidItems: 10,
-    customMapFunction: '(object) => { return {...object} }',
+    maxItems: 5,
+    startUrls: [
+      `https://twitter.com/${username}`,
+      `https://twitter.com/${username}`,
+      `https://twitter.com/${username}`,
+      `https://twitter.com/${username}`,
+      `https://twitter.com/${username}`,
+    ],
+    getFollowers: false,
+    getFollowing: false,
+    getRetweeters: false,
+    includeUnavailableUsers: false,
   }
   try {
-    const run = await apifyClient.actor('apidojo/twitter-user-scraper').call(input)
+    const run = await apifyClient.actor('apidojo/twitter-user-scraper').call(input, { build: '0.0.304' })
     console.log('🟣 | file: actions.ts:72 | scrapeProfile | run:', run)
     if (run.status === 'FAILED') throw new Error(`Scraping Error: ${run.statusMessage}`)
 

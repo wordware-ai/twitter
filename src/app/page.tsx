@@ -44,7 +44,7 @@ const Page = () => {
               </Suspense>
             </div>
 
-            <p className="mb-8 pt-8 text-base 2xl:text-lg">
+            <div className="mb-8 pt-8 text-base 2xl:text-lg">
               This is an AI Agent built with{' '}
               <a
                 className="font-medium underline-offset-4 hover:underline"
@@ -59,7 +59,7 @@ const Page = () => {
                 <li>then it will use Large Language Models - like the ones in ChatGPT - to analyse your personality</li>
                 <li>finally, it&apos;ll create a website with the analysis</li>
               </ul>
-            </p>
+            </div>
           </div>
           <div className="grow" />
 
