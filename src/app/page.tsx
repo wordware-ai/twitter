@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 
 import TopList from './top-list'
 
-export const maxDuration = 300
+export const maxDuration = 180
 
 const Page = () => {
   return (
@@ -82,7 +82,7 @@ const Page = () => {
                 variant={'outline'}
                 asChild>
                 <a
-                  href={`https://app.wordware.ai/share/${process.env.WORDWARE_PROMPT_ID}/playground`}
+                  href={process.env.NEXT_PUBLIC_SHARED_APP_URL}
                   target="_blank"
                   className="flex-center gap-2">
                   <WordwareLogo

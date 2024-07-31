@@ -80,7 +80,7 @@ const Page = async ({ params }: { params: { username: string } }) => {
               variant={'default'}
               asChild>
               <a
-                href={`https://app.wordware.ai/share/${process.env.WORDWARE_PROMPT_ID}/playground`}
+                href={process.env.NEXT_PUBLIC_SHARED_APP_URL}
                 target="_blank"
                 className="flex-center gap-2">
                 <WordwareLogo
