@@ -6,7 +6,7 @@ import NewUsernameForm from '@/components/new-username-form'
 
 import TopList from './top-list'
 
-export const maxDuration = 180
+export const maxDuration = 181
 
 const Page = () => {
   return (
