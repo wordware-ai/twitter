@@ -1,5 +1,4 @@
 import React from 'react'
-import { CalendarDaysIcon } from 'lucide-react'
 
 import WordwareLogo from '@/components/logo'
 import { Button } from '@/components/ui/button'
