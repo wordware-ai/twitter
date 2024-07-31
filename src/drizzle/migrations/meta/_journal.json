@@ -43,6 +43,13 @@
       "when": 1722388692434,
       "tag": "0005_yielding_psylocke",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1722402144865,
+      "tag": "0006_spotty_shard",
+      "breakpoints": true
     }
   ]
 }
