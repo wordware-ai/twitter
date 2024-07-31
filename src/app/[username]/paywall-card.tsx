@@ -1,5 +1,5 @@
 import React from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LockIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { unlockGeneration } from '@/actions/actions'
+import { createCheckoutSession } from '@/actions/stripe'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
@@ -18,6 +19,7 @@ const FormSchema = z.object({
 })
 
 export const PaywallCard: React.FC = () => {
+  const searchParams = useSearchParams()
   const pathname = usePathname()
   const router = useRouter()
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -26,6 +28,8 @@ export const PaywallCard: React.FC = () => {
       email: '',
     },
   })
+
+  const stripe = searchParams.get('stripe')
 
   async function onSubmit(values: z.infer<typeof FormSchema>) {
     // Attempt to create a contact in Loops
@@ -88,6 +92,16 @@ export const PaywallCard: React.FC = () => {
           By submitting your email, you agree to receive marketing content from Wordware. We&apos;ll use your email to send you the full analysis and keep you
           updated on our products and services.
         </p>
+        {stripe && (
+          <Button
+            onClick={() => {
+              createCheckoutSession({ username: pathname })
+            }}
+            className="w-full"
+            type="button">
+            Unlock Full Analysis ($2.99)
+          </Button>
+        )}
       </CardContent>
     </Card>
   )

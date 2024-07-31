@@ -346,13 +346,13 @@ export const unlockGeneration = async ({ username, email }: { username: string; 
     if (!response.ok) {
       throw new Error(data.message || response.statusText)
     }
-    unlockUser({ username: username.replace('/', ''), unlockType: 'email' })
+    await unlockUser({ username: username.replace('/', ''), unlockType: 'email' })
 
     revalidatePath(username)
     return { success: true }
   } catch (error) {
     if (error instanceof Error && error.message.includes('Email already on list')) {
-      unlockUser({ username: username.replace('/', ''), unlockType: 'email' })
+      await unlockUser({ username: username.replace('/', ''), unlockType: 'email' })
 
       revalidatePath(username)
       console.log('🟣 | file: actions.ts:356 | unlockGeneration | error:', error)

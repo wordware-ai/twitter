@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx migrate.ts"
+    "db:migrate": "tsx migrate.ts",
+    "stripe:listen": "stripe listen --forward-to localhost:3000/api/stripe/webhook"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -33,6 +34,7 @@
     "remark-gfm": "^4.0.0",
     "secure-json-parse": "^2.7.0",
     "sonner": "^1.5.0",
+    "stripe": "^16.5.0",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8"
