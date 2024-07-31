@@ -1,6 +1,6 @@
 'use server'
 
-import { unstable_cache as cache, unstable_noStore as noStore } from 'next/cache'
+import { unstable_cache as cache, unstable_noStore as noStore, revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { ApifyClient } from 'apify-client'
 import { desc, eq, inArray, sql } from 'drizzle-orm'
@@ -324,5 +324,68 @@ export const createLoopsContact = async ({ email }: { email: string }) => {
     return { success: true }
   } catch (error) {
     return { success: false, error: error }
+  }
+}
+
+export const unlockGeneration = async ({ username, email }: { username: string; email: string }) => {
+  const options = {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${process.env.LOOPS_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: email,
+      source: 'twitter-personality',
+      subscribed: true,
+      userGroup: 'Twitter Personality - PAYWALL',
+    }),
+  }
+
+  try {
+    const response = await fetch('https://app.loops.so/api/v1/contacts/create', options)
+    const data = await response.json()
+
+    if (!response.ok) {
+      throw new Error(data.message || response.statusText)
+    }
+    unlockUser({ username: username.replace('/', ''), unlockType: 'email' })
+
+    revalidatePath(`/${username}`)
+    return { success: true }
+  } catch (error) {
+    console.log('🟣 | file: actions.ts:356 | unlockGeneration | error:', error)
+    if (error instanceof Error) {
+      return { success: false, error: error.message }
+    }
+    return { success: false, error: 'An unknown error occurred' }
+  }
+}
+
+/**
+ * Unlocks a user by setting their 'unlocked' property to true and adding an 'unlockType'.
+ * @param {Object} params - The parameters for the function.
+ * @param {string} params.username - The username of the user to unlock.
+ * @param {string} params.unlockType - The type of unlock to apply.
+ * @returns {Promise<{success: boolean, error?: string}>} An object indicating success or failure.
+ */
+export const unlockUser = async ({ username, unlockType }: { username: string; unlockType: 'email' | 'stripe' | 'free' }) => {
+  try {
+    const user = await getUser({ username })
+    if (!user) {
+      throw new Error(`User not found: ${username}`)
+    }
+
+    const updatedUser = {
+      ...user,
+      unlocked: true,
+      unlockType: unlockType,
+    }
+
+    await updateUser({ user: updatedUser })
+
+    return { success: true }
+  } catch (error) {
+    if (error instanceof Error) {
+      return { success: false, error: error.message }
+    }
+    return { success: false, error: 'An unknown error occurred' }
   }
 }
