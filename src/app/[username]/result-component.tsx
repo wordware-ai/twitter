@@ -54,7 +54,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
     effectRan.current = true
     ;(async () => {
       let tweets = user.tweets
-      if (!user.tweetScrapeStarted) {
+      if (!user.tweetScrapeStarted || (!user.tweetScrapeCompleted && Date.now() - user.tweetScrapeStartedTime.getTime() > 3 * 60 * 1000)) {
         setSteps((prev) => ({
           ...prev,
           tweetScrapeStarted: true,
@@ -66,13 +66,16 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
         }))
         tweetScrapeCompleted = true
       }
-      if (tweetScrapeCompleted && !user.wordwareStarted) {
+      if (
+        (tweetScrapeCompleted && !user.wordwareStarted) ||
+        (tweetScrapeCompleted && !user.wordwareCompleted && Date.now() - user.wordwareStartedTime.getTime() > 3 * 60 * 1000)
+      ) {
         setSteps((prev) => ({
           ...prev,
           wordwareStarted: true,
         }))
         await handleTweetAnalysis({
-          tweets: JSON.stringify(user.tweets) || JSON.stringify(tweets),
+          tweets: tweets ? JSON.stringify(tweets) : JSON.stringify(user.tweets),
           profilePicture: user.profilePicture || '',
           profileInfo: JSON.stringify(user.fullProfile),
           username: user.username,
@@ -126,7 +129,6 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
       console.error('Error reading stream', error)
     } finally {
       reader.releaseLock()
-
       return parsePartialJson(result)
     }
   }

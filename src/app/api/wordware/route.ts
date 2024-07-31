@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     throw Error(`User not found: ${username}`)
   }
 
-  if (user.wordwareStarted) {
+  if (user.wordwareCompleted || (user.wordwareStarted && Date.now() - user.createdAt.getTime() < 3 * 60 * 1000)) {
     return Response.json({ error: 'Wordware already started' })
   }
 
@@ -30,6 +30,7 @@ export async function POST(request: Request) {
     user: {
       ...user,
       wordwareStarted: true,
+      wordwareStartedTime: new Date(),
     },
   })
 
@@ -52,7 +53,10 @@ export async function POST(request: Request) {
 
   // Get the reader from the response body
   const reader = runResponse.body?.getReader()
-  if (!reader) return Response.json({ error: 'No reader' })
+  if (!reader) {
+    console.error('No reader')
+    return Response.json({ error: 'No reader' })
+  }
 
   // Set up decoder and buffer for processing the stream
   const decoder = new TextDecoder()

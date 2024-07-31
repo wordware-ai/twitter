@@ -24,8 +24,10 @@ export const users = pgTable(
     //Statuses
     profileScraped: boolean('profile_scraped').default(false),
     tweetScrapeStarted: boolean('tweet_scrape_started').default(false),
+    tweetScrapeStartedTime: timestamp('tweet_scrape_started_time').notNull().defaultNow(),
     tweetScrapeCompleted: boolean('tweet_scrape_completed').default(false),
     wordwareStarted: boolean('wordware_started').default(false),
+    wordwareStartedTime: timestamp('wordware_started_time').notNull().defaultNow(),
     wordwareCompleted: boolean('wordware_completed').default(false),
   },
   (table) => {

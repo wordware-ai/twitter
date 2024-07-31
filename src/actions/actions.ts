@@ -245,10 +245,11 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
     throw Error(`User not found: ${username}`)
   }
 
-  if (!user.tweetScrapeStarted) {
+  if (!user.tweetScrapeStarted || (!user.tweetScrapeCompleted && Date.now() - user.createdAt.getTime() > 3 * 60 * 1000)) {
     user = {
       ...user,
       tweetScrapeStarted: true,
+      tweetScrapeStartedTime: new Date(),
     }
     await updateUser({ user })
     // console.log('twitter scrap started')
