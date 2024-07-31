@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 
 import Callout from '@/components/callout'
+import { DeveloperInfo } from '@/components/developer-info'
 import Footer from '@/components/footer'
 import { NewsletterForm } from '@/components/newsletter-form'
 import { getURL } from '@/lib/config'
@@ -85,6 +86,7 @@ export default function RootLayout({
 
             {/* Footer component */}
             <Footer />
+            <DeveloperInfo />
           </>
         </Providers>
       </body>

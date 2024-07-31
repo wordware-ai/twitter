@@ -2,6 +2,7 @@ import React from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LockIcon } from 'lucide-react'
+import posthog from 'posthog-js'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -38,6 +39,9 @@ export const PaywallCard: React.FC = () => {
       toast.error('Something went wrong')
     } else {
       toast.success('You have been added to the newsletter.')
+      const newUrl = new URL(pathname, window.location.origin)
+      newUrl.searchParams.set('success', 'true')
+      router.replace(newUrl.toString())
       router.refresh()
     }
   }
@@ -54,53 +58,65 @@ export const PaywallCard: React.FC = () => {
         <div className="w-full border-b border-gray-300" />
       </CardHeader>
       <CardContent className="flex flex-col text-gray-700">
-        <p className="mb-4">Unlock all insights by leaving your email address below.</p>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className="flex-center">
-                      <Input
-                        disabled={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
-                        className="w-full border-black"
-                        placeholder="your@email.com"
-                        {...field}
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        {posthog.getFeatureFlag('paywall') === 'stripe' || stripe ? (
+          <>
+            <p className="mb-4">Unlock all insights by purchasing a full access.</p>
             <Button
+              onClick={() => {
+                createCheckoutSession({ username: pathname })
+              }}
               className="w-full"
-              disabled={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
-              type="submit">
-              {/* Dynamic button text based on form state */}
-              {form.formState.isSubmitting ? 'Unlocking...' : form.formState.isSubmitSuccessful ? 'Success. Refresh the page.' : 'Unlock Full Analysis'}
+              type="button">
+              Unlock Full Analysis ($2.99)
             </Button>
-          </form>
-        </Form>
+            <p className="mt-4 text-sm text-gray-800">
+              Full access includes comprehensive persona analysis, including: <strong>Strengths</strong>, <strong>Weaknesses</strong>,{' '}
+              <strong>Love Life</strong>, <strong>Money</strong>, <strong>Health</strong>, <strong>Biggest Goal</strong>, <strong>Colleague Perspective</strong>
+              , <strong>Pickup Lines</strong>, <strong>Famous Person Comparison</strong>, <strong>Previous Life</strong>, <strong>Animal Comparison</strong>,{' '}
+              <strong>$50 Thing</strong>, <strong>Career</strong>, and <strong>Life Suggestion</strong>.
+            </p>
+          </>
+        ) : (
+          <>
+            <p className="mb-4">Unlock all insights by leaving your email address below.</p>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="w-full space-y-4">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="flex-center">
+                          <Input
+                            disabled={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
+                            className="w-full border-black"
+                            placeholder="your@email.com"
+                            {...field}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  className="w-full"
+                  disabled={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
+                  type="submit">
+                  {/* Dynamic button text based on form state */}
+                  {form.formState.isSubmitting ? 'Unlocking...' : form.formState.isSubmitSuccessful ? 'Success. Refresh the page.' : 'Unlock Full Analysis'}
+                </Button>
+              </form>
+            </Form>
 
-        <p className="mt-4 text-xs text-gray-500">
-          By submitting your email, you agree to receive marketing content from Wordware. We&apos;ll use your email to send you the full analysis and keep you
-          updated on our products and services.
-        </p>
-        {stripe && (
-          <Button
-            onClick={() => {
-              createCheckoutSession({ username: pathname })
-            }}
-            className="w-full"
-            type="button">
-            Unlock Full Analysis ($2.99)
-          </Button>
+            <p className="mt-4 text-xs text-gray-500">
+              By submitting your email, you agree to receive marketing content from Wordware. We&apos;ll use your email to send you the full analysis and keep
+              you updated on our products and services.
+            </p>
+          </>
         )}
       </CardContent>
     </Card>
