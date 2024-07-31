@@ -1,6 +1,6 @@
 'use server'
 
-import { unstable_noStore as noStore } from 'next/cache'
+import { unstable_cache as cache, unstable_noStore as noStore } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { ApifyClient } from 'apify-client'
 import { desc, eq, inArray, sql } from 'drizzle-orm'
@@ -48,8 +48,7 @@ const featuredUsernames = [
 /**
  * Retrieves the top 12 users based on follower count.
  */
-export const getTop = async (): Promise<UserCardData[]> => {
-  noStore()
+export const getTop = cache(async (): Promise<UserCardData[]> => {
   return db.query.users.findMany({
     orderBy: desc(users.followers),
     limit: 12,
@@ -61,10 +60,9 @@ export const getTop = async (): Promise<UserCardData[]> => {
       followers: true,
     },
   })
-}
+}, ['top-users'])
 
-export const getFeatured = async (): Promise<UserCardData[]> => {
-  noStore()
+export const getFeatured = cache(async (): Promise<UserCardData[]> => {
   return await db.query.users.findMany({
     where: inArray(users.username, featuredUsernames),
     orderBy: desc(users.followers),
@@ -76,7 +74,7 @@ export const getFeatured = async (): Promise<UserCardData[]> => {
       followers: true,
     },
   })
-}
+}, ['featured-users'])
 
 /**
  * Inserts a new user into the database.
