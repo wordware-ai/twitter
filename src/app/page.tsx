@@ -1,11 +1,8 @@
 import { Suspense } from 'react'
-import Link from 'next/link'
-import { PiGithubLogo } from 'react-icons/pi'
 
 import Quote from '@/app/quote'
 import WordwareLogo from '@/components/logo'
 import NewUsernameForm from '@/components/new-username-form'
-import { Button } from '@/components/ui/button'
 
 import TopList from './top-list'
 
