@@ -84,7 +84,10 @@ export const PaywallCard: React.FC = () => {
           </form>
         </Form>
 
-        <p className="mt-4 text-xs text-gray-500">We respect your privacy. Your email will only be used to send you the full analysis.</p>
+        <p className="mt-4 text-xs text-gray-500">
+          By submitting your email, you agree to receive marketing content from Wordware. We&apos;ll use your email to send you the full analysis and keep you
+          updated on our products and services.
+        </p>
       </CardContent>
     </Card>
   )
