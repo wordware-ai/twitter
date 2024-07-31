@@ -4,7 +4,7 @@ import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next/types'
 import { PiCaretLeft, PiXLogo } from 'react-icons/pi'
 
-import { getUser, getUsers } from '@/actions/actions'
+import { getUser } from '@/actions/actions'
 import WordwareLogo from '@/components/logo'
 import NewUsernameForm from '@/components/new-username-form'
 import { Button } from '@/components/ui/button'

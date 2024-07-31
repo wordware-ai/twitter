@@ -1,6 +1,5 @@
 import React from 'react'
 import { CalendarDaysIcon } from 'lucide-react'
-import { PiXLogo } from 'react-icons/pi'
 
 import WordwareLogo from '@/components/logo'
 import { Button } from '@/components/ui/button'
