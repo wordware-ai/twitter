@@ -391,18 +391,17 @@ export const unlockGeneration = async ({ username, email }: { username: string; 
  */
 export const unlockUser = async ({ username, unlockType }: { username: string; unlockType: 'email' | 'stripe' | 'free' }) => {
   try {
-    const user = await getUser({ username })
-    if (!user) {
-      throw new Error(`User not found: ${username}`)
-    }
-
-    const updatedUser = {
-      ...user,
-      unlocked: true,
-      unlockType: unlockType,
-    }
-
-    await updateUser({ user: updatedUser })
+    const r = await db
+      .update(users)
+      .set({
+        unlocked: true,
+        unlockType: unlockType,
+      })
+      .where(eq(users.username, username))
+      .returning({
+        id: users.id,
+      })
+    console.log('Updated', r)
 
     return { success: true }
   } catch (error) {
