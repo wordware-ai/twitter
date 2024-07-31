@@ -55,7 +55,7 @@ export const metadata = {
 
 /**
  * RootLayout component
- * This component serves as the main layout wrapper for the entire application
+ * This component serves as the main layout wrapper for the entire application.
  *
  * @param {Object} props - Component props
  * @param {React.ReactNode} props.children - Child components to be rendered within the layout
