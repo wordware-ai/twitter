@@ -19,9 +19,6 @@ export const getUser = async ({ username }: { username: SelectUser['username'] }
   noStore()
   const user = await db.query.users.findFirst({ where: sql`LOWER(${users.username}) = ${username.toLowerCase()}` })
 
-  if (!user) {
-    throw Error(`Could not find user with name ${username}`)
-  }
   return user
 }
 
