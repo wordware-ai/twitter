@@ -57,7 +57,7 @@ const Page = () => {
                 <li>find your twitter account online</li>
                 <li>an AI agent will read your tweets</li>
                 <li>then it will use Large Language Models - like the ones in ChatGPT - to analyse your personality</li>
-                <li>finally, it'll create a website with the analysis</li>
+                <li>finally, it&aposll create a website with the analysis</li>
               </ul>
             </p>
           </div>
