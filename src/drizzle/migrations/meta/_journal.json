@@ -50,6 +50,13 @@
       "when": 1722402144865,
       "tag": "0006_spotty_shard",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1722406099356,
+      "tag": "0007_chemical_black_bird",
+      "breakpoints": true
     }
   ]
 }
