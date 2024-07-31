@@ -22,16 +22,15 @@ export const WordwareCard: React.FC = () => {
         </CardTitle>
         <div className="w-full border-b border-gray-300" />
       </CardHeader>
-      <CardContent className="flex flex-col text-gray-700">
+      <CardContent className="flex flex-col space-y-2 text-gray-700">
         <p>
-          <a
-            href="https://wordware.ai"
-            className="u font-semibold hover:underline">
-            Wordware
-          </a>{' '}
-          (YC S24) is a native AI toolkit and IDE that helps you build high-quality LLM applications with natural language. Just like this one!
+          Edit this agent to <span className="font-semibold">win a prize</span>! No coding skills necessary.
         </p>
-        <div className="mt-8 space-y-4">
+        <p>
+          Our editor makes it super easy to create an AI app that checks your (romantic 🧐?) compatibility with another Twitter user. All of this with Natrual
+          Language Programming.
+        </p>
+        <div className="mt-8 py-4">
           <Button
             size={'sm'}
             variant={'default'}
@@ -45,42 +44,11 @@ export const WordwareCard: React.FC = () => {
                 color={'white'}
                 width={12}
               />
-              <p>
-                Remix <span className="hidden md:inline">this</span> Agent
-              </p>
-            </a>
-          </Button>
-          <Button
-            size={'sm'}
-            variant={'secondary'}
-            asChild>
-            <a
-              href={`https://app.wordware.ai/register`}
-              target="_blank"
-              className="flex-center gap-2">
-              <WordwareLogo
-                emblemOnly
-                color={'black'}
-                width={12}
-              />
-              <p>Build your AI agent</p>
-            </a>
-          </Button>
-          <Button
-            size={'sm'}
-            variant={'secondary'}
-            asChild>
-            <a
-              href={`https://tally.so/r/nrEzZN`}
-              target="_blank"
-              className="flex-center gap-2">
-              <CalendarDaysIcon className="h-4 w-4 shrink-0" />
-              <p>
-                Book<span className="hidden lg:inline"> a free</span> AI consultation
-              </p>
+              <p>Edit this AI Agent</p>
             </a>
           </Button>
         </div>
+        <p>Best inplementation of the Twitter compatibility app will get to launch it with us next week and share the profits!</p>
       </CardContent>
     </Card>
   )

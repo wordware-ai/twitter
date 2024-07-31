@@ -82,7 +82,7 @@ export default function Result({ unlocked, userData }: { unlocked: boolean; user
           if (!unlocked && index === 1) {
             return <PaywallCard key={index} />
           }
-          if (index === 2 || index === 8) {
+          if (index === 2 || index === 7) {
             return <WordwareCard key={index} />
           }
           return (
