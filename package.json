@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "build:old": "bun db:migrate && next build",
+    "build:old": "next build",
+    "build": "bun db:migrate && next build",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "drizzle-kit generate",
