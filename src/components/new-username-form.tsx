@@ -4,7 +4,6 @@ import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { PiSpinner } from 'react-icons/pi'
-import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { handleNewUsername } from '@/actions/actions'
@@ -45,8 +44,7 @@ const NewUsernameForm = () => {
     const response = await handleNewUsername({ username: cleanedUsername })
     console.log('🟣 | file: new-username-form.tsx:46 | onSubmit | response:', response)
     if (response?.error) {
-      toast.error(`We're experiencing high traffic at the moment. Please try again in a few minutes. Thank you for your patience.`)
-      console.log(response.error)
+      window.location.href = 'https://tally.so/r/3lRoOp'
     }
   }
 
