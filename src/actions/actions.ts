@@ -149,11 +149,11 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
     twitterHandles: [username],
     getFollowers: true,
     getFollowing: true,
-    maxItems: 1,
+    maxItems: 10,
     customMapFunction: '(object) => { return {...object} }',
   }
   try {
-    const run = await apifyClient.actor('apidojo/twitter-user-scraper').call(input, { build: '0.0.300' })
+    const run = await apifyClient.actor('apidojo/twitter-user-scraper').call(input)
     console.log('🟣 | file: actions.ts:72 | scrapeProfile | run:', run)
     if (run.status === 'FAILED') throw new Error(`Scraping Error: ${run.statusMessage}`)
 
