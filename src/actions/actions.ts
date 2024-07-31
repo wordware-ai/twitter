@@ -327,22 +327,19 @@ export const createLoopsContact = async ({ email }: { email: string }) => {
 }
 
 export const unlockGeneration = async ({ username, email }: { username: string; email: string }) => {
-  const formBody = new URLSearchParams({
-    userGroup: 'Twitter Personality - general',
-    mailingLists: '',
-    email,
-  }).toString()
-
   const options = {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: formBody,
+    headers: { Authorization: `Bearer ${process.env.LOOPS_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: email,
+      source: 'twitter-personality',
+      subscribed: true,
+      userGroup: 'Twitter Personality - PAYWALL',
+    }),
   }
 
   try {
-    const response = await fetch('https://app.loops.so/api/newsletter-form/cly0uctva01mv4trs2kbpgm3w', options)
+    const response = await fetch('https://app.loops.so/api/v1/contacts/create', options)
     const data = await response.json()
 
     if (!response.ok) {

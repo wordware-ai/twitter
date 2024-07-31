@@ -1,5 +1,7 @@
 'use client'
 
+import React from 'react'
+
 import { WordwareCard } from '@/app/[username]/wordware-card'
 import { Markdown } from '@/components/markdown'
 
@@ -86,10 +88,9 @@ export default function Result({ unlocked, userData }: { unlocked: boolean; user
             return <WordwareCard key={index} />
           }
           return (
-            <>
+            <React.Fragment key={index}>
               {(unlocked || index !== 1) && (
                 <AnalysisCard
-                  unlocked={unlocked}
                   key={index}
                   contentKey={card.contentKey}
                   title={card.title}
@@ -99,9 +100,10 @@ export default function Result({ unlocked, userData }: { unlocked: boolean; user
                   // color={card.color} // Commented out, might be used in future iterations
                   wide={card.wide}
                   bg={card.bg}
+                  unlocked={unlocked}
                 />
               )}
-            </>
+            </React.Fragment>
           )
         })}
       </div>
