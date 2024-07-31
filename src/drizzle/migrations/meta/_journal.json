@@ -43,6 +43,13 @@
       "when": 1722388692434,
       "tag": "0005_yielding_psylocke",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1722396698051,
+      "tag": "0006_milky_kang",
+      "breakpoints": true
     }
   ]
 }

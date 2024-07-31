@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import { IconType } from 'react-icons'
 import { PiXLogo } from 'react-icons/pi'
@@ -28,6 +28,7 @@ type ContentType = string | string[] | ContentItem[] | { [key: string]: string }
  * Props for the AnalysisCard component.
  */
 interface AnalysisCardProps {
+  unlocked: boolean
   title: string
   icon: IconType
   content: ContentType
@@ -42,30 +43,49 @@ interface AnalysisCardProps {
  * AnalysisCard component displays a card with analysis content.
  * It can render different types of content based on the ContentType.
  */
-const AnalysisCard: React.FC<AnalysisCardProps> = ({ title, icon: Icon, content, colorClass, contentKey, wide = false, bg }) => {
+const AnalysisCard: React.FC<AnalysisCardProps> = ({ unlocked, title, icon: Icon, content, colorClass, contentKey, wide = false, bg }) => {
   const { username } = useParams()
 
-  /**
-   * Renders the content based on its type.
-   * @returns JSX.Element | null
-   */
-  const renderContent = () => {
+  const isRoast = title === 'Roast'
+  const isContentVisible = isRoast || unlocked
+
+  const obfuscateContent = (content: string) => {
+    return content.replace(/[a-zA-Z]/g, '•')
+    // This was causing hydration errors
+    // return content.replace(/[a-zA-Z]/g, (char) => {
+    //   const randomChar = String.fromCharCode(Math.floor(Math.random() * 26) + (char.toLowerCase() === char ? 97 : 65))
+    //   return Math.random() > 0.5 ? randomChar : char
+    // })
+  }
+
+  const renderContent = useCallback(() => {
     if (typeof content === 'string') {
+      const displayContent = isContentVisible ? content : obfuscateContent(content)
+
       return (
-        <div className="space-y-2">
-          <Markdown content={content || ''} />
+        <div className={`space-y-2 ${!isContentVisible ? 'blur-sm' : ''}`}>
+          {/* Use a key to force re-render when content changes */}
+          <Markdown
+            key={displayContent}
+            content={displayContent || ''}
+          />
         </div>
       )
     } else if (Array.isArray(content)) {
       return (
-        <ul className="list-none space-y-2">
+        <ul className={`list-none space-y-2 ${!isContentVisible ? 'blur-sm' : ''}`}>
           {content.map((item, index) => (
             <li key={index}>
               {typeof item === 'string' ? (
-                item
+                isContentVisible ? (
+                  item
+                ) : (
+                  obfuscateContent(item)
+                )
               ) : (
                 <>
-                  <span className="font-semibold">{item.title}:</span> {item.subtitle}
+                  <span className="font-semibold">{isContentVisible ? item.title : obfuscateContent(item.title)}:</span>{' '}
+                  {isContentVisible ? item.subtitle : obfuscateContent(item.subtitle)}
                 </>
               )}
             </li>
@@ -74,17 +94,17 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ title, icon: Icon, content,
       )
     } else if (typeof content === 'object') {
       return (
-        <ul className="list-none space-y-2">
+        <ul className={`list-none space-y-2 ${!isContentVisible ? '' : ''}`}>
           {Object.entries(content).map(([key, value], index) => (
             <li key={index}>
-              <span className="font-semibold">{key}:</span> {value}
+              <span className="font-semibold">{isContentVisible ? key : obfuscateContent(key)}:</span> {isContentVisible ? value : obfuscateContent(value)}
             </li>
           ))}
         </ul>
       )
     }
     return null
-  }
+  }, [content, isContentVisible])
 
   // If there's no content, don't render the card
   if (!content) return null

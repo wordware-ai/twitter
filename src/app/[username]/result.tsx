@@ -5,6 +5,7 @@ import { Markdown } from '@/components/markdown'
 
 import AnalysisCard from './analysis-card'
 import { cardData } from './config'
+import { PaywallCard } from './paywall-card'
 
 /**
  * Represents the structure of a Twitter analysis result
@@ -60,7 +61,7 @@ export type TwitterAnalysis = {
  * @param {TwitterAnalysis | undefined} props.userData - The analyzed user data
  * @returns {JSX.Element} The rendered Result component
  */
-export default function Result({ userData }: { userData: TwitterAnalysis | undefined }) {
+export default function Result({ unlocked, userData }: { unlocked: boolean; userData: TwitterAnalysis | undefined }) {
   return (
     <div className="w-full max-w-6xl">
       {/* Display emojis representing the user */}
@@ -78,20 +79,28 @@ export default function Result({ userData }: { userData: TwitterAnalysis | undef
       {/* Display analysis cards */}
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
         {cardData.map((card, index) => {
+          if (!unlocked && index === 1) {
+            return <PaywallCard key={index} />
+          }
+          if (index === 2) {
+            return <WordwareCard key={index} />
+          }
           return (
             <>
-              {index === 2 && userData?.[card.contentKey] && <WordwareCard />}
-              <AnalysisCard
-                key={index}
-                contentKey={card.contentKey}
-                title={card.title}
-                icon={card.icon}
-                content={userData?.[card.contentKey] || ''}
-                colorClass={card.colorClass}
-                // color={card.color} // Commented out, might be used in future iterations
-                wide={card.wide}
-                bg={card.bg}
-              />
+              {(unlocked || index !== 1) && (
+                <AnalysisCard
+                  unlocked={unlocked}
+                  key={index}
+                  contentKey={card.contentKey}
+                  title={card.title}
+                  icon={card.icon}
+                  content={userData?.[card.contentKey] || ''}
+                  colorClass={card.colorClass}
+                  // color={card.color} // Commented out, might be used in future iterations
+                  wide={card.wide}
+                  bg={card.bg}
+                />
+              )}
             </>
           )
         })}

@@ -257,7 +257,10 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
       </div>
 
       {/* Render the analysis result */}
-      <Result userData={result} />
+      <Result
+        unlocked={user.unlocked || false}
+        userData={result}
+      />
     </div>
   )
 }

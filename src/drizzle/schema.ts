@@ -18,6 +18,8 @@ export const users = pgTable(
     tweets: jsonb('tweets'),
     analysis: jsonb('analysis'),
     followers: integer('followers'),
+    unlocked: boolean('unlocked').default(false),
+    unlockType: text('unlock_type').$type<'stripe' | 'email' | 'free'>(),
 
     //Statuses
     profileScraped: boolean('profile_scraped').default(false),
