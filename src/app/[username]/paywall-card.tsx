@@ -30,7 +30,8 @@ export const PaywallCard: React.FC = () => {
     },
   })
 
-  const stripe = searchParams.get('stripe')
+  const paywallFlag = posthog.getFeatureFlag('paywall') ?? searchParams.get('stripe')
+  console.log('paywall flag', paywallFlag, searchParams.get('stripe'))
 
   async function onSubmit(values: z.infer<typeof FormSchema>) {
     // Attempt to create a contact in Loops
@@ -62,16 +63,16 @@ export const PaywallCard: React.FC = () => {
         <div className="w-full border-b border-gray-300" />
       </CardHeader>
       <CardContent className="flex flex-col text-gray-700">
-        {posthog.getFeatureFlag('paywall') === 'stripe' || stripe ? (
+        {paywallFlag && paywallFlag !== 'control' ? (
           <>
             <p className="mb-4">Unlock all insights by purchasing a full access.</p>
             <Button
               onClick={() => {
-                createCheckoutSession({ username: pathname })
+                createCheckoutSession({ username: pathname, priceInt: parseInt(paywallFlag as string) })
               }}
               className="w-full"
               type="button">
-              Unlock Full Analysis ($2.99)
+              Unlock Full Analysis (${parseInt(paywallFlag as string) / 100})
             </Button>
             <p className="mt-4 text-sm text-gray-800">
               Full access includes comprehensive persona analysis, including: <strong>Strengths</strong>, <strong>Weaknesses</strong>,{' '}

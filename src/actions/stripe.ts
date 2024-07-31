@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 import { getURL } from '@/lib/config'
 import { stripe } from '@/lib/stripe'
 
-export const createCheckoutSession = async ({ username }: { username: string }) => {
+export const createCheckoutSession = async ({ username, priceInt }: { username: string; priceInt: number }) => {
   const cleanUsername = username.replace('/', '')
   const metadataObject = {
     username: cleanUsername,
@@ -16,7 +16,12 @@ export const createCheckoutSession = async ({ username }: { username: string }) 
     billing_address_collection: 'required' as const,
     line_items: [
       {
-        price: process.env.STRIPE_PRICE_ID,
+        price_data: {
+          product: process.env.STRIPE_PRODUCT_ID,
+          currency: 'USD',
+          unit_amount: priceInt,
+        },
+
         quantity: 1,
       },
     ],
