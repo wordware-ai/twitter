@@ -67,7 +67,7 @@ export const PaywallCard: React.FC = () => {
               }}
               className="w-full"
               type="button">
-              Unlock Full Analysis ($9.99)
+              Unlock Full Analysis ($2.99)
             </Button>
             <p className="mt-4 text-sm text-gray-800">
               Full access includes comprehensive persona analysis, including: <strong>Strengths</strong>, <strong>Weaknesses</strong>,{' '}
