@@ -17,11 +17,7 @@ import { InsertUser, SelectUser, users } from '@/drizzle/schema'
  */
 export const getUser = async ({ username }: { username: SelectUser['username'] }) => {
   noStore()
-  const data = await db
-    .select()
-    .from(users)
-    .where(sql`LOWER(${users.username}) = LOWER(${username})`)
-  return data[0]
+  return await db.query.users.findFirst({ where: sql`LOWER(${users.username}) = ${username.toLowerCase()}` })
 }
 
 /**

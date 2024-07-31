@@ -152,10 +152,10 @@ const Page = async ({ params }: { params: { username: string } }) => {
 
 export default Page
 
-export async function generateStaticParams() {
-  const users = await getUsers()
-  return users
-}
+// export async function generateStaticParams() {
+//   const users = await getUsers()
+//   return users
+// }
 
 export async function generateMetadata({ params, searchParams }: { params: { username?: string }; searchParams: { section?: string } }) {
   if (!params.username) return notFound()
