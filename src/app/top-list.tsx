@@ -3,9 +3,16 @@ import Link from 'next/link'
 
 import { getFeatured, getTop } from '@/actions/actions'
 import WordwareLogo from '@/components/logo'
-import { SelectUser } from '@/drizzle/schema'
 
 const wordwareBoys = ['kozerafilip', 'bertie_ai', 'unable0_']
+
+export interface UserCardData {
+  id: string
+  username: string
+  name: string | null
+  profilePicture: string | null
+  followers: number | null
+}
 
 /**
  * UserCard component displays a card with user information.
@@ -14,7 +21,7 @@ const wordwareBoys = ['kozerafilip', 'bertie_ai', 'unable0_']
  * @param {SelectUser} props.user - The user object containing user details
  * @returns {JSX.Element} A link component containing user information
  */
-const UserCard = ({ user }: { user: SelectUser }) => (
+const UserCard = ({ user }: { user: UserCardData }) => (
   <Link
     href={`/${user.username}`}
     key={user.id}
@@ -50,11 +57,11 @@ const UserCard = ({ user }: { user: SelectUser }) => (
  * UserGrid component displays a grid of UserCard components.
  *
  * @param {Object} props - The component props
- * @param {SelectUser[]} props.users - An array of user objects to display
+ * @param {UserCardData[]} props.users - An array of user objects to display
  * @param {string} props.title - The title for the grid section
  * @returns {JSX.Element} A div containing a title and a grid of UserCard components
  */
-const UserGrid = ({ users, title }: { users: SelectUser[]; title: string }) => (
+const UserGrid = ({ users, title }: { users: UserCardData[]; title: string }) => (
   <div className="flex-center w-full flex-col gap-4">
     <h2 className="mb-4 text-2xl md:text-2xl 2xl:text-4xl">{title}</h2>
     <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

@@ -6,6 +6,7 @@ import { ApifyClient } from 'apify-client'
 import { desc, eq, inArray, sql } from 'drizzle-orm'
 import { toast } from 'sonner'
 
+import { UserCardData } from '@/app/top-list'
 import { db } from '@/drizzle/db'
 import { InsertUser, SelectUser, users } from '@/drizzle/schema'
 
@@ -47,18 +48,34 @@ const featuredUsernames = [
 /**
  * Retrieves the top 12 users based on follower count.
  */
-export const getTop = async (): Promise<SelectUser[]> => {
+export const getTop = async (): Promise<UserCardData[]> => {
   noStore()
   return db.query.users.findMany({
     orderBy: desc(users.followers),
     limit: 12,
+    columns: {
+      id: true,
+      username: true,
+      name: true,
+      profilePicture: true,
+      followers: true,
+    },
   })
 }
 
-export const getFeatured = async (): Promise<SelectUser[]> => {
+export const getFeatured = async (): Promise<UserCardData[]> => {
   noStore()
-  const data = await db.select().from(users).where(inArray(users.username, featuredUsernames)).orderBy(desc(users.followers))
-  return data
+  return await db.query.users.findMany({
+    where: inArray(users.username, featuredUsernames),
+    orderBy: desc(users.followers),
+    columns: {
+      id: true,
+      username: true,
+      name: true,
+      profilePicture: true,
+      followers: true,
+    },
+  })
 }
 
 /**
