@@ -64,6 +64,7 @@ export type TwitterAnalysis = {
  * @returns {JSX.Element} The rendered Result component
  */
 export default function Result({ unlocked, userData }: { unlocked: boolean; userData: TwitterAnalysis | undefined }) {
+  const streamingStarted = !!userData?.about
   return (
     <div className="w-full max-w-6xl">
       {/* Display emojis representing the user */}
@@ -79,10 +80,10 @@ export default function Result({ unlocked, userData }: { unlocked: boolean; user
       {/* Display analysis cards */}
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
         {cardData.map((card, index) => {
-          if (!unlocked && index === 1) {
+          if (streamingStarted && !unlocked && index === 1) {
             return <PaywallCard key={index} />
           }
-          if (index === 2 || index === 7) {
+          if (index === 2 || (streamingStarted && index === 7)) {
             return <WordwareCard key={index} />
           }
           return (
