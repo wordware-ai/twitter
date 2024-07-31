@@ -1,5 +1,6 @@
 'use client'
 
+import { WordwareCard } from '@/app/[username]/wordware-card'
 import { Markdown } from '@/components/markdown'
 
 import AnalysisCard from './analysis-card'
@@ -76,19 +77,24 @@ export default function Result({ userData }: { userData: TwitterAnalysis | undef
 
       {/* Display analysis cards */}
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-        {cardData.map((card, index) => (
-          <AnalysisCard
-            key={index}
-            contentKey={card.contentKey}
-            title={card.title}
-            icon={card.icon}
-            content={userData?.[card.contentKey] || ''}
-            colorClass={card.colorClass}
-            // color={card.color} // Commented out, might be used in future iterations
-            wide={card.wide}
-            bg={card.bg}
-          />
-        ))}
+        {cardData.map((card, index) => {
+          return (
+            <>
+              {index === 2 && <WordwareCard />}
+              <AnalysisCard
+                key={index}
+                contentKey={card.contentKey}
+                title={card.title}
+                icon={card.icon}
+                content={userData?.[card.contentKey] || ''}
+                colorClass={card.colorClass}
+                // color={card.color} // Commented out, might be used in future iterations
+                wide={card.wide}
+                bg={card.bg}
+              />
+            </>
+          )
+        })}
       </div>
     </div>
   )
