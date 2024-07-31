@@ -150,6 +150,7 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
     getFollowers: true,
     getFollowing: true,
     maxItems: 10,
+    maxPaidItems: 10,
     customMapFunction: '(object) => { return {...object} }',
   }
   try {
