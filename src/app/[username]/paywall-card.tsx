@@ -46,7 +46,7 @@ export const PaywallCard: React.FC = () => {
     }
   }
 
-  if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('success')) {
+  if (typeof window !== 'undefined' && searchParams.has('success')) {
     console.log('Conversion successful')
     posthog.capture('conversion')
   }
