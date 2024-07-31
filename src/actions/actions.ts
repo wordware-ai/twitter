@@ -109,7 +109,9 @@ export const updateUser = async ({ user }: { user: InsertUser }) => {
 export const handleNewUsername = async ({ username }: { username: string }) => {
   // First, check if the user already exists. If yes, just redirect to user's page.
   const user = await getUser({ username })
-  if (user) redirect(`/${username}`)
+  if (user) {
+    redirect(`/${username}`)
+  }
 
   // If user does not exist, scrape the profile and then redirect to user's page.
   const { data, error } = await scrapeProfile({ username })
@@ -290,10 +292,7 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
         toast.warning(
           "Tweet scraping failed a second time. Apologies - we're experiencing very high traffic at the moment. Please check that the linked profile has tweets and try again in a few minutes. Thank you for your patience.",
         )
-        return {
-          ...user,
-          error: JSON.stringify(e),
-        }
+        throw e
       }
     }
     console.log('🟣 | file: actions.ts:143 | processScrapedUser | tweets:', tweets?.length)

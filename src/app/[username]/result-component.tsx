@@ -59,7 +59,11 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
           ...prev,
           tweetScrapeStarted: true,
         }))
-        tweets = await processScrapedUser({ username: user.username })
+        try {
+          tweets = await processScrapedUser({ username: user.username })
+        } catch (error) {
+          window.location.href = 'https://tally.so/r/3lRoOp'
+        }
         setSteps((prev) => ({
           ...prev,
           tweetScrapeCompleted: true,
