@@ -305,7 +305,7 @@ function generateOG({
         )
       }
     } catch (e) {
-      console.error('Failed to parse content:', e)
+      console.warn('Failed to parse content:', e)
     }
 
     // Fallback for unparseable content

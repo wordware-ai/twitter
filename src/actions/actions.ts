@@ -348,9 +348,16 @@ export const unlockGeneration = async ({ username, email }: { username: string; 
     }
     unlockUser({ username: username.replace('/', ''), unlockType: 'email' })
 
-    revalidatePath(`/${username}`)
+    revalidatePath(username)
     return { success: true }
   } catch (error) {
+    if (error instanceof Error && error.message.includes('Email already on list')) {
+      unlockUser({ username: username.replace('/', ''), unlockType: 'email' })
+
+      revalidatePath(username)
+      console.log('🟣 | file: actions.ts:356 | unlockGeneration | error:', error)
+      return { success: true }
+    }
     console.log('🟣 | file: actions.ts:356 | unlockGeneration | error:', error)
     if (error instanceof Error) {
       return { success: false, error: error.message }

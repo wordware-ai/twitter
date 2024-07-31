@@ -68,7 +68,6 @@ export default function Result({ unlocked, userData }: { unlocked: boolean; user
     <div className="w-full max-w-6xl">
       {/* Display emojis representing the user */}
       <div className="text-center text-4xl tracking-widest">{userData?.emojis}</div>
-
       {/* Display the general description about the user */}
       <div className="mb-16 mt-6 text-center">
         <div className="flex-center w-full">
@@ -77,7 +76,6 @@ export default function Result({ unlocked, userData }: { unlocked: boolean; user
           </div>
         </div>
       </div>
-
       {/* Display analysis cards */}
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
         {cardData.map((card, index) => {
