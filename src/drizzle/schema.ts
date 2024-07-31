@@ -1,9 +1,12 @@
+import { sql } from 'drizzle-orm'
 import { boolean, index, integer, jsonb, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core'
 
 export const users = pgTable(
   'users',
   {
-    id: serial('id').primaryKey(),
+    id: text('id')
+      .primaryKey()
+      .default(sql`concat('usr_', uuid_generate_v4())`),
     username: text('username').notNull().unique(),
     createdAt: timestamp('created_at').notNull().defaultNow(),
     name: text('name'),

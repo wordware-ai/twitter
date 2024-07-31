@@ -36,6 +36,13 @@
       "when": 1722380483012,
       "tag": "0004_low_scarlet_spider",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1722388692434,
+      "tag": "0005_yielding_psylocke",
+      "breakpoints": true
     }
   ]
 }
