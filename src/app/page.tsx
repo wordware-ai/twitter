@@ -37,6 +37,11 @@ const Page = () => {
               </span>
               personality
             </h1>
+            <p className="text-sm text-red-500">
+              We&apos;re currently experiencing high demand.
+              <br />
+              Thank you for your patience as we work to accommodate all users.
+            </p>
 
             <div className="mb-8 flex items-center pt-2">
               <Suspense>
