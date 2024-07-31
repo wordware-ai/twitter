@@ -3,7 +3,7 @@
 import { unstable_cache as cache, unstable_noStore as noStore, revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { ApifyClient } from 'apify-client'
-import { desc, eq, inArray, sql } from 'drizzle-orm'
+import { desc, eq, inArray } from 'drizzle-orm'
 import { toast } from 'sonner'
 
 import { UserCardData } from '@/app/top-list'
