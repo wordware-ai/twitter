@@ -21,10 +21,12 @@ export const createCheckoutSession = async ({ username, priceInt }: { username: 
           currency: 'USD',
           unit_amount: priceInt,
         },
-
         quantity: 1,
       },
     ],
+    payment_intent_data: {
+      metadata: metadataObject,
+    },
     allow_promotion_codes: undefined as boolean | undefined,
     metadata: metadataObject,
     mode: 'payment' as const,
