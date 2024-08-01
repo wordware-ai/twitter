@@ -40,6 +40,7 @@ const NewUsernameForm = () => {
    * Handle form submission
    * @param {z.infer<typeof formSchema>} values - Form values
    */
+  // @ts-ignore
   async function onSubmit(_: z.infer<typeof formSchema>) {
     //
     window.location.href = 'https://tally.so/r/3lRoOp'
