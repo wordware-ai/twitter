@@ -57,5 +57,5 @@ export const scrapeProfilesWebhookCallback = handler(
         .onConflictDoUpdate({ target: users.lowercaseUsername, set: data })
     }
   },
-  { suppressLog: true },
+  { suppressLog: false },
 )
