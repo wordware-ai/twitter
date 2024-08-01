@@ -4,7 +4,6 @@ import { unstable_cache as cache, unstable_noStore as noStore, revalidatePath } 
 import { redirect } from 'next/navigation'
 import { ApifyClient } from 'apify-client'
 import { desc, eq, inArray } from 'drizzle-orm'
-import { toast } from 'sonner'
 
 import { UserCardData } from '@/app/top-list'
 import { db } from '@/drizzle/db'
@@ -55,7 +54,10 @@ export const getTop = cache(async (): Promise<UserCardData[]> => {
 
 export const getFeatured = cache(async (): Promise<UserCardData[]> => {
   return await db.query.users.findMany({
-    where: inArray(users.username, featuredUsernames),
+    where: inArray(
+      users.lowercaseUsername,
+      featuredUsernames.map((u) => u.toLowerCase()),
+    ),
     orderBy: desc(users.followers),
     columns: {
       id: true,
@@ -271,7 +273,7 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
       if (!tweets) throw new Error('No tweets found')
     } catch (e) {
       error = e
-      toast.warning('Tweet scraping failed. Trying again...)')
+      console.warn('Tweet scraping failed. Trying again...)', e)
       try {
         const res = await scrapeTweets({ username })
         tweets = res.data
@@ -280,9 +282,6 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
         if (!tweets) throw new Error('No tweets found')
       } catch (e) {
         console.error('🟣 | file: actions.ts:255 | processScrapedUserSecond | e:', e)
-        toast.warning(
-          "Tweet scraping failed a second time. Apologies - we're experiencing very high traffic at the moment. Please check that the linked profile has tweets and try again in a few minutes. Thank you for your patience.",
-        )
         throw e
       }
     }
