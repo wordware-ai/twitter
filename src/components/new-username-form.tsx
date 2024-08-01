@@ -48,7 +48,7 @@ const NewUsernameForm = () => {
     }
 
     const start = Date.now()
-    while (!response?.found && Date.now() - start < 100000) {
+    while (response && !response?.found && Date.now() - start < 100000) {
       await new Promise((resolve) => setTimeout(resolve, 5000))
       response = await handleNewUsername({ username: cleanedUsername })
       if (response?.error) {
