@@ -57,7 +57,9 @@ const NewUsernameForm = () => {
     }
 
     // We didn't get results in after the timeout, redirect
-    // window.location.href = 'https://tally.so/r/3lRoOp'
+    if (Date.now() - start >= 100000) {
+      window.location.href = 'https://tally.so/r/3lRoOp'
+    }
   }
 
   return (
