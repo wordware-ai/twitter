@@ -47,7 +47,7 @@ export const WordwareCard: React.FC = () => {
             </a>
           </Button>
         </div>
-        <p>Best inplementation of the Twitter compatibility app will get to launch it with us next week and share the profits!</p>
+        <p>Best implementation of the Twitter compatibility app will get to launch it with us next week and share the profits!</p>
       </CardContent>
     </Card>
   )
