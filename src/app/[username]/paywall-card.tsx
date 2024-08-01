@@ -31,7 +31,8 @@ export const PaywallCard: React.FC = () => {
   })
 
   const paywallFlag = posthog.getFeatureFlag('paywall2') ?? searchParams.get('stripe')
-  console.log('paywall flag', paywallFlag, searchParams.get('stripe'))
+
+  // console.log('paywall flag', paywallFlag, searchParams.get('stripe'))
 
   async function onSubmit(values: z.infer<typeof FormSchema>) {
     // Attempt to create a contact in Loops

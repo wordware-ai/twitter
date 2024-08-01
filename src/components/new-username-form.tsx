@@ -46,6 +46,19 @@ const NewUsernameForm = () => {
     if (response?.error) {
       window.location.href = 'https://tally.so/r/3lRoOp'
     }
+
+    const start = Date.now()
+
+    while (Date.now() - start < 100000) {
+      await new Promise((resolve) => setTimeout(resolve, 5000))
+      const r = await handleNewUsername({ username: cleanedUsername })
+      if (r?.error) {
+        window.location.href = 'https://tally.so/r/3lRoOp'
+      }
+    }
+
+    // We didn't get results in after the timeout, redirect
+    // window.location.href = 'https://tally.so/r/3lRoOp'
   }
 
   return (
