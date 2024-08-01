@@ -24,7 +24,7 @@ export const scrapeProfilesWebhookCallback = handler(
 
     // De-duplicate profiles
     const uniqueProfiles = {}
-    profiles.forEach((profile) => (uniqueProfiles[profile.userName.toLowerCase()] = profile))
+    profiles.forEach((profile) => (uniqueProfiles[profile?.userName?.toLowerCase()] = profile))
 
     // Add to db
     for (const [username, profile] of Object.entries(uniqueProfiles)) {
