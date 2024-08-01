@@ -6,11 +6,12 @@ import { useForm } from 'react-hook-form'
 import { PiSpinner } from 'react-icons/pi'
 import { z } from 'zod'
 
-import { handleNewUsername } from '@/actions/actions'
+// import { handleNewUsername } from '@/actions/actions'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { cleanUsername } from '@/lib/utils'
+
+// import { cleanUsername } from '@/lib/utils'
 
 /**
  * Zod schema for form validation
@@ -39,7 +40,7 @@ const NewUsernameForm = () => {
    * Handle form submission
    * @param {z.infer<typeof formSchema>} values - Form values
    */
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(_: z.infer<typeof formSchema>) {
     //
     window.location.href = 'https://tally.so/r/3lRoOp'
     // const cleanedUsername = cleanUsername(values.username)
