@@ -103,7 +103,7 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
   const user = await getUser({ username })
   if (user) {
     redirect(`/${username}`)
-    return { error: false }
+    return { error: false, found: true }
   }
 
   // If user does not exist, trigger the scraping of the profile
@@ -112,7 +112,7 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
     body: JSON.stringify({ username: username }),
   })
 
-  return { error: !r.ok }
+  return { error: !r.ok, found: false }
   // const { data, error } = await scrapeProfile({ username })
   // console.log('🟣 | file: actions.ts:90 | handleNewUsername | error:', error, 'data', data)
   //
