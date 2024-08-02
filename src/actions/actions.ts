@@ -106,12 +106,12 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
     return { error: false, found: true }
   }
 
-  // If user does not exist, trigger the scraping of the profile
+  // // If user does not exist, trigger the scraping of the profile
   // const r = await fetch(process.env.BATCH_EXECUTION_URL!, {
   //   method: 'POST',
   //   body: JSON.stringify({ username: username }),
   // })
-  //
+
   // return { error: !r.ok, found: false }
 
   const { data, error } = await scrapeProfile({ username })
@@ -125,7 +125,7 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
       error: null,
     }
     await insertUser({ user })
-    redirect(`/${data?.username}`)
+    redirect(`https://tally.so/r/3x2Xrd?twitter_handle=${data?.username}`)
     return { error: false, found: true }
   }
   if (!data && error) {
