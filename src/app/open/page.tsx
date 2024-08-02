@@ -1,6 +1,7 @@
 import { formatDistance } from 'date-fns'
 
 import { getStatistics } from '@/actions/actions'
+import Topbar from '@/components/top-bar'
 
 import { CumulativeUsersChart, UniqueUsersChart } from './charts'
 
@@ -8,7 +9,8 @@ const Page = async () => {
   const { chartData, timestamp } = await getStatistics()
 
   return (
-    <div className="flex-center w-full flex-col gap-12 px-2 py-12">
+    <div className="flex-center w-full flex-col gap-12 px-2 pb-12 pt-28 md:pt-20">
+      <Topbar />
       <div className="w-full max-w-4xl space-y-6">
         <div className="space-y-4">
           <h1 className="text-start text-4xl font-bold">Open Project</h1>
