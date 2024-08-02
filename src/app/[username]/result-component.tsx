@@ -5,6 +5,7 @@ import { PiCheckCircle, PiCircle, PiSpinner, PiXLogo } from 'react-icons/pi'
 
 import { processScrapedUser } from '@/actions/actions'
 import WordwareLogo from '@/components/logo'
+import PHButton from '@/components/ph-button'
 import { Button } from '@/components/ui/button'
 import { SelectUser } from '@/drizzle/schema'
 import { parsePartialJson } from '@/lib/parse-partial-json'
@@ -223,9 +224,10 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
             />
           </a>
         </h2> */}
-        <div className="flex-center gap-4">
+        <div className="flex-center flex-wrap gap-4">
           {/* Twitter Profile Button */}
-          <Button
+          <PHButton text="Support us!" />
+          {/* <Button
             size={'sm'}
             asChild>
             <a
@@ -234,7 +236,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
               href={`https://twitter.com/${user.username}`}>
               <PiXLogo /> Profile
             </a>
-          </Button>
+          </Button> */}
           {/* Share Button (only visible if result is available) */}
           {result?.about && (
             <Button
