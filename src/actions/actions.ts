@@ -3,7 +3,7 @@
 import { unstable_cache as cache, unstable_noStore as noStore, revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { ApifyClient } from 'apify-client'
-import { desc, eq, inArray } from 'drizzle-orm'
+import { desc, eq, inArray, sql } from 'drizzle-orm'
 
 import { UserCardData } from '@/app/top-list'
 import { db } from '@/drizzle/db'
@@ -11,12 +11,6 @@ import { InsertUser, SelectUser, users } from '@/drizzle/schema'
 
 import { fetchUserData } from './profile-scraper'
 
-/**
- * Retrieves a user from the database by their username.
- * @param {Object} params - The parameters for the function.
- * @param {SelectUser['username']} params.username - The username of the user to retrieve.
- * @returns {Promise<SelectUser | undefined>} The user object if found, undefined otherwise.
- */
 export const getUser = async ({ username }: { username: SelectUser['username'] }) => {
   noStore()
   return await db.query.users.findFirst({ where: eq(users.lowercaseUsername, username.toLowerCase()) })
@@ -36,9 +30,7 @@ const featuredUsernames = [
   'AlexReibman',
   'bentossell',
 ]
-/**
- * Retrieves the top 12 users based on follower count.
- */
+
 export const getTop = cache(async (): Promise<UserCardData[]> => {
   return db.query.users.findMany({
     where: eq(users.wordwareCompleted, true),
@@ -71,21 +63,10 @@ export const getFeatured = cache(async (): Promise<UserCardData[]> => {
   })
 }, ['featured-users'])
 
-/**
- * Inserts a new user into the database.
- * @param {Object} params - The parameters for the function.
- * @param {InsertUser} params.user - The user object to insert.
- */
 export const insertUser = async ({ user }: { user: InsertUser }) => {
   await db.insert(users).values(user)
 }
 
-/**
- * Updates an existing user in the database.
- * @param {Object} params - The parameters for the function.
- * @param {InsertUser} params.user - The user object with updated information.
- * @throws {Error} If the username is not provided.
- */
 export const updateUser = async ({ user }: { user: InsertUser }) => {
   if (!user.username) {
     throw new Error('Username is required for updating a user')
@@ -94,23 +75,14 @@ export const updateUser = async ({ user }: { user: InsertUser }) => {
   await db.update(users).set(user).where(eq(users.lowercaseUsername, user.lowercaseUsername))
 }
 
-/**
- * Handles the process of adding a new username to the system.
- * If the user exists, redirects to their page. If not, scrapes their profile and adds them.
- * @param {Object} params - The parameters for the function.
- * @param {string} params.username - The username to process.
- */
 export const handleNewUsername = async ({ username }: { username: string }) => {
-  // First, check if the user already exists. If yes, just redirect to user's page.
   const user = await getUser({ username })
   if (user) {
     redirect(`/${username}`)
   }
 
-  // Try to fetch user data using fetchUserData
   let { data, error } = await fetchUserData({ screenName: username })
 
-  // If fetchUserData fails, try scrapeProfile as a fallback
   if (!data && error) {
     ;({ data, error } = await scrapeProfile({ username }))
   }
@@ -138,28 +110,11 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
   }
 }
 
-// Initialize the Apify client with the API key
 const apifyClient = new ApifyClient({
   token: process.env.APIFY_API_KEY,
 })
 
-/**
- * Scrapes a Twitter profile using the Apify API.
- * @param {Object} params - The parameters for the function.
- * @param {string} params.username - The Twitter username to scrape.
- * @returns {Promise<{error: string | null, data: object | null}>} The scraped profile data or an error.
- */
 export const scrapeProfile = async ({ username }: { username: string }) => {
-  // const input = {
-  //   startUrls: [`https://twitter.com/${username}`],
-  //   twitterHandles: [username],
-  //   getFollowers: true,
-  //   getFollowing: true,
-  //   maxItems: 10,
-  //   maxPaidItems: 10,
-  //   customMapFunction: '(object) => { return {...object} }',
-  // }
-
   const input = {
     maxItems: 5,
     startUrls: [
@@ -206,12 +161,6 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
   }
 }
 
-/**
- * Scrapes tweets from a Twitter profile using the Apify API.
- * @param {Object} params - The parameters for the function.
- * @param {string} params.username - The Twitter username to scrape tweets from.
- * @returns {Promise<{data: object[] | null, error: any}>} The scraped tweets or an error.
- */
 export const scrapeTweets = async ({ username }: { username: string }) => {
   const input = {
     startUrls: [`https://twitter.com/${username}`],
@@ -243,7 +192,6 @@ export const scrapeTweets = async ({ username }: { username: string }) => {
   try {
     const run = await apifyClient.actor('apidojo/tweet-scraper').call(input)
     const { items: tweets } = await apifyClient.dataset(run.defaultDatasetId).listItems()
-    // console.log('🟣 | file: actions.ts:143 | scrapeTweets | tweets:', tweets)
 
     return { data: tweets, error: null }
   } catch (error) {
@@ -254,12 +202,6 @@ export const scrapeTweets = async ({ username }: { username: string }) => {
   }
 }
 
-/**
- * Processes a scraped user by updating their information and scraping their tweets.
- * @param {Object} params - The parameters for the function.
- * @param {string} params.username - The username of the user to process.
- * @returns {Promise<object[] | undefined>} The scraped tweets if successful, undefined otherwise.
- */
 export const processScrapedUser = async ({ username }: { username: string }) => {
   let user = await getUser({ username })
 
@@ -274,7 +216,6 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
       tweetScrapeStartedTime: new Date(),
     }
     await updateUser({ user })
-    // console.log('twitter scrap started')
     let tweets
     let error
     try {
@@ -317,12 +258,6 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
   }
 }
 
-/**
- * Creates a contact in Loops.so with the given email.
- * @param {Object} params - The parameters for the function.
- * @param {string} params.email - The email address of the contact to create.
- * @returns {Promise<{success: boolean, error?: any}>} An object indicating success or failure.
- */
 export const createLoopsContact = async ({ email }: { email: string }) => {
   const options = {
     method: 'POST',
@@ -383,13 +318,6 @@ export const unlockGeneration = async ({ username, email }: { username: string; 
   }
 }
 
-/**
- * Unlocks a user by setting their 'unlocked' property to true and adding an 'unlockType'.
- * @param {Object} params - The parameters for the function.
- * @param {string} params.username - The username of the user to unlock.
- * @param {string} params.unlockType - The type of unlock to apply.
- * @returns {Promise<{success: boolean, error?: string}>} An object indicating success or failure.
- */
 export const unlockUser = async ({ username, unlockType }: { username: string; unlockType: 'email' | 'stripe' | 'free' }) => {
   try {
     const r = await db
@@ -412,3 +340,32 @@ export const unlockUser = async ({ username, unlockType }: { username: string; u
     return { success: false, error: 'An unknown error occurred' }
   }
 }
+
+export const getStatistics = cache(
+  async () => {
+    const result = await db.execute(sql`
+      SELECT 
+        DATE(created_at) AS date, 
+        EXTRACT(HOUR FROM created_at) AS hour, 
+        COUNT(DISTINCT id) AS unique_users_count
+      FROM users
+      GROUP BY DATE(created_at), EXTRACT(HOUR FROM created_at)
+      ORDER BY DATE(created_at), EXTRACT(HOUR FROM created_at)
+    `)
+    console.log('🟣 | file: actions.ts:355 | result:', result)
+
+    let cumulative = 0
+    const formattedResult = result.rows.map((row: any) => {
+      cumulative += parseInt(row.unique_users_count)
+      return {
+        timestamp: `${row.date}T${row.hour.toString().padStart(2, '0')}:00:00`,
+        unique: parseInt(row.unique_users_count),
+        cumulative: cumulative,
+      }
+    })
+
+    return formattedResult
+  },
+  ['statistics'],
+  { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
+)
