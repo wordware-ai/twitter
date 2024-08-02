@@ -150,12 +150,13 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ unlocked, title, icon: Icon
           </a>
 
           <span className="items-center text-xs">
-            Powered by{' '}
+            Made with{' '}
             <a
               href="https://wordware.ai?utm_source=twitterai"
               className="font-semibold underline-offset-4 hover:underline">
               Wordware
-            </a>
+            </a>{' '}
+            - AI superpowers for builders
           </span>
         </CardFooter>
       </div>
