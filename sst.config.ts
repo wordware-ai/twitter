@@ -39,7 +39,7 @@ export default $config({
         memory: '512 MB',
         link: [api, apifySecret],
       },
-      { batch: { size: 20, window: '10 seconds' } },
+      { batch: { size: 50, window: '10 seconds', partialResponses: true } },
     )
 
     deduplicationQueue.subscribe({
