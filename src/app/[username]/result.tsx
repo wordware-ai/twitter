@@ -58,12 +58,6 @@ export type TwitterAnalysis = {
   emojis?: string
 }
 
-/**
- * Result component that displays the Twitter analysis
- * @param {Object} props - Component props
- * @param {TwitterAnalysis | undefined} props.userData - The analyzed user data
- * @returns {JSX.Element} The rendered Result component
- */
 export default function Result({ name, unlocked, userData }: { name: string; unlocked: boolean; userData: TwitterAnalysis | undefined }) {
   const streamingStarted = !!userData?.about
   return (

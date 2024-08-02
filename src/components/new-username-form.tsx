@@ -6,12 +6,11 @@ import { useForm } from 'react-hook-form'
 import { PiSpinner } from 'react-icons/pi'
 import { z } from 'zod'
 
-// import { handleNewUsername } from '@/actions/actions'
+import { handleNewUsername } from '@/actions/actions'
 import { Button } from '@/components/ui/button'
-
-// import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
-// import { Input } from '@/components/ui/input'
-// import { cleanUsername } from '@/lib/utils'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { cleanUsername } from '@/lib/utils'
 
 /**
  * Zod schema for form validation
@@ -36,18 +35,18 @@ const NewUsernameForm = () => {
     },
   })
 
-  // async function onSubmit(values: z.infer<typeof formSchema>) {
-  //   const cleanedUsername = cleanUsername(values.username)
-  //   const response = await handleNewUsername({ username: cleanedUsername })
-  //   console.log('🟣 | file: new-username-form.tsx:46 | onSubmit | response:', response)
-  //   if (response?.error) {
-  //     window.location.href = 'https://tally.so/r/3lRoOp'
-  //   }
-  // }
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const cleanedUsername = cleanUsername(values.username)
+    const response = await handleNewUsername({ username: cleanedUsername })
+    console.log('🟣 | file: new-username-form.tsx:46 | onSubmit | response:', response)
+    if (response?.error) {
+      window.location.href = 'https://tally.so/r/3lRoOp'
+    }
+  }
 
   return (
     <div className="flex w-full flex-col gap-4">
-      <Button
+      {/* <Button
         asChild
         className="flex max-w-[220px]">
         <a
@@ -55,8 +54,8 @@ const NewUsernameForm = () => {
           target="_blank">
           Sign up for the Waitlist
         </a>
-      </Button>
-      {/* <Form {...form}>
+      </Button> */}
+      <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full max-w-sm space-y-8">
@@ -86,7 +85,7 @@ const NewUsernameForm = () => {
             )}
           />
         </form>
-      </Form> */}
+      </Form>
       {/* Display loading spinner when form is submitting or submission is successful */}
       {form.formState.isSubmitting && (
         <div className="flex items-center gap-2 text-sm">

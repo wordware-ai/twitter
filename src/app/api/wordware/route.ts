@@ -46,7 +46,7 @@ export async function POST(request: Request) {
         tweets: user.tweets,
         profilePicture: user.profilePicture,
         profileInfo: user.fullProfile,
-        version: '^1.0',
+        version: '^1.1',
       },
     }),
   })
@@ -112,7 +112,7 @@ export async function POST(request: Request) {
                 controller.enqueue(value.value ?? '')
               }
             } else if (value.type === 'outputs') {
-              // console.log('✨ here:', value.values.output, ". Now parsing")
+              console.log('✨ here:', value.values.output, '. Now parsing')
               try {
                 // Update user with the analysis from Wordware
                 await updateUser({
