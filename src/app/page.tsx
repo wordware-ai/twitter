@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import Quote from '@/app/quote'
 import WordwareLogo from '@/components/logo'
 import NewUsernameForm from '@/components/new-username-form'
+import PHButton from '@/components/ph-button'
 
 import TopList from './top-list'
 
@@ -37,7 +38,7 @@ const Page = () => {
               </span>
               personality
             </h1>
-            <p className="text-sm text-red-500">
+            <p className="text-sm text-red-900">
               We&apos;re currently experiencing high demand.
               <br />
               Thank you for your patience as we work to accommodate all users.
@@ -74,20 +75,10 @@ const Page = () => {
                 <span
                   className="bg-clip-text font-bold text-transparent"
                   style={{ backgroundColor: '#CB9F9F' }}>
-                  support the Wordware launch this Friday!
+                  support the Wordware launch!
                 </span>
               </p>
-              <a
-                href="https://www.producthunt.com/posts/wordware-yc-s24?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-wordware&#0045;yc&#0045;s24"
-                target="_blank">
-                <img
-                  src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=474117&theme=dark"
-                  alt="Wordware&#0032;&#0040;YC&#0032;S24&#0041; - web&#0045;hosted&#0032;IDE&#0032;for&#0032;building&#0032;AI&#0032;agents | Product Hunt"
-                  style={{ width: '166px', height: '36px' }}
-                  width={166}
-                  height={36}
-                />
-              </a>
+              <PHButton />
             </div>
           </div>
         </div>
