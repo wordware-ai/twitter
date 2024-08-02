@@ -28,7 +28,7 @@ export function CumulativeUsersChart({ chartData }: { chartData: { timestamp: st
       <CardContent>
         <ChartContainer
           config={chartConfig}
-          className="max-h-[300px] min-h-[200px] w-full">
+          className="aspect-auto h-[250px] max-h-[250px] min-h-[250px] w-full">
           <AreaChart
             accessibilityLayer
             data={chartData}
@@ -148,7 +148,7 @@ export function UniqueUsersChart({ chartData }: { chartData: { timestamp: string
       <CardContent>
         <ChartContainer
           config={chartConfig}
-          className="max-h-[300px] min-h-[200px] w-full">
+          className="aspect-auto h-[250px] max-h-[250px] min-h-[250px] w-full">
           <BarChart
             accessibilityLayer
             data={chartData}
