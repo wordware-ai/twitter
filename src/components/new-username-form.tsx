@@ -8,8 +8,8 @@ import { z } from 'zod'
 
 import { handleNewUsername } from '@/actions/actions'
 import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
+// import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
+// import { Input } from '@/components/ui/input'
 import { cleanUsername } from '@/lib/utils'
 
 /**
@@ -64,7 +64,16 @@ const NewUsernameForm = () => {
 
   return (
     <div className="flex w-full flex-col gap-4">
-      <Form {...form}>
+      <Button
+        asChild
+        className="flex max-w-[220px]">
+        <a
+          href="https://tally.so/r/3lRoOp"
+          target="_blank">
+          Sign up for the Waitlist
+        </a>
+      </Button>
+      {/* <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full max-w-sm space-y-8">
@@ -73,8 +82,6 @@ const NewUsernameForm = () => {
             name="username"
             render={({ field }) => (
               <FormItem>
-                {/* Note: FormLabel is commented out, consider removing if not needed */}
-                {/* <FormLabel>Your X handle or link</FormLabel> */}
                 <FormControl>
                   <div className="flex items-center">
                     <Input
@@ -96,7 +103,7 @@ const NewUsernameForm = () => {
             )}
           />
         </form>
-      </Form>
+      </Form> */}
       {/* Display loading spinner when form is submitting or submission is successful */}
       {form.formState.isSubmitting && (
         <div className="flex items-center gap-2 text-sm">

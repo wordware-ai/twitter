@@ -35,7 +35,7 @@ export async function POST(request: Request) {
   })
 
   // Make a request to the Wordware API
-  const runResponse = await fetch(`https://app.wordware.ai/api/released-app/${process.env.WORDWARE_PROMPT_ID}/run`, {
+  const runResponse = await fetch(`https://app.wordware.ai/api/released-app/${process.env.WORDWARE_ROAST_PROMPT_ID}/run`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -46,11 +46,12 @@ export async function POST(request: Request) {
         tweets: user.tweets,
         profilePicture: user.profilePicture,
         profileInfo: user.fullProfile,
-        version: '^2.0',
+        version: '^1.0',
       },
     }),
   })
 
+  console.log('🟣 | file: route.ts:40 | POST | runResponse:', runResponse)
   // Get the reader from the response body
   const reader = runResponse.body?.getReader()
   if (!reader) {
@@ -76,6 +77,7 @@ export async function POST(request: Request) {
           }
 
           const chunk = decoder.decode(value)
+          console.log('🟣 | file: route.ts:80 | start | chunk:', chunk)
 
           // Process the chunk character by character
           for (let i = 0, len = chunk.length; i < len; ++i) {
