@@ -62,7 +62,7 @@ const Callout = () => {
           </a>
         </Button>
 
-        <Button
+        {/* <Button
           size={'lg'}
           variant={'outline'}
           asChild>
@@ -73,7 +73,7 @@ const Callout = () => {
             <PiGithubLogo />
             GitHub Repo
           </a>
-        </Button>
+        </Button> */}
       </div>
     </div>
   )
