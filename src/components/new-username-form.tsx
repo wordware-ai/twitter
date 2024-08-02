@@ -40,11 +40,10 @@ const NewUsernameForm = () => {
    * Handle form submission
    * @param {z.infer<typeof formSchema>} values - Form values
    */
-  async function onSubmit(values: any) {
+  // @ts-ignore
+  async function onSubmit(_: z.infer<typeof formSchema>) {
     //
-    if (values) {
-      window.location.href = 'https://tally.so/r/3lRoOp'
-    }
+    window.location.href = 'https://tally.so/r/3lRoOp'
     // const cleanedUsername = cleanUsername(values.username)
     // let response = await handleNewUsername({ username: cleanedUsername })
     // console.log('🟣 | file: new-username-form.tsx:46 | onSubmit | response:', response)
