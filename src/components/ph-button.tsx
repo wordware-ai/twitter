@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 
-const PHButton = () => {
+const PHButton = ({ text }: { text?: string }) => {
   const [countdown, setCountdown] = useState('')
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const PHButton = () => {
       </a>
 
       <div className="text-start text-sm font-bold text-[#ff6154]">
-        We&apos;re live!
+        {text ? text : `We're live!`}
         <br />
         {countdown && `${countdown}`}
       </div>
