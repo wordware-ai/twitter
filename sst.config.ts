@@ -31,7 +31,14 @@ export default $config({
       link: [deduplicationQueue],
     })
     // A queue to batch the requests for profile scraping
-    const scrapeProfileQueue = new sst.aws.Queue('ScrapeProfile', { visibilityTimeout: '1 minute' })
+    const scrapeProfileQueue = new sst.aws.Queue('ScrapeProfile', {
+      visibilityTimeout: '1 minute',
+      transform: {
+        queue: {
+          receiveWaitTimeSeconds: 5,
+        },
+      },
+    })
     scrapeProfileQueue.subscribe(
       {
         handler: 'src/workflow/handlers/scrapeProfiles.scrapeProfiles',
@@ -39,7 +46,15 @@ export default $config({
         memory: '512 MB',
         link: [api, apifySecret],
       },
-      { batch: { size: 50, window: '10 seconds', partialResponses: true } },
+      {
+        batch: { size: 50, window: '10 seconds', partialResponses: true },
+        transform: {
+          eventSourceMapping: {
+            batchSize: 50,
+            maximumBatchingWindowInSeconds: 10,
+          },
+        },
+      },
     )
 
     deduplicationQueue.subscribe({
