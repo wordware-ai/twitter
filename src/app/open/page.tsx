@@ -1,5 +1,3 @@
-import { formatDistance } from 'date-fns'
-
 import { getStatistics } from '@/actions/actions'
 import Topbar from '@/components/top-bar'
 
@@ -14,7 +12,15 @@ const Page = async () => {
       <div className="w-full max-w-4xl space-y-6">
         <div className="space-y-4">
           <h1 className="text-start text-4xl font-bold">Open Project</h1>
-          <p>Last update: {formatDistance(timestamp, new Date(), { addSuffix: true })}</p>
+          <p>
+            Last update:{' '}
+            {new Date(timestamp).toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
+          </p>
           <p>
             Twitter Personality by Wordware is a fully Open Project, which not only the code is open source, but we&apos;re also happy to share all the critical
             metrics and statistics.
