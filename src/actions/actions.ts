@@ -363,7 +363,8 @@ export const getStatistics = cache(
       }
     })
 
-    return { chartData: formattedResult, timestamp: new Date() }
+    // Remove the last item from the array (which might be incomplete data for the current hour)
+    return { chartData: formattedResult.slice(0, -1), timestamp: new Date() }
   },
   ['statistics'],
   { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
