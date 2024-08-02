@@ -9,6 +9,7 @@ import WordwareLogo from '@/components/logo'
 import NewUsernameForm from '@/components/new-username-form'
 import { Button } from '@/components/ui/button'
 
+import PHPopup from './ph-popup'
 import ResultComponent from './result-component'
 
 export const maxDuration = 300
@@ -38,6 +39,7 @@ const Page = async ({ params }: { params: { username: string } }) => {
 
   return (
     <div className="flex-center relative min-h-screen w-full flex-col gap-12 bg-[#F9FAFB] px-4 py-28 sm:px-12 md:px-28 md:pt-24">
+      <PHPopup />
       <div className="flex-center fixed top-0 z-50 w-full border-b bg-white/80 py-2 shadow-[5px_5px_30px_rgba(190,190,190,0.15),-5px_-5px_30px_rgba(255,255,255,0.15)] backdrop-blur-sm">
         <div className="flex w-full flex-col items-center justify-between gap-4 px-2 md:flex-row md:px-12">
           <div className="hidden w-full md:flex">
