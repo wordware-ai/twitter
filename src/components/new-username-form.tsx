@@ -6,11 +6,12 @@ import { useForm } from 'react-hook-form'
 import { PiSpinner } from 'react-icons/pi'
 import { z } from 'zod'
 
-import { handleNewUsername } from '@/actions/actions'
+// import { handleNewUsername } from '@/actions/actions'
 import { Button } from '@/components/ui/button'
+
 // import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 // import { Input } from '@/components/ui/input'
-import { cleanUsername } from '@/lib/utils'
+// import { cleanUsername } from '@/lib/utils'
 
 /**
  * Zod schema for form validation
@@ -35,32 +36,14 @@ const NewUsernameForm = () => {
     },
   })
 
-  /**
-   * Handle form submission
-   * @param {z.infer<typeof formSchema>} values - Form values
-   */
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    const cleanedUsername = cleanUsername(values.username)
-    const response = await handleNewUsername({ username: cleanedUsername })
-    console.log('🟣 | file: new-username-form.tsx:46 | onSubmit | response:', response)
-    if (response?.error) {
-      window.location.href = 'https://tally.so/r/3lRoOp'
-    }
-
-    // const start = Date.now()
-    // while (response && !response?.found && Date.now() - start < 100000) {
-    //   await new Promise((resolve) => setTimeout(resolve, 5000))
-    //   response = await handleNewUsername({ username: cleanedUsername })
-    //   if (response?.error) {
-    //     window.location.href = 'https://tally.so/r/3lRoOp'
-    //   }
-    // }
-    //
-    // // We didn't get results in after the timeout, redirect
-    // if (Date.now() - start >= 100000) {
-    //   window.location.href = 'https://tally.so/r/3lRoOp'
-    // }
-  }
+  // async function onSubmit(values: z.infer<typeof formSchema>) {
+  //   const cleanedUsername = cleanUsername(values.username)
+  //   const response = await handleNewUsername({ username: cleanedUsername })
+  //   console.log('🟣 | file: new-username-form.tsx:46 | onSubmit | response:', response)
+  //   if (response?.error) {
+  //     window.location.href = 'https://tally.so/r/3lRoOp'
+  //   }
+  // }
 
   return (
     <div className="flex w-full flex-col gap-4">
