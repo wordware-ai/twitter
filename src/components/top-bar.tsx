@@ -23,7 +23,7 @@ const Topbar = () => {
           </Button>
         </div>
         <div className="flex w-full items-center justify-center gap-2 whitespace-nowrap">
-          This agent has been built with
+          Build your AI App for free in
           <a
             href="https://wordware.ai/"
             target="_blank">
