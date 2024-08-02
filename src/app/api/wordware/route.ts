@@ -35,7 +35,7 @@ export async function POST(request: Request) {
   })
 
   // Make a request to the Wordware API
-  const runResponse = await fetch(`https://app.wordware.ai/api/released-app/${process.env.WORDWARE_ROAST_PROMPT_ID}/run`, {
+  const runResponse = await fetch(`https://app.wordware.ai/api/released-app/${process.env.WORDWARE_PROMPT_ID}/run`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
         tweets: user.tweets,
         profilePicture: user.profilePicture,
         profileInfo: user.fullProfile,
-        version: '^1.1',
+        version: '^2.0',
       },
     }),
   })
