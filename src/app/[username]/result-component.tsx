@@ -72,16 +72,21 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
       }
       if (
         (tweetScrapeCompleted && !user.wordwareStarted) ||
-        (tweetScrapeCompleted && !user.wordwareCompleted && Date.now() - user.wordwareStartedTime.getTime() > 3 * 60 * 1000)
+        (tweetScrapeCompleted && !user.wordwareCompleted && Date.now() - user.wordwareStartedTime.getTime() > 60 * 1000)
       ) {
         setSteps((prev) => ({
           ...prev,
           wordwareStarted: true,
         }))
+
+        const tweetsToAnalyse = tweets ? JSON.stringify(tweets) : JSON.stringify(user.tweets)
+        const userProfile = JSON.stringify(user.fullProfile)
+        const dp = user.profilePicture || ''
+        console.log('Handling analysis:', '\nTweets:\n', tweetsToAnalyse, '\n\nProifle:\n', userProfile, '\n\ndp:\n', dp)
         await handleTweetAnalysis({
-          tweets: tweets ? JSON.stringify(tweets) : JSON.stringify(user.tweets),
-          profilePicture: user.profilePicture || '',
-          profileInfo: JSON.stringify(user.fullProfile),
+          tweets: tweetsToAnalyse,
+          profilePicture: dp,
+          profileInfo: userProfile,
           username: user.username,
         })
         setSteps((prev) => ({
