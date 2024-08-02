@@ -5,9 +5,9 @@ import { Metadata } from 'next/types'
 import { getUser } from '@/actions/actions'
 import NewUsernameForm from '@/components/new-username-form'
 
+import Topbar from '../../components/top-bar'
 import PHPopup from './ph-popup'
 import ResultComponent from './result-component'
-import Topbar from './top-bar'
 
 export const maxDuration = 300
 export const dynamic = 'force-dynamic'
