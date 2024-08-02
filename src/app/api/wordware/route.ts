@@ -5,6 +5,18 @@ import { getUser, updateUser } from '@/actions/actions'
  */
 export const maxDuration = 300
 
+type TweetType = {
+  isRetweet: boolean
+  author: { userName: string }
+  createdAt: string
+  text: string
+  retweetCount: number
+  replyCount: number
+  likeCount: number
+  quoteCount: number
+  viewCount: number
+}
+
 /**
  * POST handler for the Wordware API route
  * @param {Request} request - The incoming request object
@@ -25,14 +37,28 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Wordware already started' })
   }
 
-  // Update user to indicate Wordware has started
-  await updateUser({
-    user: {
-      ...user,
-      wordwareStarted: true,
-      wordwareStartedTime: new Date(),
-    },
-  })
+  function formatTweet(tweet: TweetType) {
+    // console.log('Formatting', tweet)
+    const isRetweet = tweet.isRetweet ? 'RT ' : ''
+    const author = tweet.author?.userName ?? username
+    const createdAt = tweet.createdAt
+    const text = tweet.text
+      .split('\n')
+      .map((line) => `${line}`)
+      .join(`\n> `)
+    return `**${isRetweet}@${author} - ${createdAt}**
+
+> ${text}
+
+*retweets: ${tweet.retweetCount}, replies: ${tweet.replyCount}, likes: ${tweet.likeCount}, quotes: ${tweet.quoteCount}, views: ${tweet.viewCount}*`
+  }
+
+  const tweets = user.tweets as TweetType[]
+
+  // console.log('Tweets', tweets)
+
+  const tweetsMarkdown = tweets.map(formatTweet).join('\n---\n\n')
+  console.log('Tweets markdown', tweetsMarkdown)
 
   // Make a request to the Wordware API
   const runResponse = await fetch(`https://app.wordware.ai/api/released-app/${process.env.WORDWARE_PROMPT_ID}/run`, {
@@ -43,21 +69,31 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       inputs: {
-        tweets: user.tweets,
+        tweets: tweetsMarkdown,
         profilePicture: user.profilePicture,
         profileInfo: user.fullProfile,
-        version: '^2.0',
+        version: '^1.0',
       },
     }),
   })
 
-  console.log('🟣 | file: route.ts:40 | POST | runResponse:', runResponse)
+  // console.log('🟣 | file: route.ts:40 | POST | runResponse:', runResponse)
   // Get the reader from the response body
   const reader = runResponse.body?.getReader()
-  if (!reader) {
-    console.error('No reader')
-    return Response.json({ error: 'No reader' })
+  if (!reader || !runResponse.ok) {
+    // console.error('No reader')
+    console.log('🟣 | ERROR | file: route.ts:40 | POST | runResponse:', runResponse)
+    return Response.json({ error: 'No reader' }, { status: 400 })
   }
+
+  // Update user to indicate Wordware has started
+  await updateUser({
+    user: {
+      ...user,
+      wordwareStarted: true,
+      wordwareStartedTime: new Date(),
+    },
+  })
 
   // Set up decoder and buffer for processing the stream
   const decoder = new TextDecoder()
@@ -77,7 +113,7 @@ export async function POST(request: Request) {
           }
 
           const chunk = decoder.decode(value)
-          console.log('🟣 | file: route.ts:80 | start | chunk:', chunk)
+          // console.log('🟣 | file: route.ts:80 | start | chunk:', chunk)
 
           // Process the chunk character by character
           for (let i = 0, len = chunk.length; i < len; ++i) {
