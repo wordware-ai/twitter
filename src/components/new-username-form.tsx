@@ -40,28 +40,26 @@ const NewUsernameForm = () => {
    * @param {z.infer<typeof formSchema>} values - Form values
    */
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    //
-    window.location.href = 'https://tally.so/r/3lRoOp'
-    // const cleanedUsername = cleanUsername(values.username)
-    // let response = await handleNewUsername({ username: cleanedUsername })
-    // console.log('🟣 | file: new-username-form.tsx:46 | onSubmit | response:', response)
-    // if (response?.error) {
-    //   window.location.href = 'https://tally.so/r/3lRoOp'
-    // }
+    const cleanedUsername = cleanUsername(values.username)
+    let response = await handleNewUsername({ username: cleanedUsername })
+    console.log('🟣 | file: new-username-form.tsx:46 | onSubmit | response:', response)
+    if (response?.error) {
+      window.location.href = 'https://tally.so/r/3lRoOp'
+    }
 
-    // const start = Date.now()
-    // while (response && !response?.found && Date.now() - start < 100000) {
-    //   await new Promise((resolve) => setTimeout(resolve, 5000))
-    //   response = await handleNewUsername({ username: cleanedUsername })
-    //   if (response?.error) {
-    //     window.location.href = 'https://tally.so/r/3lRoOp'
-    //   }
-    // }
+    const start = Date.now()
+    while (response && !response?.found && Date.now() - start < 100000) {
+      await new Promise((resolve) => setTimeout(resolve, 5000))
+      response = await handleNewUsername({ username: cleanedUsername })
+      if (response?.error) {
+        window.location.href = 'https://tally.so/r/3lRoOp'
+      }
+    }
 
-    // // We didn't get results in after the timeout, redirect
-    // if (Date.now() - start >= 100000) {
-    //   window.location.href = 'https://tally.so/r/3lRoOp'
-    // }
+    // We didn't get results in after the timeout, redirect
+    if (Date.now() - start >= 100000) {
+      window.location.href = 'https://tally.so/r/3lRoOp'
+    }
   }
 
   return (
