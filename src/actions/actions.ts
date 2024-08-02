@@ -9,6 +9,8 @@ import { UserCardData } from '@/app/top-list'
 import { db } from '@/drizzle/db'
 import { InsertUser, SelectUser, users } from '@/drizzle/schema'
 
+import { fetchUserData } from './profile-scraper'
+
 /**
  * Retrieves a user from the database by their username.
  * @param {Object} params - The parameters for the function.
@@ -103,18 +105,16 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
   const user = await getUser({ username })
   if (user) {
     redirect(`/${username}`)
-    return { error: false, found: true }
   }
 
-  // // If user does not exist, trigger the scraping of the profile
-  // const r = await fetch(process.env.BATCH_EXECUTION_URL!, {
-  //   method: 'POST',
-  //   body: JSON.stringify({ username: username }),
-  // })
+  // Try to fetch user data using fetchUserData
+  let { data, error } = await fetchUserData({ screenName: username })
 
-  // return { error: !r.ok, found: false }
+  // If fetchUserData fails, try scrapeProfile as a fallback
+  if (!data && error) {
+    ;({ data, error } = await scrapeProfile({ username }))
+  }
 
-  const { data, error } = await scrapeProfile({ username })
   console.log('🟣 | file: actions.ts:90 | handleNewUsername | error:', error, 'data', data)
 
   if (data && !error) {
@@ -125,9 +125,10 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
       error: null,
     }
     await insertUser({ user })
-    redirect(`https://tally.so/r/3x2Xrd?twitter_handle=${data?.username}`)
+    redirect(`/${username}`)
     return { error: false, found: true }
   }
+
   if (!data && error) {
     return {
       data: null,
