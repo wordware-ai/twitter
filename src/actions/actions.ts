@@ -107,31 +107,34 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
   }
 
   // If user does not exist, trigger the scraping of the profile
-  const r = await fetch(process.env.BATCH_EXECUTION_URL!, {
-    method: 'POST',
-    body: JSON.stringify({ username: username }),
-  })
-
-  return { error: !r.ok, found: false }
-  // const { data, error } = await scrapeProfile({ username })
-  // console.log('🟣 | file: actions.ts:90 | handleNewUsername | error:', error, 'data', data)
+  // const r = await fetch(process.env.BATCH_EXECUTION_URL!, {
+  //   method: 'POST',
+  //   body: JSON.stringify({ username: username }),
+  // })
   //
-  // if (data && !error) {
-  //   const user = {
-  //     ...data,
-  //     lowercaseUsername: data.username.toLowerCase(),
-  //     profileScraped: true,
-  //     error: null,
-  //   }
-  //   await insertUser({ user })
-  //   redirect(`/${data?.username}`)
-  // }
-  // if (!data && error) {
-  //   return {
-  //     data: null,
-  //     error: error,
-  //   }
-  // }
+  // return { error: !r.ok, found: false }
+
+  const { data, error } = await scrapeProfile({ username })
+  console.log('🟣 | file: actions.ts:90 | handleNewUsername | error:', error, 'data', data)
+
+  if (data && !error) {
+    const user = {
+      ...data,
+      lowercaseUsername: data.username.toLowerCase(),
+      profileScraped: true,
+      error: null,
+    }
+    await insertUser({ user })
+    redirect(`/${data?.username}`)
+    return { error: false, found: true }
+  }
+  if (!data && error) {
+    return {
+      data: null,
+      error: error,
+      found: false,
+    }
+  }
 }
 
 // Initialize the Apify client with the API key
