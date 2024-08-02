@@ -8,6 +8,7 @@ import { Markdown } from '@/components/markdown'
 import AnalysisCard from './analysis-card'
 import { cardData } from './config'
 import { PaywallCard } from './paywall-card'
+import { PHCard } from './ph-card'
 
 /**
  * Represents the structure of a Twitter analysis result
@@ -63,7 +64,7 @@ export type TwitterAnalysis = {
  * @param {TwitterAnalysis | undefined} props.userData - The analyzed user data
  * @returns {JSX.Element} The rendered Result component
  */
-export default function Result({ unlocked, userData }: { unlocked: boolean; userData: TwitterAnalysis | undefined }) {
+export default function Result({ name, unlocked, userData }: { name: string; unlocked: boolean; userData: TwitterAnalysis | undefined }) {
   const streamingStarted = !!userData?.about
   return (
     <div className="w-full max-w-6xl">
@@ -83,9 +84,20 @@ export default function Result({ unlocked, userData }: { unlocked: boolean; user
           if (streamingStarted && !unlocked && index === 1) {
             return <PaywallCard key={index} />
           }
-          if (index === 2 || (streamingStarted && index === 7)) {
+          if (index === 2) {
+            return (
+              <PHCard
+                key={index}
+                name={name}
+              />
+            )
+          }
+          if (index === 7) {
             return <WordwareCard key={index} />
           }
+          // if (index === 2 || (streamingStarted && index === 7)) {
+          //   return <WordwareCard key={index} />
+          // }
           return (
             <React.Fragment key={index}>
               {(unlocked || index !== 1) && (
