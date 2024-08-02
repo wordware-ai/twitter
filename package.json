@@ -26,6 +26,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.32.0",
+    "fast-xml-parser": "^4.4.1",
     "lucide-react": "^0.408.0",
     "next": "14.2.5",
     "posthog-js": "^1.149.0",
