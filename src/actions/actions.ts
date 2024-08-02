@@ -352,7 +352,6 @@ export const getStatistics = cache(
       GROUP BY DATE(created_at), EXTRACT(HOUR FROM created_at)
       ORDER BY DATE(created_at), EXTRACT(HOUR FROM created_at)
     `)
-    console.log('🟣 | file: actions.ts:355 | result:', result)
 
     let cumulative = 0
     const formattedResult = result.rows.map((row: any) => {
@@ -364,7 +363,7 @@ export const getStatistics = cache(
       }
     })
 
-    return formattedResult
+    return { chartData: formattedResult, timestamp: new Date() }
   },
   ['statistics'],
   { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)

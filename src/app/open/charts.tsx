@@ -146,6 +146,12 @@ export function UniqueUsersChart({ chartData }: { chartData: { timestamp: string
               right: 12,
             }}>
             <CartesianGrid vertical={false} />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
+            />
             <XAxis
               dataKey="timestamp"
               tickLine={false}

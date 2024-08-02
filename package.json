@@ -25,6 +25,7 @@
     "aws-lambda": "^1.0.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.32.0",
     "fast-xml-parser": "^4.4.1",
