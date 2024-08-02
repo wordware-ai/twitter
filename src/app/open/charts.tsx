@@ -56,7 +56,18 @@ export function CumulativeUsersChart({ chartData }: { chartData: { timestamp: st
             />
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent />}
+              content={
+                <ChartTooltipContent
+                  labelFormatter={(value) => {
+                    return new Date(value).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })
+                  }}
+                />
+              }
             />
             <defs>
               <linearGradient
@@ -172,7 +183,8 @@ export function UniqueUsersChart({ chartData }: { chartData: { timestamp: string
                     return new Date(value).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',
-                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
                     })
                   }}
                 />
