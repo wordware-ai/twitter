@@ -23,22 +23,52 @@ export const getUserCached = cache(
   ['user-cache'],
 )
 
-const authors = ['unable0_', 'bertie_ai', 'kozerafilip', 'pio_sce', 'danny_hunt_code', 'ky__zo']
-
 export const getAuthors = cache(async (): Promise<UserCardData[]> => {
-  return await db.query.users.findMany({
-    where: inArray(
-      users.lowercaseUsername,
-      authors.map((u) => u.toLowerCase()),
-    ),
-    columns: {
-      id: true,
-      username: true,
-      name: true,
-      profilePicture: true,
-      followers: true,
+  return [
+    {
+      id: '2',
+      username: 'bertie_ai',
+      name: 'Robert Chandler',
+      profilePicture: 'https://pbs.twimg.com/profile_images/1582852165831229440/PijbiUGm_400x400.jpg',
+      followers: 0,
     },
-  })
+    {
+      id: '3',
+      username: 'kozerafilip',
+      name: 'Filip Kozera',
+      profilePicture: 'https://pbs.twimg.com/profile_images/1720918552721661952/Opqp--Su_400x400.jpg',
+      followers: 0,
+    },
+    {
+      id: '6',
+      username: 'unable0_',
+      name: 'Kamil Ruczynski',
+      profilePicture: 'https://pbs.twimg.com/profile_images/1737521497525088258/WylWyvQn_400x400.jpg',
+      followers: 0,
+    },
+    {
+      id: '4',
+      username: 'pio_sce',
+      name: 'Pio Scelina',
+      profilePicture: 'https://pbs.twimg.com/profile_images/1693591650818244608/ts3JYlzY_400x400.jpg',
+      followers: 0,
+    },
+    {
+      id: '5',
+      username: 'danny_hunt_code',
+      name: 'Danny Hunt',
+      profilePicture: 'https://pbs.twimg.com/profile_images/1647625717721583619/EcHl0CIu_400x400.jpg',
+      followers: 0,
+    },
+
+    {
+      id: '7',
+      username: 'ky__zo',
+      name: 'Kyzo',
+      profilePicture: 'https://pbs.twimg.com/profile_images/1726431958891466752/JaDcBy6P_400x400.jpg',
+      followers: 0,
+    },
+  ]
 }, ['authors-users'])
 
 const featuredUsernames = [
