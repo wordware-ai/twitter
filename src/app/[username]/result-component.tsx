@@ -56,6 +56,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
           // Process the scraped user data
           await processScrapedUser({ username: user.username })
         } catch (error) {
+          console.log('🟣 | file: result-component.tsx:59 | ; | error:', error)
           // Redirect to error form if processing fails
           window.location.href = 'https://tally.so/r/3lRoOp'
         }
@@ -325,7 +326,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
         // userData={result}
         userData={prepareUserData(result, user.unlocked || false)}
       />
-      {user.unlocked && (
+      {user.unlocked && !steps.paidWordwareCompleted && (
         <div className="flex-center w-full gap-4">
           {steps.paidWordwareStarted ? (
             steps.paidWordwareCompleted ? (
