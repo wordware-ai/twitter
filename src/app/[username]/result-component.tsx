@@ -13,15 +13,6 @@ import { cn } from '@/lib/utils'
 
 import Result, { TwitterAnalysis } from './result'
 
-/**
- * Represents the steps in the Twitter analysis process
- * @typedef {Object} Steps
- * @property {boolean} profileScraped - Whether the user's profile has been scraped
- * @property {boolean} tweetScrapeStarted - Whether the tweet scraping process has started
- * @property {boolean} tweetScrapeCompleted - Whether the tweet scraping process has completed
- * @property {boolean} wordwareStarted - Whether the Wordware analysis has started
- * @property {boolean} wordwareCompleted - Whether the Wordware analysis has completed
- */
 type Steps = {
   profileScraped: boolean
   tweetScrapeStarted: boolean
@@ -98,14 +89,6 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
     })()
   }, [user])
 
-  /**
-   * Handles the tweet analysis process
-   * @param {Object} props - Analysis props
-   * @param {string} props.tweets - JSON string of user's tweets
-   * @param {string} props.profilePicture - URL of user's profile picture
-   * @param {string} props.profileInfo - JSON string of user's profile info
-   * @param {string} props.username - User's Twitter username
-   */
   const handleTweetAnalysis = async (props: { tweets: string; profilePicture: string; profileInfo: string; username: string }) => {
     const response = await fetch('/api/wordware', {
       method: 'POST',
@@ -288,7 +271,6 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
 
       {/* Render the analysis result */}
       <Result
-        name={user.name || ''}
         unlocked={user.unlocked || false}
         userData={result}
         // userData={prepareUserData(result, user.unlocked || false)}
