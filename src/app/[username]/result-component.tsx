@@ -13,28 +13,16 @@ import { cn } from '@/lib/utils'
 
 import Result, { TwitterAnalysis } from './result'
 
-/**
- * Represents the steps in the Twitter analysis process
- * @typedef {Object} Steps
- * @property {boolean} profileScraped - Whether the user's profile has been scraped
- * @property {boolean} tweetScrapeStarted - Whether the tweet scraping process has started
- * @property {boolean} tweetScrapeCompleted - Whether the tweet scraping process has completed
- * @property {boolean} wordwareStarted - Whether the Wordware analysis has started
- * @property {boolean} wordwareCompleted - Whether the Wordware analysis has completed
- */
 type Steps = {
   profileScraped: boolean
   tweetScrapeStarted: boolean
   tweetScrapeCompleted: boolean
   wordwareStarted: boolean
   wordwareCompleted: boolean
+  paidWordwareStarted: boolean
+  paidWordwareCompleted: boolean
 }
 
-/**
- * ResultComponent - Renders the result of Twitter analysis
- * @param {Object} props - Component props
- * @param {SelectUser} props.user - User data
- */
 const ResultComponent = ({ user }: { user: SelectUser }) => {
   // State to track the progress of analysis steps
   const [steps, setSteps] = useState<Steps>({
@@ -43,6 +31,8 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
     tweetScrapeCompleted: user.tweetScrapeCompleted || false,
     wordwareStarted: user.wordwareStarted || false,
     wordwareCompleted: user.wordwareCompleted || false,
+    paidWordwareStarted: user.paidWordwareStarted || false,
+    paidWordwareCompleted: user.paidWordwareCompleted || false,
   })
 
   // State to store the result of Twitter analysis
@@ -50,63 +40,60 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
   const effectRan = useRef(false)
 
   useEffect(() => {
+    // Prevent the effect from running more than once
     if (effectRan.current) return
     let tweetScrapeCompleted = user.tweetScrapeCompleted
     effectRan.current = true
     ;(async () => {
-      let tweets = user.tweets
+      // Check if tweet scraping needs to be started or restarted
       if (!user.tweetScrapeStarted || (!user.tweetScrapeCompleted && Date.now() - user.tweetScrapeStartedTime.getTime() > 3 * 60 * 1000)) {
+        // Update state to indicate tweet scraping has started
         setSteps((prev) => ({
           ...prev,
           tweetScrapeStarted: true,
         }))
         try {
-          tweets = await processScrapedUser({ username: user.username })
+          // Process the scraped user data
+          await processScrapedUser({ username: user.username })
         } catch (error) {
+          // Redirect to error form if processing fails
           window.location.href = 'https://tally.so/r/3lRoOp'
         }
+        // Update state to indicate tweet scraping is completed
         setSteps((prev) => ({
           ...prev,
           tweetScrapeCompleted: true,
         }))
         tweetScrapeCompleted = true
       }
+
+      // Check if Wordware analysis needs to be started or restarted
       if (
         (tweetScrapeCompleted && !user.wordwareStarted) ||
         (tweetScrapeCompleted && !user.wordwareCompleted && Date.now() - user.wordwareStartedTime.getTime() > 60 * 1000)
       ) {
+        // Update state to indicate Wordware analysis has started
         setSteps((prev) => ({
           ...prev,
           wordwareStarted: true,
         }))
 
-        const tweetsToAnalyse = tweets ? JSON.stringify(tweets) : JSON.stringify(user.tweets)
-        const userProfile = JSON.stringify(user.fullProfile)
-        const dp = user.profilePicture || ''
-        console.log('Handling analysis:', '\nTweets:\n', tweetsToAnalyse, '\n\nProifle:\n', userProfile, '\n\ndp:\n', dp)
+        // Perform tweet analysis
         await handleTweetAnalysis({
-          tweets: tweetsToAnalyse,
-          profilePicture: dp,
-          profileInfo: userProfile,
           username: user.username,
+          full: false,
         })
+
+        // Update state to indicate Wordware analysis is completed
         setSteps((prev) => ({
           ...prev,
           wordwareCompleted: true,
         }))
       }
     })()
-  }, [user])
+  }, []) // Effect depends on user data
 
-  /**
-   * Handles the tweet analysis process
-   * @param {Object} props - Analysis props
-   * @param {string} props.tweets - JSON string of user's tweets
-   * @param {string} props.profilePicture - URL of user's profile picture
-   * @param {string} props.profileInfo - JSON string of user's profile info
-   * @param {string} props.username - User's Twitter username
-   */
-  const handleTweetAnalysis = async (props: { tweets: string; profilePicture: string; profileInfo: string; username: string }) => {
+  const handleTweetAnalysis = async (props: { username: string; full: boolean }) => {
     const response = await fetch('/api/wordware', {
       method: 'POST',
       headers: {
@@ -144,21 +131,21 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
   }
 
   // Function to prepare userData for Result component
-  // const prepareUserData = (result: TwitterAnalysis | undefined, unlocked: boolean): TwitterAnalysis | undefined => {
-  //   if (!result) return undefined
-  //   if (!result.roast) return result
+  const prepareUserData = (result: TwitterAnalysis | undefined, unlocked: boolean): TwitterAnalysis | undefined => {
+    if (!result) return undefined
+    if (!result.roast) return result
 
-  //   if (unlocked) return result
+    if (unlocked) return result
 
-  //   // Merge placeholders with the result if not unlocked
-  //   return {
-  //     ...result,
-  //     ...placeholder,
-  //     strengths: placeholder.strengths,
-  //     weaknesses: placeholder.weaknesses,
-  //     pickupLines: placeholder.pickupLines,
-  //   }
-  // }
+    // Merge placeholders with the result if not unlocked
+    return {
+      ...result,
+      ...placeholder,
+      strengths: placeholder.strengths,
+      weaknesses: placeholder.weaknesses,
+      pickupLines: placeholder.pickupLines,
+    }
+  }
 
   return (
     <div className="flex-center flex-col gap-8">
@@ -290,8 +277,8 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
       <Result
         name={user.name || ''}
         unlocked={user.unlocked || false}
-        userData={result}
-        // userData={prepareUserData(result, user.unlocked || false)}
+        // userData={result}
+        userData={prepareUserData(result, user.unlocked || false)}
       />
     </div>
   )
@@ -299,76 +286,76 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
 
 export default ResultComponent
 
-// const placeholder = {
-//   money:
-//     '•••• •••••••••••••• •••••• ••• ••••••••••• •• •••••••••••• •• •••••••••• •••••••• ••• •••• ••• ••••••••• •••••••• ••• ••••• ••••••• • ••• •••••• •• •••••••• • ••••••••••••••••• •••• •••••••• •• •••• •••••• ••• ••••••••••• •• •••••••• •••••••••••• •••• •• ••• •• •••• •••••• ••••••••••••• •••• ••••••• •• •••••••• •••••• ••• ••• ••••• •••• •••••••',
-//   animal:
-//     '•••••••• •••• •• •••••••• ••••• •• •••••• ••••••••• ••••••••••• ••• ••••••• •• •••••••• •••••••• ••••• •••••••••••••• •• ••••••••• ••• ••••••• •••••• •• ••• •••• •••••••• •••• ••••• ••••• •••• •••• ••••• •• ••••• •••• ••••••••• ••••• •• ••••••••••• •••• •• •• •••••••• ••• •••••• ••• ••••••••••• •• •••• ••• ••••••••••• ••••• •••••• ••• ••••••• ••• •••••• ••• •••••••••• •• ••• •••••••••••• •••• ••••••••••',
-//   career:
-//     '•••••• ••• ••••• •••••• •••• ••• •••• •••• •• •• • ••••••••••••• ••••••••••• •••• •••• •••• •• ••••••••••• •• ••••••••••••• •••• •••••• ••••• •••••••• ••• ••••••• ••••••••••••• ••••• •• •••••••••• •• ••••••• •••• ••••••• ••••• ••••••••••• •••••• •••• ••••••• ••••• •• ••••••• ••••• ••••••• •••••••• •• •••••••••••••••• •••••••• •••••••••• •••••••• ••••••• •••• ••••••••••• •••••• ••• ••••••••••• ••••• • ••••••• ••••••• •••••••• ••••• ••••••••• ••• ••• ••••• •••• •••••• ••••••••••• •••• •••• •• ••••••••••• ••••••••••••',
-//   health:
-//     '•••• ••••••••• ••••••••• ••• •••• •• ••••••• ••• ••• ••••• ••••••• •••••• •••• •••••••• ••••••• ••••••••••• •••••••• •••••••••• ••••••• •••••••• ••• ••••••••• •••••• ••••••••••• •• •••••••• •••• ••••••••••• ••••••• ••••••• ••••••• •••• •• ••••••• ••• •••• •••••• ••••••••• ••••••••• • •••••• •••• •• • •••••• •••• •• ••• •••••••• ••••••••••••• •••••',
-//   loveLife:
-//     '••• ••••• ••••• ••• • ••••••••••• •••••••••• •••• ••••••• ••• •••••• •••• ••••• ••• ••••••••••• •••• ••• • ••••••• ••• ••••••••• •••• ••••• ••• •••••••• •••• •••••••••• • •••••••• •• ••••• •••• •••• •• • •••••••• •• ••••••• •••• ••••••• ••• ••••••••••• •••• ••••••••••••••• ••• •••• •••••• ••• •• •••••••• •••• ••••••• •••• •••••• •••• •••••• • ••••••••• ••• •••••••• ••••',
-//   strengths: [
-//     {
-//       title: '•••••••••• ••••••••',
-//       subtitle: '•••••••••• ••••••••• ••• ••••• •• •• ••• ••••••••••',
-//     },
-//     {
-//       title: '•••••••••••••• ••••••',
-//       subtitle: '•••••• •• •••••• ••• •••• ••••••••',
-//     },
-//     {
-//       title: '•••••••••• •••••••',
-//       subtitle: '•••••••• ••••••••••• •• ••• •••• •••••••••',
-//     },
-//     {
-//       title: '••••••••••••',
-//       subtitle: '••••• •• ••••••• ••• •••••••••••• ••• ••••••',
-//     },
-//     {
-//       title: '•••••• •••••••',
-//       subtitle: '•••••• •••••••• •• ••••• ••• •••••••',
-//     },
-//   ],
-//   weaknesses: [
-//     {
-//       title: '•••••••••••••',
-//       subtitle: '••• ••••••••••••• ••••••••• •• • ••••••• •••••••• •••••',
-//     },
-//     {
-//       title: '•••• ••••••• •••••••••',
-//       subtitle: '••••••••••• ••••••• •• ••••••• •••••• ••••••••••',
-//     },
-//     {
-//       title: '••••••••• ••••••••',
-//       subtitle: '•••••• ••••••••••• •••••• •••• •••••••• ••••',
-//     },
-//     {
-//       title: '•••••••• ••••••••',
-//       subtitle: '••• •••••••• •••• ••••••••••• •• ••••••••••• •••• •••••',
-//     },
-//     {
-//       title: '•••••••• •••••••••',
-//       subtitle: '••••••••••••• ••••••••• •• ••••••• •• ••••••••••',
-//     },
-//   ],
-//   biggestGoal:
-//     '•• ••••••••••••• ••• •• •••••••• •••• ••••••••••••• ••••••••••• •••• ••••••••••••• ••••••• ••••• •••• ••• •••• ••• ••••••••••• •• •••••• •••••••• •• ••••••••••',
-//   pickupLines: [
-//     '••• ••• • •••••• •••••••• ••••••• ••••••• ••• •• •••••• ••••••••••',
-//     '•• •••• •••• ••••••• ••••••• ••• ••••••• •••••••• • ••••••••••',
-//     '••• •••• •• • •••••••• ••••••• ••••••• •••••••• •••••••••••• •• •• ••••••',
-//   ],
-//   previousLife:
-//     '•• • •••••••• ••••• ••••• ••• •••••• •••••• •••••• •••• ••••• •• ••••••••••• •••••• ••• ••••••••••• • ••••••••• •••••••• •• ••••••••••• ••• • •••••••• •• •• ••••• •• ••••• ••••• •••• •• ••••• ••••••• •• •••••••• •••••• ••••••••••••• ••••• •••••••• • ••••• ••••••••••• •• ••• ••••• •••• ••••••• ••••• ••• •••• •••••••••• •• •••• ••••••••• • ••• •••• •••• •••••• •• ••••••••••• •••••',
-//   lifeSuggestion:
-//     '••••••• ••• ••• •• •••••••••• ••••••• ••• ••• •••• ••••• ••••• •••••••• •• ••••••• •••• ••••••• •• ••••••••• ••••••• ••••• •••••••••• •••• ••••••• •••• ••••••• •••••• ••• ••••••••••••• •••• •••• ••••••••• ••••••••••••• •••• •••••••• •••• ••••• •••• •••••••••••• •••••••• •••• •••• ••••• ••••••• •••••••• •• •••• •••••••••• ••• ••••••••• ••••••••••••',
-//   fiftyDollarThing:
-//     '• ••••••• ••••••••••• •••• ••••••••• ••••• •• •••• •••• •••••• ••• •• ••• •••••• •••• •• ••••• ••••••• ••••••••••••• ••••••••• • ••••••••••• ••••••••••••• •• •••• ••••••••• •••••• •• ••••• •••• •• •••••• •••• •••• ••• •••• •• •••••••• ••••••••••••••',
-//   colleaguePerspective:
-//     '•••••••• •••• ••••• •• •••• •••••• • ••••••••••••• • ••••••••••••• ••• ••••••••• •••••••••• ••• •••••••• •••••• •• ••••• ••• •• ••••••••• ••• •••• •••• ••••••• ••• •• ••••• •• ••••••• •••••• ••••• •••••• •••••• •••••••• ••• •••• ••• ••••• ••••• ••••• ••••• ••••••• •••••••• ••••• ••• •••• •• ••• ••••• •••••• •••• •• ••• •••• ••••• •• •••••• ••• •••• ••••• ••••• ••• •••••••••• ••••• ••• •• ••• •••••••• •••••',
-//   famousPersonComparison:
-//     '••• •••••• •••• •••• ••••• •••••••• ••• •••••• •• • •••••• ••••••••• •••• •••••••••••• •••••• •••••••• •• ••• •••• ••••• • ••••••••• ••••• ••• ••••••••••• • •••• •••••••• •• •••••••• •••••••••••• ••••••••••• ••• • •••••• •••••• •• ••• ••••••••••••• ••••• •• ••• •••• •••• •••• ••••••••• ••• ••••••••••• ••••• •• ••••••• •••••• •••••••• •••• • ••• •• •••••••• ••• •••••••••• ••••••••',
-// }
+const placeholder = {
+  money:
+    '•••• •••••••••••••• •••••• ••• ••••••••••• •• •••••••••••• •• •••••••••• •••••••• ••• •••• ••• ••••••••• •••••••• ••• ••••• ••••••• • ••• •••••• •• •••••••• • ••••••••••••••••• •••• •••••••• •• •••• •••••• ••• ••••••••••• •• •••••••• •••••••••••• •••• •• ••• •• •••• •••••• ••••••••••••• •••• ••••••• •• •••••••• •••••• ••• ••• ••••• •••• •••••••',
+  animal:
+    '•••••••• •••• •• •••••••• ••••• •• •••••• ••••••••• ••••••••••• ••• ••••••• •• •••••••• •••••••• ••••• •••••••••••••• •• ••••••••• ••• ••••••• •••••• •• ••• •••• •••••••• •••• ••••• ••••• •••• •••• ••••• •• ••••• •••• ••••••••• ••••• •• ••••••••••• •••• •• •• •••••••• ••• •••••• ••• ••••••••••• •• •••• ••• ••••••••••• ••••• •••••• ••• ••••••• ••• •••••• ••• •••••••••• •• ••• •••••••••••• •••• ••••••••••',
+  career:
+    '•••••• ••• ••••• •••••• •••• ••• •••• •••• •• •• • ••••••••••••• ••••••••••• •••• •••• •••• •• ••••••••••• •• ••••••••••••• •••• •••••• ••••• •••••••• ••• ••••••• ••••••••••••• ••••• •• •••••••••• •• ••••••• •••• ••••••• ••••• ••••••••••• •••••• •••• ••••••• ••••• •• ••••••• ••••• ••••••• •••••••• •• •••••••••••••••• •••••••• •••••••••• •••••••• ••••••• •••• ••••••••••• •••••• ••• ••••••••••• ••••• • ••••••• ••••••• •••••••• ••••• ••••••••• ••• ••• ••••• •••• •••••• ••••••••••• •••• •••• •• ••••••••••• ••••••••••••',
+  health:
+    '•••• ••••••••• ••••••••• ••• •••• •• ••••••• ••• ••• ••••• ••••••• •••••• •••• •••••••• ••••••• ••••••••••• •••••••• •••••••••• ••••••• •••••••• ••• ••••••••• •••••• ••••••••••• •• •••••••• •••• ••••••••••• ••••••• ••••••• ••••••• •••• •• ••••••• ••• •••• •••••• ••••••••• ••••••••• • •••••• •••• •• • •••••• •••• •• ••• •••••••• ••••••••••••• •••••',
+  loveLife:
+    '••• ••••• ••••• ••• • ••••••••••• •••••••••• •••• ••••••• ••• •••••• •••• ••••• ••• ••••••••••• •••• ••• • ••••••• ••• ••••••••• •••• ••••• ••• •••••••• •••• •••••••••• • •••••••• •• ••••• •••• •••• •• • •••••••• •• ••••••• •••• ••••••• ••• ••••••••••• •••• ••••••••••••••• ••• •••• •••••• ••• •• •••••••• •••• ••••••• •••• •••••• •••• •••••• • ••••••••• ••• •••••••• ••••',
+  strengths: [
+    {
+      title: '•••••••••• ••••••••',
+      subtitle: '•••••••••• ••••••••• ••• ••••• •• •• ••• ••••••••••',
+    },
+    {
+      title: '•••••••••••••• ••••••',
+      subtitle: '•••••• •• •••••• ••• •••• ••••••••',
+    },
+    {
+      title: '•••••••••• •••••••',
+      subtitle: '•••••••• ••••••••••• •• ••• •••• •••••••••',
+    },
+    {
+      title: '••••••••••••',
+      subtitle: '••••• •• ••••••• ••• •••••••••••• ••• ••••••',
+    },
+    {
+      title: '•••••• •••••••',
+      subtitle: '•••••• •••••••• •• ••••• ••• •••••••',
+    },
+  ],
+  weaknesses: [
+    {
+      title: '•••••••••••••',
+      subtitle: '••• ••••••••••••• ••••••••• •• • ••••••• •••••••• •••••',
+    },
+    {
+      title: '•••• ••••••• •••••••••',
+      subtitle: '••••••••••• ••••••• •• ••••••• •••••• ••••••••••',
+    },
+    {
+      title: '••••••••• ••••••••',
+      subtitle: '•••••• ••••••••••• •••••• •••• •••••••• ••••',
+    },
+    {
+      title: '•••••••• ••••••••',
+      subtitle: '••• •••••••• •••• ••••••••••• •• ••••••••••• •••• •••••',
+    },
+    {
+      title: '•••••••• •••••••••',
+      subtitle: '••••••••••••• ••••••••• •• ••••••• •• ••••••••••',
+    },
+  ],
+  biggestGoal:
+    '•• ••••••••••••• ••• •• •••••••• •••• ••••••••••••• ••••••••••• •••• ••••••••••••• ••••••• ••••• •••• ••• •••• ••• ••••••••••• •• •••••• •••••••• •• ••••••••••',
+  pickupLines: [
+    '••• ••• • •••••• •••••••• ••••••• ••••••• ••• •• •••••• ••••••••••',
+    '•• •••• •••• ••••••• ••••••• ••• ••••••• •••••••• • ••••••••••',
+    '••• •••• •• • •••••••• ••••••• ••••••• •••••••• •••••••••••• •• •• ••••••',
+  ],
+  previousLife:
+    '•• • •••••••• ••••• ••••• ••• •••••• •••••• •••••• •••• ••••• •• ••••••••••• •••••• ••• ••••••••••• • ••••••••• •••••••• •• ••••••••••• ••• • •••••••• •• •• ••••• •• ••••• ••••• •••• •• ••••• ••••••• •• •••••••• •••••• ••••••••••••• ••••• •••••••• • ••••• ••••••••••• •• ••• ••••• •••• ••••••• ••••• ••• •••• •••••••••• •• •••• ••••••••• • ••• •••• •••• •••••• •• ••••••••••• •••••',
+  lifeSuggestion:
+    '••••••• ••• ••• •• •••••••••• ••••••• ••• ••• •••• ••••• ••••• •••••••• •• ••••••• •••• ••••••• •• ••••••••• ••••••• ••••• •••••••••• •••• ••••••• •••• ••••••• •••••• ••• ••••••••••••• •••• •••• ••••••••• ••••••••••••• •••• •••••••• •••• ••••• •••• •••••••••••• •••••••• •••• •••• ••••• ••••••• •••••••• •• •••• •••••••••• ••• ••••••••• ••••••••••••',
+  fiftyDollarThing:
+    '• ••••••• ••••••••••• •••• ••••••••• ••••• •• •••• •••• •••••• ••• •• ••• •••••• •••• •• ••••• ••••••• ••••••••••••• ••••••••• • ••••••••••• ••••••••••••• •• •••• ••••••••• •••••• •• ••••• •••• •• •••••• •••• •••• ••• •••• •• •••••••• ••••••••••••••',
+  colleaguePerspective:
+    '•••••••• •••• ••••• •• •••• •••••• • ••••••••••••• • ••••••••••••• ••• ••••••••• •••••••••• ••• •••••••• •••••• •• ••••• ••• •• ••••••••• ••• •••• •••• ••••••• ••• •• ••••• •• ••••••• •••••• ••••• •••••• •••••• •••••••• ••• •••• ••• ••••• ••••• ••••• ••••• ••••••• •••••••• ••••• ••• •••• •• ••• ••••• •••••• •••• •• ••• •••• ••••• •• •••••• ••• •••• ••••• ••••• ••• •••••••••• ••••• ••• •• ••• •••••••• •••••',
+  famousPersonComparison:
+    '••• •••••• •••• •••• ••••• •••••••• ••• •••••• •• • •••••• ••••••••• •••• •••••••••••• •••••• •••••••• •• ••• •••• ••••• • ••••••••• ••••• ••• ••••••••••• • •••• •••••••• •• •••••••• •••••••••••• ••••••••••• ••• • •••••• •••••• •• ••• ••••••••••••• ••••• •• ••• •••• •••• •••• ••••••••• ••• ••••••••••• ••••• •• ••••••• •••••• •••••••• •••• • ••• •• •••••••• ••• •••••••••• ••••••••',
+}

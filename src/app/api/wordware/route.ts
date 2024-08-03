@@ -24,7 +24,7 @@ type TweetType = {
  */
 export async function POST(request: Request) {
   // Extract username from the request body
-  const { username } = await request.json()
+  const { username, full } = await request.json()
 
   // Fetch user data and check if Wordware has already been started
   const user = await getUser({ username })
@@ -60,8 +60,10 @@ export async function POST(request: Request) {
   const tweetsMarkdown = tweets.map(formatTweet).join('\n---\n\n')
   console.log('Tweets markdown', tweetsMarkdown)
 
+  const promptID = full ? process.env.WORDWARE_FULL_PROMPT_ID : process.env.WORDWARE_ROAST_PROMPT_ID
+
   // Make a request to the Wordware API
-  const runResponse = await fetch(`https://app.wordware.ai/api/released-app/${process.env.WORDWARE_PROMPT_ID}/run`, {
+  const runResponse = await fetch(`https://app.wordware.ai/api/released-app/${promptID}/run`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -64,6 +64,13 @@
       "when": 1722462514405,
       "tag": "0008_broken_squirrel_girl",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1722620352228,
+      "tag": "0009_rapid_vulcan",
+      "breakpoints": true
     }
   ]
 }
