@@ -162,12 +162,12 @@ export async function POST(request: Request) {
             } else if (value.type === 'outputs') {
               console.log('✨ here:', value.values.output, '. Now parsing')
               try {
+                const statusObject = full ? { paidWordwareStarted: true, paidWordwareCompleted: true } : { wordwareStarted: true, wordwareCompleted: true }
                 // Update user with the analysis from Wordware
                 await updateUser({
                   user: {
                     ...user,
-                    wordwareStarted: true,
-                    wordwareCompleted: true,
+                    ...statusObject,
                     analysis: {
                       ...existingAnalysis,
                       ...value.values.output,
@@ -177,11 +177,12 @@ export async function POST(request: Request) {
                 // console.log('Analysis saved to database')
               } catch (error) {
                 console.error('Error parsing or saving output:', error)
-                // Reset wordwareStarted if there's an error
+
+                const statusObject = full ? { paidWordwareStarted: false, paidWordwareCompleted: false } : { wordwareStarted: false, wordwareCompleted: false }
                 await updateUser({
                   user: {
                     ...user,
-                    wordwareStarted: false,
+                    ...statusObject,
                   },
                 })
               }

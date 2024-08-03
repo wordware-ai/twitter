@@ -46,7 +46,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
     effectRan.current = true
     ;(async () => {
       // Check if tweet scraping needs to be started or restarted
-      if (!user.tweetScrapeStarted || (!user.tweetScrapeCompleted && Date.now() - user.tweetScrapeStartedTime.getTime() > 3 * 60 * 1000)) {
+      if (!user.tweetScrapeStarted || (!user.tweetScrapeCompleted && Date.now() - user.tweetScrapeStartedTime.getTime() > 1 * 60 * 1000)) {
         // Update state to indicate tweet scraping has started
         setSteps((prev) => ({
           ...prev,
@@ -93,8 +93,9 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
       }
 
       if (
-        (user.unlocked && !user.paidWordwareStarted) ||
-        (user.unlocked && !user.paidWordwareCompleted && Date.now() - user.paidWordwareStartedTime.getTime() > 60 * 1000)
+        !user.paidWordwareCompleted &&
+        ((user.unlocked && !user.paidWordwareStarted) ||
+          (user.unlocked && !user.paidWordwareCompleted && Date.now() - user.paidWordwareStartedTime.getTime() > 60 * 1000))
       ) {
         console.log('PAID SHOULD BE STARTED, STARTING')
         // Update state to indicate Wordware analysis has started
