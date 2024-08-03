@@ -2,6 +2,7 @@ import { getStatistics } from '@/actions/actions'
 import Topbar from '@/components/top-bar'
 
 import { CumulativeUsersChart, UniqueUsersChart } from './charts'
+import LastUpdate from './last-update'
 
 const Page = async () => {
   const { chartData, timestamp } = await getStatistics()
@@ -12,15 +13,7 @@ const Page = async () => {
       <div className="w-full max-w-4xl space-y-6">
         <div className="space-y-4">
           <h1 className="text-start text-4xl font-bold">Open Project</h1>
-          <p>
-            Last update:{' '}
-            {new Date(timestamp).toLocaleDateString('en-US', {
-              month: 'short',
-              day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-          </p>
+          <LastUpdate timestamp={timestamp} />
           <p>
             Twitter Personality by Wordware is a fully Open Project, which not only the code is open source, but we&apos;re also happy to share all the critical
             metrics and statistics.

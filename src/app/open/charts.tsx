@@ -59,11 +59,12 @@ export function CumulativeUsersChart({ chartData }: { chartData: { timestamp: st
               content={
                 <ChartTooltipContent
                   labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString('en-US', {
+                    return new Date(value).toLocaleString('en-US', {
                       month: 'short',
                       day: 'numeric',
                       hour: '2-digit',
                       minute: '2-digit',
+                      timeZoneName: 'shortGeneric',
                     })
                   }}
                 />
@@ -180,11 +181,12 @@ export function UniqueUsersChart({ chartData }: { chartData: { timestamp: string
                   className="w-[150px]"
                   nameKey="unique"
                   labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString('en-US', {
+                    return new Date(value).toLocaleString('en-US', {
                       month: 'short',
                       day: 'numeric',
                       hour: '2-digit',
                       minute: '2-digit',
+                      timeZoneName: 'shortGeneric',
                     })
                   }}
                 />
