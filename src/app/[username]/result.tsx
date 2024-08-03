@@ -75,39 +75,24 @@ export default function Result({ name, unlocked, userData }: { name: string; unl
       {/* Display analysis cards */}
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
         {cardData.map((card, index) => {
-          if (streamingStarted && !unlocked && index === 1) {
-            return <PaywallCard key={index} />
-          }
-          if (index === 2) {
-            return (
-              <PHCard
-                key={index}
-                name={name}
-              />
-            )
-          }
-          if (index === 7) {
-            return <WordwareCard key={index} />
-          }
-          // if (index === 2 || (streamingStarted && index === 7)) {
-          //   return <WordwareCard key={index} />
-          // }
+          console.log('index', index, 'card')
+
           return (
             <React.Fragment key={index}>
-              {(unlocked || index !== 1) && (
-                <AnalysisCard
-                  key={index}
-                  contentKey={card.contentKey}
-                  title={card.title}
-                  icon={card.icon}
-                  content={userData?.[card.contentKey] || ''}
-                  colorClass={card.colorClass}
-                  // color={card.color} // Commented out, might be used in future iterations
-                  wide={card.wide}
-                  bg={card.bg}
-                  unlocked={unlocked}
-                />
-              )}
+              {streamingStarted && !unlocked && index === 1 && <PaywallCard />}
+              {index === 1 && <PHCard name={name} />}
+              {index === 7 && <WordwareCard />}
+              <AnalysisCard
+                contentKey={card.contentKey}
+                title={card.title}
+                icon={card.icon}
+                content={userData?.[card.contentKey] || ''}
+                colorClass={card.colorClass}
+                // color={card.color} // Commented out, might be used in future iterations
+                wide={card.wide}
+                bg={card.bg}
+                unlocked={unlocked}
+              />
             </React.Fragment>
           )
         })}

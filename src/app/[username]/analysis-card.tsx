@@ -50,6 +50,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ unlocked, title, icon: Icon
   const isContentVisible = isRoast || unlocked
 
   const obfuscateContent = (content: string) => {
+    if (!content) return ''
     return content.replace(/[a-zA-Z]/g, '•')
     // This was causing hydration errors
     // return content.replace(/[a-zA-Z]/g, (char) => {
