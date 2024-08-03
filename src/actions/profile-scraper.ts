@@ -110,8 +110,8 @@ async function getUserData(screenName: string, guestToken: string): Promise<any>
     }
     return await response.json()
   } catch (error) {
-    console.error('Error fetching user data:', error)
-    throw new Error('Failed to fetch user data')
+    console.warn('Error fetching user data:', error)
+    throw new Error('getUserData: Failed to fetch user data')
   }
 }
 
@@ -135,7 +135,7 @@ export async function fetchUserData({ screenName }: { screenName: string }): Pro
 
     return { data: databaseUser, error: null }
   } catch (error) {
-    console.error('Error fetching user data:', error)
+    console.warn('fetchUserData: Error fetching user data:', error)
     return {
       data: null,
       error: error instanceof Error ? error.message : 'No profile found',
