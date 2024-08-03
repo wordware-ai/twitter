@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { PiCaretLeft, PiXLogo } from 'react-icons/pi'
+import { PiBrain, PiCaretLeft, PiXLogo } from 'react-icons/pi'
 
 import WordwareLogo from '@/components/logo'
 // import PHButton from '@/components/ph-button'
@@ -9,7 +9,7 @@ const Topbar = () => {
   return (
     <div className="flex-center fixed top-0 z-50 w-full border-b bg-white/80 py-2 shadow-[5px_5px_30px_rgba(190,190,190,0.15),-5px_-5px_30px_rgba(255,255,255,0.15)] backdrop-blur-sm">
       <div className="flex w-full flex-col items-center justify-between gap-4 px-2 md:flex-row md:px-12">
-        <div className="hidden w-full md:flex">
+        <div className="hidden w-full items-center gap-2 md:flex">
           <Button
             size={'sm'}
             variant={'outline'}
@@ -19,6 +19,17 @@ const Topbar = () => {
               href={'/'}>
               <PiCaretLeft />
               Homepage
+            </Link>
+          </Button>
+          <Button
+            size={'sm'}
+            asChild
+            variant={'outline'}>
+            <Link
+              href="/open"
+              className="flex items-center gap-2">
+              <PiBrain />
+              Stats for nerds
             </Link>
           </Button>
         </div>

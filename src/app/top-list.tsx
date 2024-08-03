@@ -21,7 +21,7 @@ export interface UserCardData {
  * @param {SelectUser} props.user - The user object containing user details
  * @returns {JSX.Element} A link component containing user information
  */
-const UserCard = ({ user }: { user: UserCardData }) => (
+export const UserCard = ({ user }: { user: UserCardData }) => (
   <Link
     href={`/${user.username}`}
     key={user.id}

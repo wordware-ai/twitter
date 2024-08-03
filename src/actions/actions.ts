@@ -23,6 +23,24 @@ export const getUserCached = cache(
   ['user-cache'],
 )
 
+const authors = ['unable0_', 'bertie_ai', 'kozerafilip', 'pio_sce', 'danny_hunt_code', 'ky__zo']
+
+export const getAuthors = cache(async (): Promise<UserCardData[]> => {
+  return await db.query.users.findMany({
+    where: inArray(
+      users.lowercaseUsername,
+      authors.map((u) => u.toLowerCase()),
+    ),
+    columns: {
+      id: true,
+      username: true,
+      name: true,
+      profilePicture: true,
+      followers: true,
+    },
+  })
+}, ['authors-users'])
+
 const featuredUsernames = [
   'yoheinakajima',
   'MattPRD',

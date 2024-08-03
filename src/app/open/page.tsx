@@ -2,6 +2,7 @@ import { getStatistics } from '@/actions/actions'
 import { getMostVisited, getTraffic } from '@/actions/posthog'
 import Topbar from '@/components/top-bar'
 
+import Authors from './authors'
 import { CumulativeUsersChart, TrafficChart, UniqueUsersChart } from './charts'
 import LastUpdate from './last-update'
 import MostVisited from './most-visited'
@@ -23,6 +24,12 @@ const Page = async () => {
             metrics and statistics.
           </p>
         </div>
+        <div className="space-y-4">
+          <h2 className="text-start text-2xl font-bold">Creators</h2>
+          <p>This project was brought to life by Wordware.</p>
+          <Authors />
+        </div>
+
         <div className="space-y-4">
           <h2 className="text-start text-2xl font-bold">Cumulative users</h2>
           <p>
