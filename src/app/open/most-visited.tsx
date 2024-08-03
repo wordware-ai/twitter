@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 const MostVisited = async ({ mostVisited }: { mostVisited: Array<{ name: string; visits: number }> }) => {
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       <Card>
         <CardHeader>
           <CardTitle>Top 50</CardTitle>
