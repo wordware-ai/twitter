@@ -90,6 +90,30 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
           wordwareCompleted: true,
         }))
       }
+
+      if (
+        (user.unlocked && !user.paidWordwareStarted) ||
+        (user.unlocked && !user.paidWordwareCompleted && Date.now() - user.paidWordwareStartedTime.getTime() > 60 * 1000)
+      ) {
+        console.log('PAID SHOULD BE STARTED, STARTING')
+        // Update state to indicate Wordware analysis has started
+        setSteps((prev) => ({
+          ...prev,
+          paidWordwareStarted: true,
+        }))
+
+        // Perform tweet analysis
+        await handleTweetAnalysis({
+          username: user.username,
+          full: true,
+        })
+
+        // Update state to indicate Wordware analysis is completed
+        setSteps((prev) => ({
+          ...prev,
+          paidWordwareCompleted: true,
+        }))
+      }
     })()
   }, []) // Effect depends on user data
 
@@ -119,8 +143,9 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
         result += decoder.decode(value, { stream: true })
 
         const parsed = parsePartialJson(result) as TwitterAnalysis
+        const existingAnalysis = user.analysis as TwitterAnalysis
 
-        setResult(parsed)
+        setResult({ ...existingAnalysis, ...parsed })
       }
     } catch (error) {
       console.error('Error reading stream', error)
@@ -149,8 +174,16 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
 
   return (
     <div className="flex-center flex-col gap-8">
+      <div className="absolute left-0 top-0 z-50 bg-black text-xs text-white">
+        <pre>{JSON.stringify(steps, null, 2)}</pre>
+        {/* <pre>{JSON.stringify(user, null, 2)}</pre> */}
+      </div>
       {/* Progress indicator */}
-      <div className={cn('w-full max-w-[280px] flex-col items-center justify-center gap-4', steps.wordwareCompleted ? 'hidden' : 'flex')}>
+      <div
+        className={cn(
+          'w-full max-w-[280px] flex-col items-center justify-center gap-4',
+          steps.wordwareCompleted ? (user.unlocked ? (steps.paidWordwareCompleted ? 'hidden' : 'flex') : 'hidden') : 'flex',
+        )}>
         {/* Profile check step */}
         <div className="flex-center w-full gap-8">
           {steps.profileScraped ? (
@@ -213,21 +246,33 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
 
           <div>Creating your Personality</div>
         </div>
+        {user.unlocked && (
+          <div className="flex-center w-full gap-4">
+            {steps.paidWordwareStarted ? (
+              steps.paidWordwareCompleted ? (
+                <PiCheckCircle
+                  className="text-green-500"
+                  size={24}
+                />
+              ) : (
+                <PiSpinner
+                  className="animate-spin text-blue-500"
+                  size={24}
+                />
+              )
+            ) : (
+              <PiCircle
+                className="text-gray-500"
+                size={24}
+              />
+            )}
+
+            <div>Extending your Personality</div>
+          </div>
+        )}
       </div>
       {/* Action buttons */}
       <div className="flex flex-col gap-6">
-        {/* Commented out header
-        <h2 className="flex-center mt-6 gap-4 text-xl font-light">
-          Your Twitter Personality, created with
-          <a
-            href="https://wordware.ai/"
-            target="_blank">
-            <WordwareLogo
-              color="black"
-              width={134}
-            />
-          </a>
-        </h2> */}
         <div className="flex-center flex-wrap gap-4">
           {/* Twitter Profile Button */}
           <PHButton text="Support us!" />
@@ -280,6 +325,29 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
         // userData={result}
         userData={prepareUserData(result, user.unlocked || false)}
       />
+      {user.unlocked && (
+        <div className="flex-center w-full gap-4">
+          {steps.paidWordwareStarted ? (
+            steps.paidWordwareCompleted ? (
+              <PiCheckCircle
+                className="text-green-500"
+                size={24}
+              />
+            ) : (
+              <PiSpinner
+                className="animate-spin text-blue-500"
+                size={24}
+              />
+            )
+          ) : (
+            <PiCircle
+              className="text-gray-500"
+              size={24}
+            />
+          )}
+          <div>Unlocking your Personality</div>
+        </div>
+      )}
     </div>
   )
 }

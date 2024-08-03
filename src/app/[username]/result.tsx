@@ -75,8 +75,6 @@ export default function Result({ name, unlocked, userData }: { name: string; unl
       {/* Display analysis cards */}
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
         {cardData.map((card, index) => {
-          console.log('index', index, 'card')
-
           return (
             <React.Fragment key={index}>
               {streamingStarted && !unlocked && index === 1 && <PaywallCard />}

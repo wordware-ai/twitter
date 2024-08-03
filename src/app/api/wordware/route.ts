@@ -1,4 +1,5 @@
 import { getUser, updateUser } from '@/actions/actions'
+import { TwitterAnalysis } from '@/app/[username]/result'
 
 /**
  * Maximum duration for the API route execution (in seconds)
@@ -33,8 +34,16 @@ export async function POST(request: Request) {
     throw Error(`User not found: ${username}`)
   }
 
-  if (user.wordwareCompleted || (user.wordwareStarted && Date.now() - user.createdAt.getTime() < 3 * 60 * 1000)) {
-    return Response.json({ error: 'Wordware already started' })
+  if (!full) {
+    if (user.wordwareCompleted || (user.wordwareStarted && Date.now() - user.createdAt.getTime() < 3 * 60 * 1000)) {
+      return Response.json({ error: 'Wordware already started' })
+    }
+  }
+
+  if (full) {
+    if (user.paidWordwareCompleted || (user.paidWordwareStarted && Date.now() - user.createdAt.getTime() < 3 * 60 * 1000)) {
+      return Response.json({ error: 'Wordware already started' })
+    }
   }
 
   function formatTweet(tweet: TweetType) {
@@ -101,6 +110,7 @@ export async function POST(request: Request) {
   const decoder = new TextDecoder()
   let buffer: string[] = []
   let finalOutput = false
+  const existingAnalysis = user?.analysis as TwitterAnalysis
 
   // Create a readable stream to process the response
   const stream = new ReadableStream({
@@ -158,7 +168,10 @@ export async function POST(request: Request) {
                     ...user,
                     wordwareStarted: true,
                     wordwareCompleted: true,
-                    analysis: value.values.output,
+                    analysis: {
+                      ...existingAnalysis,
+                      ...value.values.output,
+                    },
                   },
                 })
                 // console.log('Analysis saved to database')
