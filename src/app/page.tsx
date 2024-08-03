@@ -1,9 +1,12 @@
 import { Suspense } from 'react'
+import Link from 'next/link'
+import { PiBrain } from 'react-icons/pi'
 
 import Quote from '@/app/quote'
 import WordwareLogo from '@/components/logo'
 import NewUsernameForm from '@/components/new-username-form'
 import PHButton from '@/components/ph-button'
+import { Button } from '@/components/ui/button'
 
 import TopList from './top-list'
 
@@ -78,7 +81,19 @@ const Page = () => {
                   support the Wordware launch!
                 </span>
               </p>
-              <PHButton />
+              <div className="flex flex-wrap gap-2">
+                <PHButton />
+                <Button
+                  asChild
+                  variant={'outline'}>
+                  <Link
+                    href="/open"
+                    className="flex items-center gap-2">
+                    <PiBrain />
+                    Stats for Nerds
+                  </Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

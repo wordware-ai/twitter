@@ -30,7 +30,7 @@ const PHButton = ({ text }: { text?: string }) => {
   }, [])
 
   return (
-    <div className="flex flex-row items-center justify-start gap-4">
+    <div className="flex min-w-[167px] flex-row items-center justify-start gap-4">
       <a
         href="https://www.producthunt.com/posts/wordware-yc-s24?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-wordware&#0045;yc&#0045;s24"
         target="_blank">

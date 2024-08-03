@@ -94,6 +94,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
 
       if (
         !user.paidWordwareCompleted &&
+        (!result || !result.loveLife) && //checking if love-life exist to prevent re-generation of the previous result
         ((user.unlocked && !user.paidWordwareStarted) ||
           (user.unlocked && !user.paidWordwareCompleted && Date.now() - user.paidWordwareStartedTime.getTime() > 60 * 1000))
       ) {
@@ -184,7 +185,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
       <div
         className={cn(
           'w-full max-w-[280px] flex-col items-center justify-center gap-4',
-          steps.wordwareCompleted ? (user.unlocked ? (steps.paidWordwareCompleted ? 'hidden' : 'flex') : 'hidden') : 'flex',
+          steps.wordwareCompleted ? (!result?.loveLife && user.unlocked ? (steps.paidWordwareCompleted ? 'hidden' : 'flex') : 'hidden') : 'flex',
         )}>
         {/* Profile check step */}
         <div className="flex-center w-full gap-8">
@@ -248,7 +249,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
 
           <div>Creating your Personality</div>
         </div>
-        {user.unlocked && (
+        {!result?.loveLife && user.unlocked && (
           <div className="flex-center w-full gap-4">
             {steps.paidWordwareStarted ? (
               steps.paidWordwareCompleted ? (
@@ -326,7 +327,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
         // userData={result}
         userData={prepareUserData(result, user.unlocked || false)}
       />
-      {user.unlocked && !steps.paidWordwareCompleted && (
+      {!result?.loveLife && user.unlocked && !steps.paidWordwareCompleted && (
         <div className="flex-center w-full gap-4">
           {steps.paidWordwareStarted ? (
             steps.paidWordwareCompleted ? (
