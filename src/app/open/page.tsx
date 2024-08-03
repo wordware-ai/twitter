@@ -1,13 +1,15 @@
 import { getStatistics } from '@/actions/actions'
-import { getInsights } from '@/actions/posthog'
+import { getMostVisited, getTraffic } from '@/actions/posthog'
 import Topbar from '@/components/top-bar'
 
 import { CumulativeUsersChart, TrafficChart, UniqueUsersChart } from './charts'
 import LastUpdate from './last-update'
+import MostVisited from './most-visited'
 
 const Page = async () => {
   const { chartData, timestamp } = await getStatistics()
-  const { trafficData } = await getInsights()
+  const { trafficData } = await getTraffic()
+  const { mostVisited } = await getMostVisited()
 
   return (
     <div className="flex-center w-full flex-col gap-12 px-2 pb-12 pt-28 md:pt-20">
@@ -39,8 +41,13 @@ const Page = async () => {
         </div>
         <div className="space-y-4">
           <h2 className="text-start text-2xl font-bold">Website traffic</h2>
-          <p></p>
+          <p>Data provided by Posthog</p>
           <TrafficChart chartData={trafficData} />
+        </div>
+        <div className="space-y-4">
+          <h2 className="text-start text-2xl font-bold">Most Visited Personalities</h2>
+          <p>Data provided by Posthog</p>
+          <MostVisited mostVisited={mostVisited} />
         </div>
       </div>
     </div>

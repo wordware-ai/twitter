@@ -2,7 +2,7 @@
 
 import { unstable_cache as cache } from 'next/cache'
 
-export const getInsights = cache(
+export const getTraffic = cache(
   async (): Promise<{ trafficData: Array<{ timestamp: string; traffic: number }> }> => {
     const response = await fetch(`https://app.posthog.com/api/projects/${process.env.POSTHOG_PROJECT_ID}/insights/1771705`, {
       method: 'GET',
@@ -31,5 +31,30 @@ export const getInsights = cache(
     return { trafficData }
   },
   ['insights'],
+  { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
+)
+
+export const getMostVisited = cache(
+  async (): Promise<{ mostVisited: Array<{ name: string; visits: number }> }> => {
+    const response = await fetch(`https://app.posthog.com/api/projects/${process.env.POSTHOG_PROJECT_ID}/insights/1771725`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.POSTHOG_PERSONAL_API_KEY}`,
+      },
+    })
+    const data = await response.json()
+    const insights = data.result
+
+    const mostVisited = insights.map((item: any) => {
+      return {
+        name: item.label.replace('/', ''),
+        visits: item.aggregated_value,
+      }
+    })
+
+    return { mostVisited }
+  },
+  ['most-visited'],
   { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
 )

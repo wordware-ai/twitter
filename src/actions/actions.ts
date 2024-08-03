@@ -16,6 +16,13 @@ export const getUser = async ({ username }: { username: SelectUser['username'] }
   return await db.query.users.findFirst({ where: eq(users.lowercaseUsername, username.toLowerCase()) })
 }
 
+export const getUserCached = cache(
+  async ({ username }: { username: SelectUser['username'] }) => {
+    return await db.query.users.findFirst({ where: eq(users.lowercaseUsername, username.toLowerCase()) })
+  },
+  ['user-cache'],
+)
+
 const featuredUsernames = [
   'yoheinakajima',
   'MattPRD',
