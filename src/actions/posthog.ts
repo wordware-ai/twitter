@@ -2,6 +2,7 @@
 
 import { unstable_cache as cache } from 'next/cache'
 
+//This function is not being refetched after 1 hour. Not sure why?
 export const getTraffic = cache(
   async (): Promise<{ trafficData: Array<{ timestamp: string; traffic: number }> }> => {
     const response = await fetch(`https://app.posthog.com/api/projects/${process.env.POSTHOG_PROJECT_ID}/insights/1771705`, {
