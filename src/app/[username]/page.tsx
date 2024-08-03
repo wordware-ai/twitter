@@ -6,7 +6,7 @@ import { getUser } from '@/actions/actions'
 import NewUsernameForm from '@/components/new-username-form'
 
 import Topbar from '../../components/top-bar'
-import PHPopup from './ph-popup'
+// import PHPopup from './ph-popup'
 import ResultComponent from './result-component'
 
 export const maxDuration = 300
@@ -36,7 +36,7 @@ const Page = async ({ params }: { params: { username: string } }) => {
 
   return (
     <div className="flex-center relative min-h-screen w-full flex-col gap-12 bg-[#F9FAFB] px-4 py-28 sm:px-12 md:px-28 md:pt-24">
-      <PHPopup />
+      {/* <PHPopup /> */}
       <Topbar />
       <div className="flex-center flex-col gap-6">
         <div className="text-center text-xl font-light">
