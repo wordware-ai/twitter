@@ -69,7 +69,7 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       inputs: {
-        tweets: tweetsMarkdown,
+        tweets: `Tweets: ${tweetsMarkdown}`,
         profilePicture: user.profilePicture,
         profileInfo: user.fullProfile,
         version: '^1.0',
