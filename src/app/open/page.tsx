@@ -1,11 +1,13 @@
 import { getStatistics } from '@/actions/actions'
+import { getInsights } from '@/actions/posthog'
 import Topbar from '@/components/top-bar'
 
-import { CumulativeUsersChart, UniqueUsersChart } from './charts'
+import { CumulativeUsersChart, TrafficChart, UniqueUsersChart } from './charts'
 import LastUpdate from './last-update'
 
 const Page = async () => {
   const { chartData, timestamp } = await getStatistics()
+  const { trafficData } = await getInsights()
 
   return (
     <div className="flex-center w-full flex-col gap-12 px-2 pb-12 pt-28 md:pt-20">
@@ -34,6 +36,11 @@ const Page = async () => {
             times.
           </p>
           <UniqueUsersChart chartData={chartData} />
+        </div>
+        <div className="space-y-4">
+          <h2 className="text-start text-2xl font-bold">Website traffic</h2>
+          <p></p>
+          <TrafficChart chartData={trafficData} />
         </div>
       </div>
     </div>

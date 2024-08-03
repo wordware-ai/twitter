@@ -9,12 +9,14 @@ const chartConfig = {
   cumulative: {
     label: 'Cumulative',
     color: '#2563eb',
-
-    // color: 'hsl(var(--chart-1))',
   },
   unique: {
     label: 'Unique',
     color: '#F7ABB6',
+  },
+  traffic: {
+    label: 'Traffic',
+    color: '#22c55e',
   },
 } satisfies ChartConfig
 
@@ -78,7 +80,7 @@ export function CumulativeUsersChart({ chartData }: { chartData: { timestamp: st
             />
             <defs>
               <linearGradient
-                id="fillDesktop"
+                id="fillCumulative"
                 x1="0"
                 y1="0"
                 x2="0"
@@ -123,7 +125,7 @@ export function CumulativeUsersChart({ chartData }: { chartData: { timestamp: st
             <Area
               dataKey="cumulative"
               type="natural"
-              fill="url(#fillDesktop)"
+              fill="url(#fillCumulative)"
               fillOpacity={0.4}
               stroke="var(--color-cumulative)"
               stackId="a"
@@ -215,6 +217,93 @@ export function UniqueUsersChart({ chartData }: { chartData: { timestamp: string
           </div>
         </div>
       </CardFooter> */}
+    </Card>
+  )
+}
+
+export function TrafficChart({ chartData }: { chartData: { timestamp: string; traffic: number }[] }) {
+  return (
+    <Card className="w-full max-w-4xl">
+      <CardHeader>
+        <CardTitle>Website Traffic</CardTitle>
+        <CardDescription>Showing website traffic hour - by - hour</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-auto h-[250px] max-h-[250px] min-h-[250px] w-full">
+          <AreaChart
+            accessibilityLayer
+            data={chartData}
+            margin={{
+              left: 12,
+              right: 12,
+            }}>
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
+            />
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="timestamp"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              minTickGap={32}
+              tickFormatter={(value) => {
+                const date = new Date(value)
+                return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')} | ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+              }}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={
+                <ChartTooltipContent
+                  labelFormatter={(value) => {
+                    return new Date(value).toLocaleString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      timeZoneName: 'shortGeneric',
+                    })
+                  }}
+                />
+              }
+            />
+            <defs>
+              <linearGradient
+                id="fillTraffic"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1">
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-traffic)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-traffic)"
+                  stopOpacity={0.1}
+                />
+              </linearGradient>
+            </defs>
+
+            <Area
+              dataKey="traffic"
+              type="natural"
+              fill="url(#fillTraffic)"
+              fillOpacity={0.4}
+              stroke="var(--color-traffic)"
+              stackId="a"
+            />
+          </AreaChart>
+        </ChartContainer>
+      </CardContent>
     </Card>
   )
 }

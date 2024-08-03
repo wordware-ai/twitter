@@ -1,6 +1,6 @@
 'use client'
 
-const LastUpdate = ({ timestamp }: { timestamp: Date }) => {
+const LastUpdate = ({ timestamp }: { timestamp: Date | string }) => {
   return (
     <p>
       Last update:{' '}
