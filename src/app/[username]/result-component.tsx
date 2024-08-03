@@ -177,7 +177,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
   return (
     <div className="flex-center flex-col gap-8">
       <div className="absolute left-0 top-0 z-50 bg-black text-xs text-white">
-        <pre>{JSON.stringify(steps, null, 2)}</pre>
+        {/* <pre>{JSON.stringify(steps, null, 2)}</pre> */}
         {/* <pre>{JSON.stringify(user, null, 2)}</pre> */}
       </div>
       {/* Progress indicator */}
