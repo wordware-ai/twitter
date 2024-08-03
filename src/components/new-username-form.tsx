@@ -38,7 +38,7 @@ const NewUsernameForm = () => {
 
   return (
     <div className="flex w-full flex-col gap-4">
-      {/* <Button
+      <Button
         asChild
         className="flex max-w-[220px]">
         <a
@@ -46,11 +46,11 @@ const NewUsernameForm = () => {
           target="_blank">
           Sign up for the Waitlist
         </a>
-      </Button> */}
+      </Button>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full max-w-sm space-y-8">
+          className="hidden w-full max-w-sm space-y-8">
           <FormField
             control={form.control}
             name="username"
