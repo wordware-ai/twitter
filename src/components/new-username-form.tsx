@@ -12,18 +12,10 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Input } from '@/components/ui/input'
 import { cleanUsername } from '@/lib/utils'
 
-/**
- * Zod schema for form validation
- */
 const formSchema = z.object({
   username: z.string().min(3).max(50),
 })
 
-/**
- * NewUsernameForm component
- * Renders a form for entering a new username
- * @returns {JSX.Element}
- */
 const NewUsernameForm = () => {
   const searchParams = useSearchParams()
 

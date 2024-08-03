@@ -8,29 +8,9 @@ import { Markdown } from '@/components/markdown'
 import AnalysisCard from './analysis-card'
 import { cardData } from './config'
 import { PaywallCard } from './paywall-card'
-import { PHCard } from './ph-card'
 
-/**
- * Represents the structure of a Twitter analysis result
- * @typedef {Object} TwitterAnalysis
- * @property {string} [about] - General description about the user
- * @property {Array<{title: string, subtitle: string}>} [strengths] - User's strengths
- * @property {Array<{title: string, subtitle: string}>} [weaknesses] - User's weaknesses
- * @property {string} [loveLife] - Analysis of user's love life
- * @property {string} [money] - Analysis of user's financial situation
- * @property {string} [health] - Analysis of user's health
- * @property {string} [biggestGoal] - User's biggest goal
- * @property {string} [colleaguePerspective] - How colleagues might perceive the user
- * @property {string[]} [pickupLines] - Pickup lines based on user's profile
- * @property {string} [famousPersonComparison] - Comparison to a famous person
- * @property {string} [previousLife] - Speculation about user's previous life
- * @property {string} [animal] - Animal that represents the user
- * @property {string} [fiftyDollarThing] - Suggestion for a $50 purchase
- * @property {string} [career] - Career analysis or suggestion
- * @property {string} [lifeSuggestion] - General life suggestion
- * @property {string} [roast] - Humorous roast of the user
- * @property {string} [emojis] - Emojis representing the user
- */
+// import { PHCard } from './ph-card'
+
 export type TwitterAnalysis = {
   [key: string]: string | { title: string; subtitle: string }[] | string[] | undefined
   about?: string
@@ -58,7 +38,7 @@ export type TwitterAnalysis = {
   emojis?: string
 }
 
-export default function Result({ name, unlocked, userData }: { name: string; unlocked: boolean; userData: TwitterAnalysis | undefined }) {
+export default function Result({ unlocked, userData }: { unlocked: boolean; userData: TwitterAnalysis | undefined }) {
   const streamingStarted = !!userData?.about
   return (
     <div className="w-full max-w-6xl">
@@ -78,7 +58,8 @@ export default function Result({ name, unlocked, userData }: { name: string; unl
           return (
             <React.Fragment key={index}>
               {streamingStarted && !unlocked && index === 1 && <PaywallCard />}
-              {index === 1 && <PHCard name={name} />}
+              {index === 1 && <WordwareCard />}
+              {/* {index === 1 && <PHCard name={name} />} */}
               {index === 7 && <WordwareCard />}
               <AnalysisCard
                 contentKey={card.contentKey}
