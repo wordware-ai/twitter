@@ -53,8 +53,8 @@ export function CumulativeUsersChart({ chartData }: { chartData: { timestamp: st
               dataKey="timestamp"
               tickLine={false}
               axisLine={false}
-              interval={12}
               tickMargin={8}
+              minTickGap={32}
               tickFormatter={(value) => {
                 const date = new Date(value)
                 return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')} | ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
