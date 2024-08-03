@@ -43,7 +43,7 @@ const PHButton = ({ text }: { text?: string }) => {
         />
       </a>
 
-      <div className="text-start text-sm font-bold text-[#ff6154]">
+      <div className="hidden text-start text-sm font-bold text-[#ff6154]">
         {text ? text : `We're live!`}
         <br />
         {countdown && `${countdown}`}

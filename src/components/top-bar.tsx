@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import { PiCaretLeft } from 'react-icons/pi'
+import { PiCaretLeft, PiXLogo } from 'react-icons/pi'
 
 import WordwareLogo from '@/components/logo'
-import PHButton from '@/components/ph-button'
+// import PHButton from '@/components/ph-button'
 import { Button } from '@/components/ui/button'
 
 const Topbar = () => {
@@ -44,7 +44,7 @@ const Topbar = () => {
               <PiCaretLeft />
             </Link>
           </Button>
-          {/* <Button
+          <Button
             size={'sm'}
             variant={'default'}
             asChild>
@@ -61,9 +61,9 @@ const Topbar = () => {
                 Duplicate <span className="hidden md:inline">this</span> AI Agent
               </p>
             </a>
-          </Button> */}
-          <PHButton text="Support us!" />
-          {/* <Button
+          </Button>
+          {/* <PHButton text="Support us!" /> */}
+          <Button
             size={'sm'}
             variant={'outline'}
             asChild>
@@ -76,7 +76,7 @@ const Topbar = () => {
                 Follow <span className="hidden md:inline">us</span>
               </p>
             </a>
-          </Button> */}
+          </Button>
         </div>
       </div>
     </div>
