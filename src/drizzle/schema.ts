@@ -30,6 +30,9 @@ export const users = pgTable(
     wordwareStarted: boolean('wordware_started').default(false),
     wordwareStartedTime: timestamp('wordware_started_time').notNull().defaultNow(),
     wordwareCompleted: boolean('wordware_completed').default(false),
+    paidWordwareStarted: boolean('paid_wordware_started').default(false),
+    paidWordwareStartedTime: timestamp('paid_wordware_started_time').notNull().defaultNow(),
+    paidWordwareCompleted: boolean('paid_wordware_completed').default(false),
   },
   (table) => {
     return {

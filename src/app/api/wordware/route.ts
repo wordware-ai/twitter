@@ -1,4 +1,5 @@
 import { getUser, updateUser } from '@/actions/actions'
+import { TwitterAnalysis } from '@/app/[username]/result'
 
 /**
  * Maximum duration for the API route execution (in seconds)
@@ -24,7 +25,7 @@ type TweetType = {
  */
 export async function POST(request: Request) {
   // Extract username from the request body
-  const { username } = await request.json()
+  const { username, full } = await request.json()
 
   // Fetch user data and check if Wordware has already been started
   const user = await getUser({ username })
@@ -33,8 +34,16 @@ export async function POST(request: Request) {
     throw Error(`User not found: ${username}`)
   }
 
-  if (user.wordwareCompleted || (user.wordwareStarted && Date.now() - user.createdAt.getTime() < 3 * 60 * 1000)) {
-    return Response.json({ error: 'Wordware already started' })
+  if (!full) {
+    if (user.wordwareCompleted || (user.wordwareStarted && Date.now() - user.createdAt.getTime() < 3 * 60 * 1000)) {
+      return Response.json({ error: 'Wordware already started' })
+    }
+  }
+
+  if (full) {
+    if (user.paidWordwareCompleted || (user.paidWordwareStarted && Date.now() - user.createdAt.getTime() < 3 * 60 * 1000)) {
+      return Response.json({ error: 'Wordware already started' })
+    }
   }
 
   function formatTweet(tweet: TweetType) {
@@ -60,8 +69,10 @@ export async function POST(request: Request) {
   const tweetsMarkdown = tweets.map(formatTweet).join('\n---\n\n')
   console.log('Tweets markdown', tweetsMarkdown)
 
+  const promptID = full ? process.env.WORDWARE_FULL_PROMPT_ID : process.env.WORDWARE_ROAST_PROMPT_ID
+
   // Make a request to the Wordware API
-  const runResponse = await fetch(`https://app.wordware.ai/api/released-app/${process.env.WORDWARE_PROMPT_ID}/run`, {
+  const runResponse = await fetch(`https://app.wordware.ai/api/released-app/${promptID}/run`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -99,6 +110,7 @@ export async function POST(request: Request) {
   const decoder = new TextDecoder()
   let buffer: string[] = []
   let finalOutput = false
+  const existingAnalysis = user?.analysis as TwitterAnalysis
 
   // Create a readable stream to process the response
   const stream = new ReadableStream({
@@ -150,23 +162,27 @@ export async function POST(request: Request) {
             } else if (value.type === 'outputs') {
               console.log('✨ here:', value.values.output, '. Now parsing')
               try {
+                const statusObject = full ? { paidWordwareStarted: true, paidWordwareCompleted: true } : { wordwareStarted: true, wordwareCompleted: true }
                 // Update user with the analysis from Wordware
                 await updateUser({
                   user: {
                     ...user,
-                    wordwareStarted: true,
-                    wordwareCompleted: true,
-                    analysis: value.values.output,
+                    ...statusObject,
+                    analysis: {
+                      ...existingAnalysis,
+                      ...value.values.output,
+                    },
                   },
                 })
                 // console.log('Analysis saved to database')
               } catch (error) {
                 console.error('Error parsing or saving output:', error)
-                // Reset wordwareStarted if there's an error
+
+                const statusObject = full ? { paidWordwareStarted: false, paidWordwareCompleted: false } : { wordwareStarted: false, wordwareCompleted: false }
                 await updateUser({
                   user: {
                     ...user,
-                    wordwareStarted: false,
+                    ...statusObject,
                   },
                 })
               }
