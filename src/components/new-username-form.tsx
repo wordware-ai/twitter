@@ -40,7 +40,7 @@ const NewUsernameForm = () => {
     <div className="flex w-full flex-col gap-4">
       <Button
         asChild
-        className="flex hidden max-w-[220px]">
+        className="hidden max-w-[220px]">
         <a
           href="https://tally.so/r/3lRoOp"
           target="_blank">
