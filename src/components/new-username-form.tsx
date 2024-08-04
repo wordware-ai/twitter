@@ -40,7 +40,7 @@ const NewUsernameForm = () => {
     <div className="flex w-full flex-col gap-4">
       <Button
         asChild
-        className="flex max-w-[220px]">
+        className="flex hidden max-w-[220px]">
         <a
           href="https://tally.so/r/3lRoOp"
           target="_blank">
@@ -50,7 +50,7 @@ const NewUsernameForm = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="hidden w-full max-w-sm space-y-8">
+          className="w-full max-w-sm space-y-8">
           <FormField
             control={form.control}
             name="username"
