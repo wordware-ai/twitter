@@ -4,7 +4,7 @@ import WordwareLogo from '@/components/logo'
 const Authors = async () => {
   const authors = await getAuthors()
   return (
-    <div className="grid grid-cols-3 gap-2">
+    <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
       {authors.map((user) => (
         <a
           target="_blank"
