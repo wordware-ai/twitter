@@ -423,6 +423,6 @@ export const getStatistics = cache(
     const lastTimestamp = lastElement ? new Date(lastElement.timestamp) : new Date()
     return { chartData: formattedResult.slice(0, -1), timestamp: lastTimestamp.toISOString() }
   },
-  ['statistics-posthog'],
+  ['statistics'],
   { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
 )

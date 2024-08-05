@@ -32,7 +32,7 @@ export const getTraffic = cache(
 
     return { trafficData }
   },
-  ['insights'],
+  ['insights-posthog'],
   { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
 )
 
@@ -58,6 +58,6 @@ export const getMostVisited = cache(
 
     return { mostVisited }
   },
-  ['most-visited'],
+  ['most-visited-posthog'],
   { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
 )
