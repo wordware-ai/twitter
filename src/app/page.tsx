@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
-import { PiBrain } from 'react-icons/pi'
+import { PiBrain, PiGithubLogo } from 'react-icons/pi'
 
 import Quote from '@/app/quote'
 import WordwareLogo from '@/components/logo'
@@ -83,6 +83,18 @@ const Page = () => {
               </p>
               <div className="flex flex-wrap gap-2">
                 <PHButton />
+
+                <Button
+                  variant={'outline'}
+                  asChild>
+                  <a
+                    href="https://github.com/wordware-ai/twitter"
+                    target="_blank"
+                    className="flex-center gap-2">
+                    <PiGithubLogo />
+                    GitHub Repo
+                  </a>
+                </Button>
                 <Button
                   asChild
                   variant={'outline'}>
@@ -90,7 +102,7 @@ const Page = () => {
                     href="/open"
                     className="flex items-center gap-2">
                     <PiBrain />
-                    Stats for Nerds
+                    Stats
                   </Link>
                 </Button>
               </div>
