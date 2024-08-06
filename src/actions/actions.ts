@@ -130,10 +130,10 @@ export const updateUser = async ({ user }: { user: InsertUser }) => {
   await db.update(users).set(user).where(eq(users.lowercaseUsername, user.lowercaseUsername))
 }
 
-export const handleNewUsername = async ({ username }: { username: string }) => {
+export const handleNewUsername = async ({ username, redirectPath }: { username: string; redirectPath: string }) => {
   const user = await getUser({ username })
   if (user) {
-    redirect(`/${username}`)
+    redirect(redirectPath)
   }
 
   let { data, error } = await fetchUserData({ screenName: username })
@@ -141,8 +141,6 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
   if (!data && error) {
     ;({ data, error } = await scrapeProfile({ username }))
   }
-
-  console.log('🟣 | file: actions.ts:90 | handleNewUsername | error:', error, 'data', data)
 
   if (data && !error) {
     const user = {
@@ -152,7 +150,7 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
       error: null,
     }
     await insertUser({ user })
-    redirect(`/${username}`)
+    redirect(redirectPath)
     return { error: false, found: true }
   }
 
@@ -426,3 +424,17 @@ export const getStatistics = cache(
   ['statistics'],
   { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
 )
+
+export const createPair = async (userId1: string, userId2: string) => {
+  const [user1Id, user2Id] = [userId1, userId2].sort()
+
+  console.log({
+    user1Id,
+    user2Id,
+  })
+
+  // return await db.insert(pairs).values({
+  //   user1Id,
+  //   user2Id,
+  // }).returning();
+}

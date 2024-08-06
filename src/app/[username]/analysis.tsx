@@ -30,12 +30,12 @@ export type TwitterAnalysis = {
   emojis?: string
 }
 
-type ResultProps = {
+type AnalysisProps = {
   unlocked: boolean
   userData: TwitterAnalysis | undefined
 }
 
-const Result: React.FC<ResultProps> = ({ unlocked, userData }) => {
+const Analysis: React.FC<AnalysisProps> = ({ unlocked, userData }) => {
   const streamingStarted = !!userData?.about
 
   return (
@@ -66,4 +66,4 @@ const Result: React.FC<ResultProps> = ({ unlocked, userData }) => {
   )
 }
 
-export default Result
+export { Analysis }

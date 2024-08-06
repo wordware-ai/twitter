@@ -1,9 +1,10 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { PiSpinner } from 'react-icons/pi'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import { handleNewUsername } from '@/actions/actions'
@@ -16,37 +17,26 @@ const formSchema = z.object({
   username: z.string().min(3).max(50),
 })
 
-const NewUsernameForm = () => {
-  const searchParams = useSearchParams()
+const NewPairForm = () => {
+  const pathname = usePathname()
 
-  // Initialize form with react-hook-form and zod resolver
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: searchParams.get('u') || '',
+      username: '',
     },
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const cleanedUsername = cleanUsername(values.username)
-    const response = await handleNewUsername({ username: cleanedUsername, redirectPath: `/${cleanedUsername}` })
-
+    const response = await handleNewUsername({ username: cleanedUsername, redirectPath: `${pathname}/${cleanedUsername}` })
     if (response?.error) {
-      window.location.href = 'https://tally.so/r/3lRoOp'
+      toast.error(response.error)
     }
   }
 
   return (
-    <div className="flex w-full flex-col gap-4">
-      <Button
-        asChild
-        className="hidden max-w-[220px]">
-        <a
-          href="https://tally.so/r/3lRoOp"
-          target="_blank">
-          Sign up for the Waitlist
-        </a>
-      </Button>
+    <div className="flex-center w-full flex-col gap-4">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -68,7 +58,7 @@ const NewUsernameForm = () => {
                       disabled={form.formState.isSubmitting}
                       type="submit"
                       className="rounded-l-none rounded-r-sm">
-                      Discover
+                      Check Compatibility
                     </Button>
                   </div>
                 </FormControl>
@@ -82,11 +72,11 @@ const NewUsernameForm = () => {
       {form.formState.isSubmitting && (
         <div className="flex items-center gap-2 text-sm">
           <PiSpinner className="animate-spin" />
-          Looking for your X profile...
+          Checking compatibility...
         </div>
       )}
     </div>
   )
 }
 
-export default NewUsernameForm
+export default NewPairForm
