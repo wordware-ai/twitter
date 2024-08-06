@@ -22,13 +22,11 @@ export const WordwareCard: React.FC = () => {
         <div className="w-full border-b border-gray-300" />
       </CardHeader>
       <CardContent className="flex flex-col space-y-2 text-gray-700">
-        <p>
-          Edit this agent to <span className="font-semibold">win a prize</span>! No coding skills necessary.
-        </p>
-        <p>
-          Our editor makes it super easy to create an AI app that checks your (romantic 🧐?) compatibility with another Twitter user. All of this with Natural
-          Language Programming.
-        </p>
+        Wordware is a toolkit that enables anyone to build powerful AI Agents and applications with Natural Language.
+        <br />
+        <p>Build, iterate and deploy 20x faster with prebuilt tools, selection of all AI models, tracing, and more.</p>
+        <br />
+        <p>Finally, high-quality and reliable AI!</p>
         <div className="mt-8 py-4">
           <Button
             size={'sm'}
@@ -43,11 +41,10 @@ export const WordwareCard: React.FC = () => {
                 color={'white'}
                 width={12}
               />
-              <p>Edit this AI Agent</p>
+              <p>Sign up today</p>
             </a>
           </Button>
         </div>
-        <p>Best implementation of the Twitter compatibility app will get to launch it with us next week and share the profits!</p>
       </CardContent>
     </Card>
   )
