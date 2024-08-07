@@ -49,12 +49,12 @@ export const pairs = pgTable(
     id: text('id')
       .primaryKey()
       .default(sql`concat('pair_', uuid_generate_v4())`),
-    user1Id: text('user1_id')
+    user1lowercaseUsername: text('user1_lowercase_username')
       .notNull()
-      .references(() => users.id),
-    user2Id: text('user2_id')
+      .references(() => users.lowercaseUsername),
+    user2lowercaseUsername: text('user2_lowercase_username')
       .notNull()
-      .references(() => users.id),
+      .references(() => users.lowercaseUsername),
     createdAt: timestamp('created_at').notNull().defaultNow(),
     analysis: jsonb('analysis'),
 
@@ -64,7 +64,7 @@ export const pairs = pgTable(
   },
   (table) => {
     return {
-      userPairIdx: uniqueIndex('unique_user_pair_idx').on(table.user1Id, table.user2Id),
+      userPairIdx: uniqueIndex('unique_user_pair_idx').on(table.user1lowercaseUsername, table.user2lowercaseUsername),
     }
   },
 )

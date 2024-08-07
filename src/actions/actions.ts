@@ -425,25 +425,25 @@ export const getStatistics = cache(
   { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
 )
 
-export const createPair = async (userId1: string, userId2: string) => {
-  const [user1Id, user2Id] = [userId1, userId2].sort()
+export const createPair = async (username1: string, username2: string) => {
+  const [user1lowercaseUsername, user2lowercaseUsername] = [username1.toLowerCase(), username2.toLowerCase()].sort()
 
   return await db
     .insert(pairs)
     .values({
-      user1Id,
-      user2Id,
+      user1lowercaseUsername,
+      user2lowercaseUsername,
     })
     .returning()
 }
 
-export const findPair = async (userId1: string, userId2: string) => {
-  const [user1Id, user2Id] = [userId1, userId2].sort()
+export const findPair = async (username1: string, username2: string) => {
+  const [user1lowercaseUsername, user2lowercaseUsername] = [username1.toLowerCase(), username2.toLowerCase()].sort()
 
   return await db
     .select()
     .from(pairs)
-    .where(and(eq(pairs.user1Id, user1Id), eq(pairs.user2Id, user2Id)))
+    .where(and(eq(pairs.user1lowercaseUsername, user1lowercaseUsername), eq(pairs.user2lowercaseUsername, user2lowercaseUsername)))
     .limit(1)
 }
 
