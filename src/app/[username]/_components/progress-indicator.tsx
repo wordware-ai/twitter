@@ -1,11 +1,21 @@
 import { PiCheckCircle, PiCircle, PiSpinner } from 'react-icons/pi'
 
+import { Steps } from '@/hooks/twitter-analysis'
 import { cn } from '@/lib/utils'
 
 import { TwitterAnalysis } from './analysis'
-import { Steps } from './result-component'
 
-export const ProgressIndicator = ({ steps, result, userUnlocked }: { steps: Steps; result: TwitterAnalysis | undefined; userUnlocked: boolean }) => {
+export const ProgressIndicator = ({
+  steps,
+  result,
+  userUnlocked,
+  disableAnalysis = false,
+}: {
+  steps: Steps
+  result: TwitterAnalysis | undefined
+  userUnlocked: boolean
+  disableAnalysis?: boolean
+}) => {
   return (
     <div
       className={cn(
@@ -26,19 +36,23 @@ export const ProgressIndicator = ({ steps, result, userUnlocked }: { steps: Step
         text="Reading your Tweets"
       />
 
-      {/* Wordware analysis step */}
-      <StepIndicator
-        started={steps.wordwareStarted}
-        completed={steps.wordwareCompleted}
-        text="Creating your Personality"
-      />
+      {!disableAnalysis && (
+        <>
+          {/* Wordware analysis step */}
+          <StepIndicator
+            started={steps.wordwareStarted}
+            completed={steps.wordwareCompleted}
+            text="Creating your Personality"
+          />
 
-      {!result?.loveLife && userUnlocked && (
-        <StepIndicator
-          started={steps.paidWordwareStarted}
-          completed={steps.paidWordwareCompleted}
-          text="Extending your Personality"
-        />
+          {!result?.loveLife && userUnlocked && (
+            <StepIndicator
+              started={steps.paidWordwareStarted}
+              completed={steps.paidWordwareCompleted}
+              text="Extending your Personality"
+            />
+          )}
+        </>
       )}
     </div>
   )

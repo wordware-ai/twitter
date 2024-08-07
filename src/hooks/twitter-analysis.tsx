@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { processScrapedUser } from '@/actions/actions'
-import { TwitterAnalysis } from '@/app/[username]/analysis'
+import { TwitterAnalysis } from '@/app/[username]/_components/analysis'
 import { SelectUser } from '@/drizzle/schema'
 import { parsePartialJson } from '@/lib/parse-partial-json'
 
@@ -15,7 +15,14 @@ export type Steps = {
   paidWordwareCompleted: boolean
 }
 
-export const useTwitterAnalysis = (user: SelectUser) => {
+/**
+ * Custom hook for analyzing Twitter user data.
+ *
+ * @param {SelectUser} user - The user object containing Twitter profile information.
+ * @param {boolean} [disableAnalysis=false] - Flag to disable the analysis process.
+ * @returns {Object} An object containing the analysis steps and results.
+ */
+export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = false) => {
   const [steps, setSteps] = useState<Steps>(initializeSteps(user))
   const [result, setResult] = useState<TwitterAnalysis | undefined>((user.analysis as TwitterAnalysis) || undefined)
   const effectRan = useRef(false)
@@ -31,6 +38,7 @@ export const useTwitterAnalysis = (user: SelectUser) => {
         tweetScrapeCompleted = await runTweetScrape(user, setSteps)
       }
 
+      if (disableAnalysis) return
       if (shouldRunWordwareAnalysis(user, tweetScrapeCompleted || false)) {
         await runWordwareAnalysis(user, setSteps)
       }

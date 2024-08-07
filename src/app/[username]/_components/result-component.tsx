@@ -43,14 +43,15 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
         username={user.username}
       />
 
-      <div className="flex-center w-full flex-col gap-4">
-        <div className="text-center text-lg font-light">Add new user to find if you are compatible souls</div>
-        <NewPairForm />
-      </div>
+      {steps.wordwareCompleted && (
+        <div className="flex-center w-full flex-col gap-4">
+          <div className="text-center text-lg font-light">Add new user to find if you are compatible souls</div>
+          <NewPairForm />
+        </div>
+      )}
 
       <Analysis
         unlocked={user.unlocked || false}
-        // userData={result}
         userData={prepareUserData(result, user.unlocked || false)}
       />
       {!result?.loveLife && user.unlocked && (

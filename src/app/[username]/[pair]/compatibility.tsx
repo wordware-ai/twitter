@@ -5,7 +5,7 @@ import React from 'react'
 import { WordwareCard } from '@/app/[username]/wordware-card'
 import { Markdown } from '@/components/markdown'
 
-import AnalysisCard from '../analysis-card'
+import AnalysisCard from '../_components/analysis-card'
 
 export type CompatibilityAnalysis = {
   [key: string]: string | { title: string; subtitle: string }[] | string[] | undefined

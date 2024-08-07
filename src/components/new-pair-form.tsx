@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { PiSpinner } from 'react-icons/pi'
+import { PiSparkle, PiSpinner } from 'react-icons/pi'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -50,14 +50,15 @@ const NewPairForm = () => {
                   <div className="flex items-center">
                     <Input
                       disabled={form.formState.isSubmitting}
-                      className="w-full rounded-l-sm rounded-r-none border-black"
+                      className="w-full rounded-l-sm rounded-r-none border-blue-500"
                       placeholder="@username"
                       {...field}
                     />
                     <Button
                       disabled={form.formState.isSubmitting}
                       type="submit"
-                      className="rounded-l-none rounded-r-sm">
+                      className="flex-center gap-2 rounded-l-none rounded-r-sm bg-blue-500 hover:bg-blue-600">
+                      <PiSparkle />
                       Check Compatibility
                     </Button>
                   </div>

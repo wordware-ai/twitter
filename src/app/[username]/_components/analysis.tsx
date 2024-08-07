@@ -2,12 +2,12 @@
 
 import React from 'react'
 
-import { WordwareCard } from '@/app/[username]/wordware-card'
 import { Markdown } from '@/components/markdown'
 
 import AnalysisCard from './analysis-card'
 import { cardData } from './config'
 import { PaywallCard } from './paywall-card'
+import { WordwareCard } from './wordware-card'
 
 export type TwitterAnalysis = {
   [key: string]: string | { title: string; subtitle: string }[] | string[] | undefined
@@ -52,7 +52,7 @@ const Analysis: React.FC<AnalysisProps> = ({ unlocked, userData }) => {
         {cardData.map((card, index) => (
           <React.Fragment key={card.contentKey}>
             {streamingStarted && !unlocked && index === 1 && <PaywallCard />}
-            {index === 1 && <WordwareCard />}
+            {streamingStarted && index === 1 && <WordwareCard />}
             {index === 7 && <WordwareCard />}
             <AnalysisCard
               {...card}
