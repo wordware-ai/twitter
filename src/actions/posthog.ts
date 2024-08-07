@@ -48,13 +48,12 @@ export const getMostVisited = cache(
     })
     const data = await response.json()
     const insights = data.result
-
-    const mostVisited = insights.map((item: any) => {
-      return {
+    const mostVisited = insights
+      .map((item: any) => ({
         name: item.label.replace('/', ''),
         visits: item.aggregated_value,
-      }
-    })
+      }))
+      .filter((item: { name: string; visits: number }) => item.name !== undefined)
 
     return { mostVisited }
   },
