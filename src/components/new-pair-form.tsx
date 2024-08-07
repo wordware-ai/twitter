@@ -34,11 +34,12 @@ const NewPairForm = () => {
     }
     const cleanedUsername = cleanUsername(values.username)
     const response = await handleNewUsername({ username: cleanedUsername, redirectPath: `${pathname}/${cleanedUsername}` })
-    await createPair({ usernames: [pathname.replace('/', ''), cleanedUsername], shouldRedirect: true })
 
     if (response?.error) {
       toast.error(response.error)
+      return
     }
+    await createPair({ usernames: [pathname.replace('/', ''), cleanedUsername], shouldRedirect: true })
   }
 
   return (
