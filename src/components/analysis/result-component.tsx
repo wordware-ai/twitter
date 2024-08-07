@@ -2,7 +2,7 @@
 
 import { useCallback } from 'react'
 
-import NewPairForm from '@/components/new-pair-form'
+// import NewPairForm from '@/components/new-pair-form'
 import { SelectUser } from '@/drizzle/schema'
 import { useTwitterAnalysis } from '@/hooks/twitter-analysis'
 import { analysisPlaceholder } from '@/lib/constants'
@@ -43,10 +43,10 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
         username={user.username}
       />
 
-      <div className="flex-center w-full flex-col gap-4">
+      {/* <div className="flex-center w-full flex-col gap-4">
         <div className="text-center text-lg font-light">Add new user to find if you are compatible souls</div>
         <NewPairForm />
-      </div>
+      </div> */}
 
       <Analysis
         unlocked={user.unlocked || false}

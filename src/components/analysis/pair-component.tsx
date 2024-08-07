@@ -3,6 +3,7 @@
 import { SelectPair, SelectUser } from '@/drizzle/schema'
 import { useCompatibilityAnalysis } from '@/hooks/compatibility-analysis'
 
+import Compatibility from './compatibility'
 import { ProgressIndicator, StepIndicator } from './progress-indicator'
 
 const PairComponent = ({ users, pair }: { users: SelectUser[]; pair: SelectPair }) => {
@@ -34,9 +35,11 @@ const PairComponent = ({ users, pair }: { users: SelectUser[]; pair: SelectPair 
         completed={steps.compatibilityAnalysisCompleted}
         text="Compatibility Analysis"
       />
-      <pre>{JSON.stringify(steps, null, 2)}</pre>
+      <Compatibility
+        pairAnalysis={compatibilityResult}
+        unlocked={false}
+      />
       <pre className="max-w-lg whitespace-pre-wrap">{JSON.stringify(compatibilityResult, null, 2)}</pre>
-      <pre>{JSON.stringify(pair, null, 2)}</pre>
     </div>
   )
 }

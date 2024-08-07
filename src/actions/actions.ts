@@ -447,6 +447,7 @@ export const createPair = async ({ usernames }: { usernames: string[] }) => {
 }
 
 export const getPair = async ({ usernames }: { usernames: string[] }) => {
+  noStore()
   const [user1lowercaseUsername, user2lowercaseUsername] = [usernames[0].toLowerCase(), usernames[1].toLowerCase()].sort()
 
   return await db.query.pairs.findFirst({
@@ -455,12 +456,11 @@ export const getPair = async ({ usernames }: { usernames: string[] }) => {
 }
 
 export const getOrCreatePair = async ({ usernames }: { usernames: string[] }) => {
-  console.log('🟣 | file: actions.ts:455 | getOrCreatePair | usernames:', usernames)
+  noStore()
+
   const existingPair = await getPair({ usernames })
-  console.log('🟣 | file: actions.ts:456 | getOrCreatePair | existingPair:', existingPair)
 
   if (existingPair) return existingPair
-  console.log('🟣 | file: actions.ts:463 | getOrCreatePair | existingPair:', existingPair)
 
   return await createPair({ usernames })
 }
