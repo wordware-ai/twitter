@@ -39,10 +39,10 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
         result={result}
         userUnlocked={user.unlocked || false}
       />
-
       <ActionButtons
-        result={result}
-        username={user.username}
+        shareActive={!!result?.about}
+        text={`this is my Twitter Personality analysis by AI Agent, built on @wordware_ai`}
+        url={`https://twitter.wordware.ai/${user.username}`}
       />
 
       {searchParams.get('password') === 'supersecret' && (

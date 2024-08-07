@@ -3,6 +3,7 @@
 import { SelectPair, SelectUser } from '@/drizzle/schema'
 import { useCompatibilityAnalysis } from '@/hooks/compatibility-analysis'
 
+import ActionButtons from './action-buttons'
 import Compatibility from './compatibility'
 import { ProgressIndicator, StepIndicator } from './progress-indicator'
 
@@ -34,6 +35,11 @@ const PairComponent = ({ users, pair }: { users: SelectUser[]; pair: SelectPair 
         started={steps.compatibilityAnalysisStarted}
         completed={steps.compatibilityAnalysisCompleted}
         text="Compatibility Analysis"
+      />
+      <ActionButtons
+        shareActive={!!compatibilityResult?.about}
+        text={`this is my and ${user2.username}'s Compatibility analysis by AI Agent, built on @wordware_ai`}
+        url={`https://twitter.wordware.ai/${user1.username}/${user2.username}`}
       />
       <Compatibility
         pairAnalysis={compatibilityResult}
