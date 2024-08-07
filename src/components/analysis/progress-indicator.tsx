@@ -1,4 +1,4 @@
-import { PiCheckCircle, PiCircle, PiSpinner } from 'react-icons/pi'
+import { PiCheckCircle, PiCircle, PiCrown, PiLock, PiLockKey, PiSpinner } from 'react-icons/pi'
 
 import { Steps } from '@/hooks/twitter-analysis'
 import { cn } from '@/lib/utils'
@@ -33,6 +33,8 @@ export const ProgressIndicator = ({
       <StepIndicator
         started={steps.tweetScrapeStarted}
         completed={steps.tweetScrapeCompleted}
+        premium={true}
+        unlocked={userUnlocked}
         text="Reading your Tweets"
       />
 
@@ -42,6 +44,8 @@ export const ProgressIndicator = ({
           <StepIndicator
             started={steps.wordwareStarted}
             completed={steps.wordwareCompleted}
+            premium={true}
+            unlocked={userUnlocked}
             text="Creating your Personality"
           />
 
@@ -49,6 +53,8 @@ export const ProgressIndicator = ({
             <StepIndicator
               started={steps.paidWordwareStarted}
               completed={steps.paidWordwareCompleted}
+              premium={true}
+              unlocked={userUnlocked}
               text="Extending your Personality"
             />
           )}
@@ -58,7 +64,19 @@ export const ProgressIndicator = ({
   )
 }
 
-export const StepIndicator = ({ started, completed, text }: { started?: boolean; completed?: boolean; text: string }) => {
+export const StepIndicator = ({
+  started,
+  completed,
+  text,
+  premium = false,
+  unlocked = false,
+}: {
+  started?: boolean
+  completed?: boolean
+  text: string
+  premium?: boolean
+  unlocked?: boolean
+}) => {
   return (
     <div className="flex-center w-full gap-4">
       {started ? (
@@ -74,10 +92,26 @@ export const StepIndicator = ({ started, completed, text }: { started?: boolean;
           />
         )
       ) : (
-        <PiCircle
-          className="text-gray-500"
-          size={24}
-        />
+        <>
+          {premium ? (
+            !unlocked ? (
+              <PiLockKey
+                className="text-gray-500"
+                size={24}
+              />
+            ) : (
+              <PiCircle
+                className="text-gray-500"
+                size={24}
+              />
+            )
+          ) : (
+            <PiCircle
+              className="text-gray-500"
+              size={24}
+            />
+          )}
+        </>
       )}
       <div>{text}</div>
     </div>

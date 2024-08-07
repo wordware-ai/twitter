@@ -104,7 +104,10 @@ export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = 
     }
   }
   const shouldRunTweetScrape = (user: SelectUser): boolean => {
-    return !user.tweetScrapeStarted || (!user.tweetScrapeCompleted && Date.now() - user.tweetScrapeStartedTime.getTime() > 1 * 60 * 1000)
+    return (
+      (user.unlocked || false) &&
+      (!user.tweetScrapeStarted || (!user.tweetScrapeCompleted && Date.now() - user.tweetScrapeStartedTime.getTime() > 1 * 60 * 1000))
+    )
   }
 
   const shouldRunWordwareAnalysis = (user: SelectUser, tweetScrapeCompleted: boolean): boolean => {
