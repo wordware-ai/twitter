@@ -58,7 +58,7 @@ export const PaywallCard: React.FC = () => {
         <CardTitle className="flex w-full items-center justify-between py-2 pb-4 text-2xl">
           <div className="flex items-center gap-3">
             <LockIcon size={24} />
-            <span className={`text-xl font-light text-gray-900`}>Want to see the full picture?</span>
+            <span className={`text-xl font-light text-gray-900`}>Want to see your roast? ️‍🔥</span>
           </div>
         </CardTitle>
         <div className="w-full border-b border-gray-300" />
@@ -66,7 +66,7 @@ export const PaywallCard: React.FC = () => {
       <CardContent className="flex flex-col text-gray-700">
         {paywallFlag && paywallFlag !== 'control' ? (
           <>
-            <p className="mb-4">Unlock all insights by purchasing a full access.</p>
+            <p className="mb-4">Unlock all insights by purchasing below.</p>
             <Button
               onClick={() => {
                 createCheckoutSession({ username: pathname, priceInt: parseInt(paywallFlag as string) })
@@ -76,7 +76,7 @@ export const PaywallCard: React.FC = () => {
               Unlock Full Analysis (${parseInt(paywallFlag as string) / 100})
             </Button>
             <p className="mt-4 text-sm text-gray-800">
-              Full access includes comprehensive persona analysis, including: <strong>Strengths</strong>, <strong>Weaknesses</strong>,{' '}
+              Full access includes comprehensive persona analysis, including: <strong>Roast</strong>, <strong>Strengths</strong>, <strong>Weaknesses</strong>,{' '}
               <strong>Love Life</strong>, <strong>Money</strong>, <strong>Health</strong>, <strong>Biggest Goal</strong>, <strong>Colleague Perspective</strong>
               , <strong>Pickup Lines</strong>, <strong>Famous Person Comparison</strong>, <strong>Previous Life</strong>, <strong>Animal Comparison</strong>,{' '}
               <strong>$50 Thing</strong>, <strong>Career</strong>, and <strong>Life Suggestion</strong>.

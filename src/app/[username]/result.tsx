@@ -36,7 +36,7 @@ type ResultProps = {
 }
 
 const Result: React.FC<ResultProps> = ({ unlocked, userData }) => {
-  const streamingStarted = !!userData?.about
+  // const streamingStarted = !!userData?.about
 
   return (
     <div className="w-full max-w-6xl">
@@ -51,7 +51,7 @@ const Result: React.FC<ResultProps> = ({ unlocked, userData }) => {
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
         {cardData.map((card, index) => (
           <React.Fragment key={card.contentKey}>
-            {streamingStarted && !unlocked && index === 1 && <PaywallCard />}
+            {!unlocked && index === 1 && <PaywallCard />}
             {index === 1 && <WordwareCard />}
             {index === 7 && <WordwareCard />}
             <AnalysisCard

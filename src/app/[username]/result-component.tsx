@@ -43,84 +43,96 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
     // Prevent the effect from running more than once
     if (effectRan.current) return
     let tweetScrapeCompleted = user.tweetScrapeCompleted
+    let wordwarePart1Completed = user.wordwareCompleted
     effectRan.current = true
     ;(async () => {
-      // Check if tweet scraping needs to be started or restarted
-      if (!user.tweetScrapeStarted || (!user.tweetScrapeCompleted && Date.now() - user.tweetScrapeStartedTime.getTime() > 1 * 60 * 1000)) {
-        // Update state to indicate tweet scraping has started
-        setSteps((prev) => ({
-          ...prev,
-          tweetScrapeStarted: true,
-        }))
-        try {
-          // Process the scraped user data
-          await processScrapedUser({ username: user.username })
-        } catch (error) {
-          console.log('🟣 | file: result-component.tsx:59 | ; | error:', error)
-          // Redirect to error form if processing fails
-          window.location.href = 'https://tally.so/r/3lRoOp'
-        }
-        // Update state to indicate tweet scraping is completed
-        setSteps((prev) => ({
-          ...prev,
-          tweetScrapeCompleted: true,
-        }))
-        tweetScrapeCompleted = true
-      }
-
-      // Check if Wordware analysis needs to be started or restarted
-      if (
-        (tweetScrapeCompleted && !user.wordwareStarted) ||
-        (tweetScrapeCompleted && !user.wordwareCompleted && Date.now() - user.wordwareStartedTime.getTime() > 60 * 1000)
-      ) {
-        // Update state to indicate Wordware analysis has started
-        setSteps((prev) => ({
-          ...prev,
-          wordwareStarted: true,
-        }))
-
-        // Perform tweet analysis
-        await handleTweetAnalysis({
-          username: user.username,
-          full: false,
-        })
-
-        // Update state to indicate Wordware analysis is completed
-        setSteps((prev) => ({
-          ...prev,
-          wordwareCompleted: true,
-        }))
-      }
-
-      if (
-        !user.paidWordwareCompleted &&
-        (!result || !result.loveLife) && //checking if love-life exist to prevent re-generation of the previous result
-        ((user.unlocked && !user.paidWordwareStarted) ||
-          (user.unlocked && !user.paidWordwareCompleted && Date.now() - user.paidWordwareStartedTime.getTime() > 60 * 1000))
-      ) {
+      if (user.unlocked) {
         console.log('PAID SHOULD BE STARTED, STARTING')
-        // Update state to indicate Wordware analysis has started
-        setSteps((prev) => ({
-          ...prev,
-          paidWordwareStarted: true,
-        }))
 
-        // Perform tweet analysis
-        await handleTweetAnalysis({
-          username: user.username,
-          full: true,
-        })
+        // Check if tweet scraping needs to be started or restarted
+        if (!user.tweetScrapeStarted || (!user.tweetScrapeCompleted && Date.now() - user.tweetScrapeStartedTime.getTime() > 1 * 60 * 1000)) {
+          // Update state to indicate tweet scraping has started
+          setSteps((prev) => ({
+            ...prev,
+            tweetScrapeStarted: true,
+          }))
+          try {
+            // Process the scraped user data
+            await processScrapedUser({ username: user.username })
+          } catch (error) {
+            console.log('🟣 | file: result-component.tsx:59 | ; | error:', error)
+            // Redirect to error form if processing fails
+            // window.location.href = 'https://tally.so/r/3lRoOp'
+          }
+          // Update state to indicate tweet scraping is completed
+          setSteps((prev) => ({
+            ...prev,
+            tweetScrapeCompleted: true,
+          }))
+          tweetScrapeCompleted = true
+        }
 
-        // Update state to indicate Wordware analysis is completed
-        setSteps((prev) => ({
-          ...prev,
-          paidWordwareCompleted: true,
-        }))
+        console.log('Checking first Wordware')
+        // Check if Wordware analysis needs to be started or restarted
+        if (
+          (tweetScrapeCompleted && !user.wordwareStarted) ||
+          (tweetScrapeCompleted && !user.wordwareCompleted && Date.now() - user.wordwareStartedTime.getTime() > 60 * 1000)
+        ) {
+          // Update state to indicate Wordware analysis has started
+          setSteps((prev) => ({
+            ...prev,
+            wordwareStarted: true,
+          }))
+
+          // Perform tweet analysis
+          await handleTweetAnalysis({
+            username: user.username,
+            full: false,
+            existingAnalysis: result ?? {},
+          })
+
+          wordwarePart1Completed = true
+
+          // Update state to indicate Wordware analysis is completed
+          setSteps((prev) => ({
+            ...prev,
+            wordwareCompleted: true,
+          }))
+        }
+
+        if (
+          wordwarePart1Completed &&
+          !user.paidWordwareCompleted &&
+          (!result || !result.loveLife) && //checking if love-life exist to prevent re-generation of the previous result
+          ((user.unlocked && !user.paidWordwareStarted) ||
+            (user.unlocked && !user.paidWordwareCompleted && Date.now() - user.paidWordwareStartedTime.getTime() > 60 * 1000))
+        ) {
+          console.log('Full analysis')
+
+          // Update state to indicate Wordware analysis has started
+          setSteps((prev) => ({
+            ...prev,
+            paidWordwareStarted: true,
+          }))
+
+          // Perform tweet analysis
+          await handleTweetAnalysis({
+            username: user.username,
+            full: true,
+            existingAnalysis: {},
+          })
+
+          // Update state to indicate Wordware analysis is completed
+          setSteps((prev) => ({
+            ...prev,
+            paidWordwareCompleted: true,
+          }))
+        }
       }
     })()
   }, []) // Effect depends on user data
 
-  const handleTweetAnalysis = async (props: { username: string; full: boolean }) => {
+  const handleTweetAnalysis = async (props: { username: string; full: boolean; existingAnalysis: TwitterAnalysis }) => {
     const response = await fetch('/api/wordware', {
       method: 'POST',
       headers: {
@@ -146,9 +158,8 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
         result += decoder.decode(value, { stream: true })
 
         const parsed = parsePartialJson(result) as TwitterAnalysis
-        const existingAnalysis = user.analysis as TwitterAnalysis
 
-        setResult({ ...existingAnalysis, ...parsed })
+        setResult({ ...props.existingAnalysis, ...parsed })
       }
     } catch (error) {
       console.error('Error reading stream', error)
