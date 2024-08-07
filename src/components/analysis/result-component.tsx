@@ -2,7 +2,9 @@
 
 import { useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
+import posthog from 'posthog-js'
 
+import { PriceButton } from '@/components/analysis/paywall-card'
 import { SelectUser } from '@/drizzle/schema'
 import { useTwitterAnalysis } from '@/hooks/twitter-analysis'
 import { analysisPlaceholder } from '@/lib/constants'
@@ -15,6 +17,8 @@ import { ProgressIndicator, StepIndicator } from './progress-indicator'
 const ResultComponent = ({ user }: { user: SelectUser }) => {
   const { steps, result } = useTwitterAnalysis(user)
   const searchParams = useSearchParams()
+
+  const paywallFlag = posthog.getFeatureFlag('paywall2') ?? searchParams.get('stripe')
 
   const prepareUserData = useCallback((result: TwitterAnalysis | undefined, unlocked: boolean): TwitterAnalysis | undefined => {
     if (!result) return undefined
@@ -39,6 +43,12 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
         result={result}
         userUnlocked={user.unlocked || false}
       />
+      {!user.unlocked && (
+        <PriceButton
+          username={user.username}
+          price={paywallFlag as string}
+        />
+      )}
       <ActionButtons
         shareActive={!!result?.about}
         text={`this is my Twitter Personality analysis by AI Agent, built on @wordware_ai`}

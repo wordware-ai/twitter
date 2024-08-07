@@ -19,6 +19,17 @@ const FormSchema = z.object({
   email: z.string().email(),
 })
 
+export const PriceButton = ({ username, price }: { username: string; price: string }) => (
+  <Button
+    onClick={() => {
+      createCheckoutSession({ username, priceInt: parseInt(price) })
+    }}
+    className="w-full bg-green-600 hover:bg-green-700"
+    type="button">
+    Unlock Full Analysis (${parseInt(price) / 100})
+  </Button>
+)
+
 export const PaywallCard: React.FC = () => {
   const searchParams = useSearchParams()
   const pathname = usePathname()
@@ -67,14 +78,10 @@ export const PaywallCard: React.FC = () => {
         {paywallFlag && paywallFlag !== 'control' ? (
           <>
             <p className="mb-4">Unlock all insights by purchasing below.</p>
-            <Button
-              onClick={() => {
-                createCheckoutSession({ username: pathname, priceInt: parseInt(paywallFlag as string) })
-              }}
-              className="w-full bg-green-600 hover:bg-green-700"
-              type="button">
-              Unlock Full Analysis (${parseInt(paywallFlag as string) / 100})
-            </Button>
+            <PriceButton
+              username={pathname}
+              price={paywallFlag as string}
+            />
             <p className="mt-4 text-sm text-gray-800">
               Full access includes comprehensive persona analysis, including: <strong>Roast</strong>, <strong>Strengths</strong>, <strong>Weaknesses</strong>,{' '}
               <strong>Love Life</strong>, <strong>Money</strong>, <strong>Health</strong>, <strong>Biggest Goal</strong>, <strong>Colleague Perspective</strong>
