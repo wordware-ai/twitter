@@ -119,7 +119,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
           await handleTweetAnalysis({
             username: user.username,
             full: true,
-            existingAnalysis: {},
+            existingAnalysis: result ?? {},
           })
 
           // Update state to indicate Wordware analysis is completed
