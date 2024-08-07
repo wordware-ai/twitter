@@ -1,18 +1,20 @@
 'use client'
 
 import { useCallback } from 'react'
+import { useSearchParams } from 'next/navigation'
 
-// import NewPairForm from '@/components/new-pair-form'
 import { SelectUser } from '@/drizzle/schema'
 import { useTwitterAnalysis } from '@/hooks/twitter-analysis'
 import { analysisPlaceholder } from '@/lib/constants'
 
+import NewPairForm from '../new-pair-form'
 import ActionButtons from './action-buttons'
 import { Analysis, TwitterAnalysis } from './analysis'
 import { ProgressIndicator, StepIndicator } from './progress-indicator'
 
 const ResultComponent = ({ user }: { user: SelectUser }) => {
   const { steps, result } = useTwitterAnalysis(user)
+  const searchParams = useSearchParams()
 
   const prepareUserData = useCallback((result: TwitterAnalysis | undefined, unlocked: boolean): TwitterAnalysis | undefined => {
     if (!result) return undefined
@@ -43,10 +45,12 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
         username={user.username}
       />
 
-      {/* <div className="flex-center w-full flex-col gap-4">
-        <div className="text-center text-lg font-light">Add new user to find if you are compatible souls</div>
-        <NewPairForm />
-      </div> */}
+      {searchParams.get('password') === 'supersecret' && (
+        <div className="flex-center w-full flex-col gap-4">
+          <div className="text-center text-lg font-light">Add new user to find if you are compatible souls</div>
+          <NewPairForm />
+        </div>
+      )}
 
       <Analysis
         unlocked={user.unlocked || false}

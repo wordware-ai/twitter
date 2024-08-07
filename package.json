@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build": "bun db:migrate && next build",
     "build:old": "next build",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx migrate.ts",
