@@ -1,9 +1,121 @@
 {
-  "id": "8308df4b-7560-497d-8345-60c8789a2457",
-  "prevId": "c50c677b-cc10-4184-b184-cabe44229737",
+  "id": "7398ca41-a246-4a8a-8dac-9775f3b82537",
+  "prevId": "8308df4b-7560-497d-8345-60c8789a2457",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.pairs": {
+      "name": "pairs",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "concat('pair_', uuid_generate_v4())"
+        },
+        "user1_lowercase_username": {
+          "name": "user1_lowercase_username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user2_lowercase_username": {
+          "name": "user2_lowercase_username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "analysis": {
+          "name": "analysis",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "wordware_started": {
+          "name": "wordware_started",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "wordware_started_time": {
+          "name": "wordware_started_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "wordware_completed": {
+          "name": "wordware_completed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        }
+      },
+      "indexes": {
+        "unique_user_pair_idx": {
+          "name": "unique_user_pair_idx",
+          "columns": [
+            {
+              "expression": "user1_lowercase_username",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "user2_lowercase_username",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "pairs_user1_lowercase_username_users_lowercase_username_fk": {
+          "name": "pairs_user1_lowercase_username_users_lowercase_username_fk",
+          "tableFrom": "pairs",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user1_lowercase_username"
+          ],
+          "columnsTo": [
+            "lowercase_username"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "pairs_user2_lowercase_username_users_lowercase_username_fk": {
+          "name": "pairs_user2_lowercase_username_users_lowercase_username_fk",
+          "tableFrom": "pairs",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user2_lowercase_username"
+          ],
+          "columnsTo": [
+            "lowercase_username"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "public.users": {
       "name": "users",
       "schema": "",
@@ -225,12 +337,16 @@
         "users_username_unique": {
           "name": "users_username_unique",
           "nullsNotDistinct": false,
-          "columns": ["username"]
+          "columns": [
+            "username"
+          ]
         },
         "users_lowercase_username_unique": {
           "name": "users_lowercase_username_unique",
           "nullsNotDistinct": false,
-          "columns": ["lowercase_username"]
+          "columns": [
+            "lowercase_username"
+          ]
         }
       }
     }

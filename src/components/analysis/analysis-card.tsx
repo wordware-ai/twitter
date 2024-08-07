@@ -22,7 +22,7 @@ type ContentItem = {
  * It can be a string, an array of strings, an array of ContentItems,
  * or an object with string keys and string values.
  */
-type ContentType = string | string[] | ContentItem[] | { [key: string]: string }
+type ContentType = string | string[] | ContentItem[] | { [key: string]: string | string[] }
 
 /**
  * Props for the AnalysisCard component.
@@ -49,26 +49,16 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ unlocked, title, icon: Icon
   const isRoast = title === 'Roast'
   const isContentVisible = isRoast || unlocked
 
-  const obfuscateContent = (content: string) => {
-    if (!content) return ''
-    return content.replace(/[a-zA-Z]/g, '•')
-    // This was causing hydration errors
-    // return content.replace(/[a-zA-Z]/g, (char) => {
-    //   const randomChar = String.fromCharCode(Math.floor(Math.random() * 26) + (char.toLowerCase() === char ? 97 : 65))
-    //   return Math.random() > 0.5 ? randomChar : char
-    // })
-  }
-
   const renderContent = useCallback(() => {
     if (typeof content === 'string') {
-      const displayContent = isContentVisible ? content : obfuscateContent(content)
+      // const displayContent = isContentVisible ? content : obfuscateContent(content)
 
       return (
         <div className={`space-y-2 ${!isContentVisible ? 'blur-sm' : ''}`}>
           {/* Use a key to force re-render when content changes */}
           <Markdown
-            key={displayContent}
-            content={displayContent || ''}
+            key={content}
+            content={content || ''}
           />
         </div>
       )
@@ -78,15 +68,10 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ unlocked, title, icon: Icon
           {content.map((item, index) => (
             <li key={index}>
               {typeof item === 'string' ? (
-                isContentVisible ? (
-                  item
-                ) : (
-                  obfuscateContent(item)
-                )
+                item
               ) : (
                 <>
-                  <span className="font-semibold">{isContentVisible ? item.title : obfuscateContent(item.title)}:</span>{' '}
-                  {isContentVisible ? item.subtitle : obfuscateContent(item.subtitle)}
+                  <span className="font-semibold">{isContentVisible ? item.title : item.title}:</span> {isContentVisible ? item.subtitle : item.subtitle}
                 </>
               )}
             </li>
@@ -95,10 +80,10 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ unlocked, title, icon: Icon
       )
     } else if (typeof content === 'object') {
       return (
-        <ul className={`list-none space-y-2 ${!isContentVisible ? '' : ''}`}>
+        <ul className={`list-none space-y-2 ${!isContentVisible ? 'blur-sm' : ''}`}>
           {Object.entries(content).map(([key, value], index) => (
             <li key={index}>
-              <span className="font-semibold">{isContentVisible ? key : obfuscateContent(key)}:</span> {isContentVisible ? value : obfuscateContent(value)}
+              <span className="font-semibold">{key}:</span> {value}
             </li>
           ))}
         </ul>

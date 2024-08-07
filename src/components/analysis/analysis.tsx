@@ -2,12 +2,12 @@
 
 import React from 'react'
 
-import { WordwareCard } from '@/app/[username]/wordware-card'
 import { Markdown } from '@/components/markdown'
 
+import { cardData } from '../../lib/wordware-config'
 import AnalysisCard from './analysis-card'
-import { cardData } from './config'
 import { PaywallCard } from './paywall-card'
+import { WordwareCard } from './wordware-card'
 
 export type TwitterAnalysis = {
   [key: string]: string | { title: string; subtitle: string }[] | string[] | undefined
@@ -30,12 +30,12 @@ export type TwitterAnalysis = {
   emojis?: string
 }
 
-type ResultProps = {
+type AnalysisProps = {
   unlocked: boolean
   userData: TwitterAnalysis | undefined
 }
 
-const Result: React.FC<ResultProps> = ({ unlocked, userData }) => {
+const Analysis: React.FC<AnalysisProps> = ({ unlocked, userData }) => {
   // const streamingStarted = !!userData?.about
 
   return (
@@ -66,4 +66,4 @@ const Result: React.FC<ResultProps> = ({ unlocked, userData }) => {
   )
 }
 
-export default Result
+export { Analysis }

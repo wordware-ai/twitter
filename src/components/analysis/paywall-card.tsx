@@ -71,7 +71,7 @@ export const PaywallCard: React.FC = () => {
               onClick={() => {
                 createCheckoutSession({ username: pathname, priceInt: parseInt(paywallFlag as string) })
               }}
-              className="w-full"
+              className="w-full bg-green-600 hover:bg-green-700"
               type="button">
               Unlock Full Analysis (${parseInt(paywallFlag as string) / 100})
             </Button>
@@ -109,9 +109,9 @@ export const PaywallCard: React.FC = () => {
                   )}
                 />
                 <Button
-                  className="w-full"
                   disabled={form.formState.isSubmitting || form.formState.isSubmitSuccessful}
-                  type="submit">
+                  type="submit"
+                  className="w-full bg-green-600 hover:bg-green-700">
                   {/* Dynamic button text based on form state */}
                   {form.formState.isSubmitting ? 'Unlocking...' : form.formState.isSubmitSuccessful ? 'Success. Refresh the page.' : 'Unlock Full Analysis'}
                 </Button>

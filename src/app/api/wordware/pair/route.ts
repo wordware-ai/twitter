@@ -1,5 +1,4 @@
-import { getUser, updateUser } from '@/actions/actions'
-import { TwitterAnalysis } from '@/components/analysis/analysis'
+import { getPair, getUser, updatePair } from '@/actions/actions'
 
 /**
  * Maximum duration for the API route execution (in seconds)
@@ -25,31 +24,29 @@ type TweetType = {
  */
 export async function POST(request: Request) {
   // Extract username from the request body
-  const { username, full } = await request.json()
+  const { usernames } = await request.json()
 
   // Fetch user data and check if Wordware has already been started
-  const user = await getUser({ username })
+  const user1 = await getUser({ username: usernames[0] })
+  const user2 = await getUser({ username: usernames[1] })
+  const pair = await getPair({ usernames })
 
-  if (!user) {
-    throw Error(`User not found: ${username}`)
+  if (!user1 || !user2) {
+    throw Error(`User not found: ${usernames[0]} or ${usernames[1]}`)
   }
 
-  if (!full) {
-    if (user.wordwareCompleted || (user.wordwareStarted && Date.now() - user.createdAt.getTime() < 3 * 60 * 1000)) {
-      return Response.json({ error: 'Wordware already started' })
-    }
+  if (!pair) {
+    throw Error(`Pair not found: ${usernames[0]} and ${usernames[1]}`)
   }
 
-  if (full) {
-    if (user.paidWordwareCompleted || (user.paidWordwareStarted && Date.now() - user.createdAt.getTime() < 3 * 60 * 1000)) {
-      return Response.json({ error: 'Wordware already started' })
-    }
+  if (pair.wordwareCompleted || (pair.wordwareStarted && Date.now() - pair.createdAt.getTime() < 3 * 60 * 1000)) {
+    return Response.json({ error: 'Wordware already started' })
   }
 
   function formatTweet(tweet: TweetType) {
     // console.log('Formatting', tweet)
     const isRetweet = tweet.isRetweet ? 'RT ' : ''
-    const author = tweet.author?.userName ?? username
+    const author = tweet.author?.userName ?? ''
     const createdAt = tweet.createdAt
     const text = tweet.text
       .split('\n')
@@ -62,14 +59,21 @@ export async function POST(request: Request) {
 *retweets: ${tweet.retweetCount}, replies: ${tweet.replyCount}, likes: ${tweet.likeCount}, quotes: ${tweet.quoteCount}, views: ${tweet.viewCount}*`
   }
 
-  const tweets = user.tweets as TweetType[]
+  const tweets1 = user1.tweets as TweetType[]
+  const tweets2 = user2.tweets as TweetType[]
 
-  // console.log('Tweets', tweets)
+  const userOnePayload = {
+    tweets: tweets1.map(formatTweet).join('\n---\n\n'),
+    profilePicture: user1.profilePicture,
+    fullProfile: user1.fullProfile,
+  }
+  const userTwoPayload = {
+    tweets: tweets2.map(formatTweet).join('\n---\n\n'),
+    profilePicture: user2.profilePicture,
+    fullProfile: user2.fullProfile,
+  }
 
-  const tweetsMarkdown = tweets.map(formatTweet).join('\n---\n\n')
-  console.log('Tweets markdown', tweetsMarkdown)
-
-  const promptID = full ? process.env.WORDWARE_FULL_PROMPT_ID : process.env.WORDWARE_ROAST_PROMPT_ID
+  const promptID = process.env.WORDWARE_PAIR_PROMPT_ID
 
   // Make a request to the Wordware API
   const runResponse = await fetch(`https://app.wordware.ai/api/released-app/${promptID}/run`, {
@@ -80,11 +84,10 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       inputs: {
-        tweets: `Tweets: ${tweetsMarkdown}`,
-        profilePicture: user.profilePicture,
-        profileInfo: user.fullProfile,
-        version: '^1.0',
+        userOne: JSON.stringify(userOnePayload),
+        userTwo: JSON.stringify(userTwoPayload),
       },
+      version: '^1.0',
     }),
   })
 
@@ -98,9 +101,9 @@ export async function POST(request: Request) {
   }
 
   // Update user to indicate Wordware has started
-  await updateUser({
-    user: {
-      ...user,
+  await updatePair({
+    pair: {
+      ...pair,
       wordwareStarted: true,
       wordwareStartedTime: new Date(),
     },
@@ -110,7 +113,6 @@ export async function POST(request: Request) {
   const decoder = new TextDecoder()
   let buffer: string[] = []
   let finalOutput = false
-  const existingAnalysis = user?.analysis as TwitterAnalysis
 
   // Create a readable stream to process the response
   const stream = new ReadableStream({
@@ -125,7 +127,7 @@ export async function POST(request: Request) {
           }
 
           const chunk = decoder.decode(value)
-          // console.log('🟣 | file: route.ts:80 | start | chunk:', chunk)
+          console.log('🟣 | file: route.ts:80 | start | chunk:', chunk)
 
           // Process the chunk character by character
           for (let i = 0, len = chunk.length; i < len; ++i) {
@@ -162,14 +164,13 @@ export async function POST(request: Request) {
             } else if (value.type === 'outputs') {
               console.log('✨ here:', value.values.output, '. Now parsing')
               try {
-                const statusObject = full ? { paidWordwareStarted: true, paidWordwareCompleted: true } : { wordwareStarted: true, wordwareCompleted: true }
                 // Update user with the analysis from Wordware
-                await updateUser({
-                  user: {
-                    ...user,
-                    ...statusObject,
+                await updatePair({
+                  pair: {
+                    ...pair,
+                    wordwareStarted: true,
+                    wordwareCompleted: true,
                     analysis: {
-                      ...existingAnalysis,
                       ...value.values.output,
                     },
                   },
@@ -178,11 +179,11 @@ export async function POST(request: Request) {
               } catch (error) {
                 console.error('Error parsing or saving output:', error)
 
-                const statusObject = full ? { paidWordwareStarted: false, paidWordwareCompleted: false } : { wordwareStarted: false, wordwareCompleted: false }
-                await updateUser({
-                  user: {
-                    ...user,
-                    ...statusObject,
+                await updatePair({
+                  pair: {
+                    ...pair,
+                    wordwareStarted: false,
+                    wordwareCompleted: false,
                   },
                 })
               }

@@ -3,11 +3,11 @@
 import { unstable_cache as cache, unstable_noStore as noStore, revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { ApifyClient } from 'apify-client'
-import { desc, eq, inArray, sql } from 'drizzle-orm'
+import { and, desc, eq, inArray, sql } from 'drizzle-orm'
 
 import { UserCardData } from '@/app/top-list'
 import { db } from '@/drizzle/db'
-import { InsertUser, SelectUser, users } from '@/drizzle/schema'
+import { InsertPair, InsertUser, pairs, SelectUser, users } from '@/drizzle/schema'
 
 import { fetchUserData } from './profile-scraper'
 
@@ -130,10 +130,10 @@ export const updateUser = async ({ user }: { user: InsertUser }) => {
   await db.update(users).set(user).where(eq(users.lowercaseUsername, user.lowercaseUsername))
 }
 
-export const handleNewUsername = async ({ username }: { username: string }) => {
+export const handleNewUsername = async ({ username, redirectPath }: { username: string; redirectPath: string }) => {
   const user = await getUser({ username })
   if (user) {
-    redirect(`/${username}`)
+    redirect(redirectPath)
   }
 
   let { data, error } = await fetchUserData({ screenName: username })
@@ -141,8 +141,6 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
   if (!data && error) {
     ;({ data, error } = await scrapeProfile({ username }))
   }
-
-  console.log('🟣 | file: actions.ts:90 | handleNewUsername | error:', error, 'data', data)
 
   if (data && !error) {
     const user = {
@@ -152,7 +150,7 @@ export const handleNewUsername = async ({ username }: { username: string }) => {
       error: null,
     }
     await insertUser({ user })
-    redirect(`/${username}`)
+    redirect(redirectPath)
     return { error: false, found: true }
   }
 
@@ -426,3 +424,48 @@ export const getStatistics = cache(
   ['statistics'],
   { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
 )
+
+export const createPair = async ({ usernames }: { usernames: string[] }) => {
+  const [user1lowercaseUsername, user2lowercaseUsername] = [usernames[0].toLowerCase(), usernames[1].toLowerCase()].sort()
+
+  console.log('creating pair', user1lowercaseUsername, user2lowercaseUsername)
+
+  const result = await db
+    .insert(pairs)
+    .values({
+      user1lowercaseUsername,
+      user2lowercaseUsername,
+    })
+    .returning()
+  console.log('🟣 | file: actions.ts:440 | createPair | result:', result)
+
+  if (result.length !== 1) {
+    throw new Error('Expected to create exactly one pair, but got ' + result.length)
+  }
+
+  return result[0]
+}
+
+export const getPair = async ({ usernames }: { usernames: string[] }) => {
+  noStore()
+  const [user1lowercaseUsername, user2lowercaseUsername] = [usernames[0].toLowerCase(), usernames[1].toLowerCase()].sort()
+
+  return await db.query.pairs.findFirst({
+    where: and(eq(pairs.user1lowercaseUsername, user1lowercaseUsername), eq(pairs.user2lowercaseUsername, user2lowercaseUsername)),
+  })
+}
+
+export const getOrCreatePair = async ({ usernames }: { usernames: string[] }) => {
+  noStore()
+
+  const existingPair = await getPair({ usernames })
+
+  if (existingPair) return existingPair
+
+  return await createPair({ usernames })
+}
+
+export const updatePair = async ({ pair }: { pair: InsertPair }) => {
+  if (!pair.id) throw new Error('Pair ID is required for update')
+  return await db.update(pairs).set(pair).where(eq(pairs.id, pair.id))
+}

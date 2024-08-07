@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm'
-import { boolean, index, integer, jsonb, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
+import { boolean, index, integer, jsonb, pgTable, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core'
 
 export const users = pgTable(
   'users',
@@ -43,5 +43,33 @@ export const users = pgTable(
   },
 )
 
+export const pairs = pgTable(
+  'pairs',
+  {
+    id: text('id')
+      .primaryKey()
+      .default(sql`concat('pair_', uuid_generate_v4())`),
+    user1lowercaseUsername: text('user1_lowercase_username')
+      .notNull()
+      .references(() => users.lowercaseUsername),
+    user2lowercaseUsername: text('user2_lowercase_username')
+      .notNull()
+      .references(() => users.lowercaseUsername),
+    createdAt: timestamp('created_at').notNull().defaultNow(),
+    analysis: jsonb('analysis'),
+
+    wordwareStarted: boolean('wordware_started').default(false),
+    wordwareStartedTime: timestamp('wordware_started_time').notNull().defaultNow(),
+    wordwareCompleted: boolean('wordware_completed').default(false),
+  },
+  (table) => {
+    return {
+      userPairIdx: uniqueIndex('unique_user_pair_idx').on(table.user1lowercaseUsername, table.user2lowercaseUsername),
+    }
+  },
+)
+
 export type InsertUser = typeof users.$inferInsert
 export type SelectUser = typeof users.$inferSelect
+export type InsertPair = typeof pairs.$inferInsert
+export type SelectPair = typeof pairs.$inferSelect
