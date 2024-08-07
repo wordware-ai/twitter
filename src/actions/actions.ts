@@ -221,6 +221,7 @@ export const scrapeTweets = async ({ username }: { username: string }) => {
     const tweets = await getTweets(username)
     if (!tweets) throw new Error('No tweets found')
 
+    console.log('getTweets success ✅')
     return { data: tweets, error: null }
   } catch (error) {
     //FALLBACK - APIFY
