@@ -4,7 +4,6 @@ import { JSDOM } from 'jsdom'
 import { getRandom } from 'random-useragent'
 
 // import { CookieManager, PreciseCookieManager } from './cookie-manager'
-
 // import { CookieManager } from './cookie-manager'
 
 type DatabaseUser = {
