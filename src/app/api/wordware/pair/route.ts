@@ -60,15 +60,18 @@ export async function POST(request: Request) {
   }
 
   const tweets1 = user1.tweets as TweetType[]
+  const tweetsMarkdown1 = tweets1.map(formatTweet).join('\n---\n\n')
+
   const tweets2 = user2.tweets as TweetType[]
+  const tweetsMarkdown2 = tweets2.map(formatTweet).join('\n---\n\n')
 
   const userOnePayload = {
-    tweets: tweets1.map(formatTweet).join('\n---\n\n'),
+    tweets: `Tweets: ${tweetsMarkdown1}`,
     profilePicture: user1.profilePicture,
     fullProfile: user1.fullProfile,
   }
   const userTwoPayload = {
-    tweets: tweets2.map(formatTweet).join('\n---\n\n'),
+    tweets: `Tweets: ${tweetsMarkdown2}`,
     profilePicture: user2.profilePicture,
     fullProfile: user2.fullProfile,
   }
