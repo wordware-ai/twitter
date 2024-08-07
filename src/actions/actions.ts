@@ -186,7 +186,7 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
   }
   try {
     const run = await apifyClient.actor('apidojo/twitter-user-scraper').call(input)
-    console.log('🟣 | file: actions.ts:72 | scrapeProfile | run:', run)
+
     if (run.status === 'FAILED') throw new Error(`Scraping Error: ${run.statusMessage}`)
 
     const { items: profiles } = await apifyClient.dataset(run.defaultDatasetId).listItems()
@@ -220,7 +220,7 @@ export const scrapeTweets = async ({ username }: { username: string }) => {
   try {
     const tweets = await getTweets(username)
     if (!tweets) throw new Error('No tweets found')
-    console.log('YASSS JABADABADU')
+
     return { data: tweets, error: null }
   } catch (error) {
     //FALLBACK - APIFY
@@ -301,7 +301,7 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
         throw e
       }
     }
-    console.log('🟣 | file: actions.ts:143 | processScrapedUser | tweets:', tweets?.length)
+
     if (tweets && !error) {
       user = {
         ...user,
@@ -371,10 +371,10 @@ export const unlockGeneration = async ({ username, email }: { username: string; 
       await unlockUser({ username: username.replace('/', ''), unlockType: 'email' })
 
       revalidatePath(username)
-      console.log('🟣 | file: actions.ts:356 | unlockGeneration | error:', error)
+
       return { success: true }
     }
-    console.log('🟣 | file: actions.ts:356 | unlockGeneration | error:', error)
+
     if (error instanceof Error) {
       return { success: false, error: error.message }
     }
@@ -448,7 +448,6 @@ export const createPair = async ({ usernames, shouldRedirect }: { usernames: str
       user2lowercaseUsername,
     })
     .returning()
-  console.log('🟣 | file: actions.ts:440 | createPair | result:', result)
 
   if (result.length !== 1) {
     throw new Error('Expected to create exactly one pair, but got ' + result.length)

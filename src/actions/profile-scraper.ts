@@ -3,7 +3,9 @@
 import { JSDOM } from 'jsdom'
 import { getRandom } from 'random-useragent'
 
-import { CookieManager } from './cookie-manager'
+// import { CookieManager, PreciseCookieManager } from './cookie-manager'
+
+// import { CookieManager } from './cookie-manager'
 
 type DatabaseUser = {
   username: string
@@ -147,7 +149,8 @@ export async function fetchUserData({ screenName }: { screenName: string }): Pro
     }
   }
 }
-const cookieManager = new CookieManager()
+// const cookieManager = new CookieManager()
+// const preciseCookieManager = new PreciseCookieManager()
 
 export async function fetchTimelineProfile(screenName: string): Promise<string> {
   const guestToken = await getGuestToken()
@@ -174,9 +177,9 @@ export async function fetchTimelineProfile(screenName: string): Promise<string> 
   const headers = {
     accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
     'accept-language': 'en-US,en;q=0.9',
-    cookie:
-      'guest_id=v1%3A168987090345885498; kdt=p0eqA5087j6MNpREwxYJcudjCegtrzc9b8J7H2iI; auth_token=e4fa2e1fb11107b1648add7bbd58d3cd4e4b2d5e; ct0=f39f4820e35d45a0b64651eb46acae1694bfeb221af2d1b650b74a81bebd95673869b2504b75d005809bebe0a71e1863c87338e5b534a02c8ce4d10b1730f501127333aadc34cf9c6dece1d74c91b00f; twid=u%3D945756809356300294; dnt=1; btc_opt_in=Y; twtr_pixel_opt_in=Y; *twitter*sess=BAh7CiIKZmxhc2hJQzonQWN0aW9uQ29udHJvbGxlcjo6Rmxhc2g6OkZsYXNo%250ASGFzaHsABjoKQHVzZWR7ADoPY3JlYXRlZF9hdGwrCAIPOL2LAToMY3NyZl9p%250AZCIlODJlZjUzMTE0ZmZkZWZlNzVhMzM0NTM3M2FhNWZhNmI6B2lkIiU3OGMy%250ANDlmN2Y5NWRjYmVkZTliMTYyZmI2YWVjYjgzZToVaW5pdGlhdGVkX2luX2Fw%250AcCIGMQ%253D%253D--e4fb722064815b66eb4cb5098a47fc74eef01367; fm="WW91IHdpbGwgbm8gbG9uZ2VyIHJlY2VpdmUgZW1haWxzIGxpa2UgdGhpcy4=--61a3e5587a505c23e2499300d1d7f92ff6d971e0"; guest_id_marketing=v1%3A168987090345885498; guest_id_ads=v1%3A168987090345885498; personalization_id="v1_qWZOJ07EYJQV7qtkcyHuQg=="; *ga=GA1.2.891791384.1722577601; *gid=GA1.2.262146840.1723035771; *gat=1',
+    cookie: process.env.TWITTER_COOKIE!,
     // cookie: cookieManager.getNextCookie(),
+    // cookie: preciseCookieManager.getNextCookie(),
     dnt: '1',
     priority: 'u=0, i',
     referer: 'https://publish.twitter.com/',
