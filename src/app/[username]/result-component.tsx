@@ -44,6 +44,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
     if (effectRan.current) return
     let tweetScrapeCompleted = user.tweetScrapeCompleted
     let wordwarePart1Completed = user.wordwareCompleted
+    let part1result: TwitterAnalysis = user.analysis ?? {}
     effectRan.current = true
     ;(async () => {
       if (user.unlocked) {
@@ -85,7 +86,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
           }))
 
           // Perform tweet analysis
-          await handleTweetAnalysis({
+          part1result = await handleTweetAnalysis({
             username: user.username,
             full: false,
             existingAnalysis: result ?? {},
@@ -119,7 +120,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
           await handleTweetAnalysis({
             username: user.username,
             full: true,
-            existingAnalysis: result ?? {},
+            existingAnalysis: part1result,
           })
 
           // Update state to indicate Wordware analysis is completed
