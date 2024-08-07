@@ -130,9 +130,9 @@ export const updateUser = async ({ user }: { user: InsertUser }) => {
   await db.update(users).set(user).where(eq(users.lowercaseUsername, user.lowercaseUsername))
 }
 
-export const handleNewUsername = async ({ username, redirectPath }: { username: string; redirectPath: string }) => {
+export const handleNewUsername = async ({ username, redirectPath }: { username: string; redirectPath?: string }) => {
   const user = await getUser({ username })
-  if (user) {
+  if (user && redirectPath) {
     redirect(redirectPath)
   }
 
@@ -150,7 +150,9 @@ export const handleNewUsername = async ({ username, redirectPath }: { username: 
       error: null,
     }
     await insertUser({ user })
-    redirect(redirectPath)
+    if (redirectPath) {
+      redirect(redirectPath)
+    }
     return { error: false, found: true }
   }
 
@@ -425,7 +427,7 @@ export const getStatistics = cache(
   { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
 )
 
-export const createPair = async ({ usernames }: { usernames: string[] }) => {
+export const createPair = async ({ usernames, shouldRedirect }: { usernames: string[]; shouldRedirect?: boolean }) => {
   const [user1lowercaseUsername, user2lowercaseUsername] = [usernames[0].toLowerCase(), usernames[1].toLowerCase()].sort()
 
   console.log('creating pair', user1lowercaseUsername, user2lowercaseUsername)
@@ -441,6 +443,9 @@ export const createPair = async ({ usernames }: { usernames: string[] }) => {
 
   if (result.length !== 1) {
     throw new Error('Expected to create exactly one pair, but got ' + result.length)
+  }
+  if (shouldRedirect) {
+    redirect(`/${usernames[0]}/${usernames[1]}`)
   }
 
   return result[0]
