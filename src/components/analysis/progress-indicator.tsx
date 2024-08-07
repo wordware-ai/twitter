@@ -1,4 +1,4 @@
-import { PiCheckCircle, PiCircle, PiCrown, PiLock, PiLockKey, PiSpinner } from 'react-icons/pi'
+import { PiCheckCircle, PiCircle, PiLockKey, PiSpinner } from 'react-icons/pi'
 
 import { Steps } from '@/hooks/twitter-analysis'
 import { cn } from '@/lib/utils'
