@@ -71,6 +71,13 @@
       "when": 1722620352228,
       "tag": "0009_rapid_vulcan",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1723013114197,
+      "tag": "0010_secret_susan_delgado",
+      "breakpoints": true
     }
   ]
 }
