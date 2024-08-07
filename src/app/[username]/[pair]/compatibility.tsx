@@ -9,6 +9,26 @@ import AnalysisCard from '../analysis-card'
 
 export type CompatibilityAnalysis = {
   [key: string]: string | { title: string; subtitle: string }[] | string[] | undefined
+  personOnePersonality: string
+  personTwoPersonality: string
+  personalityTypeMatch: string
+  characteristics: string
+  threat: string
+  crazy: string
+  dynamic: string
+  financialCompatibility: string
+  emotionalCompatibility: string
+  communicationstyleCompatibility: string
+  disagreements: string
+  goalsAligment: string
+  freeTime: string
+  breakupPercentage: string
+  makingMillionsWithIdea: string
+  bestIdeaToWork: string
+  yc: string
+  marriage: string
+  divorce: string
+  overallCompability: string
 }
 
 type CompatibilityProps = {

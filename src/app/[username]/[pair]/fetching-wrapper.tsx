@@ -1,18 +1,21 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { PiCheckCircle, PiCircle, PiSpinner, PiXLogo } from 'react-icons/pi'
 
 import { processScrapedUser } from '@/actions/actions'
+import WordwareLogo from '@/components/logo'
 import NewPairForm from '@/components/new-pair-form'
+import PHButton from '@/components/ph-button'
+import { Button } from '@/components/ui/button'
 import { SelectUser } from '@/drizzle/schema'
 import { analysisPlaceholder } from '@/lib/constants'
 import { parsePartialJson } from '@/lib/parse-partial-json'
+import { cn } from '@/lib/utils'
 
-import ActionButtons from './action-buttons'
 import { Analysis, TwitterAnalysis } from './analysis'
-import { ProgressIndicator, StepIndicator } from './progress-indicator'
 
-export type Steps = {
+type Steps = {
   profileScraped: boolean
   tweetScrapeStarted: boolean
   tweetScrapeCompleted: boolean
@@ -176,33 +179,171 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
 
   return (
     <div className="flex-center flex-col gap-8">
-      <ProgressIndicator
-        steps={steps}
-        result={result}
-        userUnlocked={user.unlocked || false}
-      />
+      <div className="absolute left-0 top-0 z-50 bg-black text-xs text-white">
+        {/* <pre>{JSON.stringify(steps, null, 2)}</pre> */}
+        {/* <pre>{JSON.stringify(user, null, 2)}</pre> */}
+      </div>
+      {/* Progress indicator */}
+      <div
+        className={cn(
+          'w-full max-w-[280px] flex-col items-center justify-center gap-4',
+          steps.wordwareCompleted ? (!result?.loveLife && user.unlocked ? (steps.paidWordwareCompleted ? 'hidden' : 'flex') : 'hidden') : 'flex',
+        )}>
+        {/* Profile check step */}
+        <div className="flex-center w-full gap-8">
+          {steps.profileScraped ? (
+            <PiCheckCircle
+              className="text-green-500"
+              size={24}
+            />
+          ) : (
+            <PiCircle
+              className="text-gray-500"
+              size={24}
+            />
+          )}
 
-      <ActionButtons
-        result={result}
-        username={user.username}
-      />
+          <div>Checking who you are</div>
+        </div>
+        {/* Tweet scraping step */}
+        <div className="flex-center w-full gap-4">
+          {steps.tweetScrapeStarted ? (
+            steps.tweetScrapeCompleted ? (
+              <PiCheckCircle
+                className="text-green-500"
+                size={24}
+              />
+            ) : (
+              <PiSpinner
+                className="animate-spin text-blue-500"
+                size={24}
+              />
+            )
+          ) : (
+            <PiCircle
+              className="text-gray-500"
+              size={24}
+            />
+          )}
 
+          <div>Reading your Tweets</div>
+        </div>
+        {/* Wordware analysis step */}
+        <div className="flex-center w-full gap-4">
+          {steps.wordwareStarted ? (
+            steps.wordwareCompleted ? (
+              <PiCheckCircle
+                className="text-green-500"
+                size={24}
+              />
+            ) : (
+              <PiSpinner
+                className="animate-spin text-blue-500"
+                size={24}
+              />
+            )
+          ) : (
+            <PiCircle
+              className="text-gray-500"
+              size={24}
+            />
+          )}
+
+          <div>Creating your Personality</div>
+        </div>
+        {!result?.loveLife && user.unlocked && (
+          <div className="flex-center w-full gap-4">
+            {steps.paidWordwareStarted ? (
+              steps.paidWordwareCompleted ? (
+                <PiCheckCircle
+                  className="text-green-500"
+                  size={24}
+                />
+              ) : (
+                <PiSpinner
+                  className="animate-spin text-blue-500"
+                  size={24}
+                />
+              )
+            ) : (
+              <PiCircle
+                className="text-gray-500"
+                size={24}
+              />
+            )}
+
+            <div>Extending your Personality</div>
+          </div>
+        )}
+      </div>
+      {/* Action buttons */}
+      <div className="flex flex-col gap-6">
+        <div className="flex-center flex-wrap gap-4">
+          {/* Twitter Profile Button */}
+          <PHButton text="Support us!" />
+          {result?.about && (
+            <Button
+              size={'sm'}
+              asChild>
+              <a
+                target="_blank"
+                className="flex-center gap-2"
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`this is my Twitter Personality analysis by AI Agent, built on @wordware_ai`)}&url=${encodeURIComponent(`https://twitter.wordware.ai/${user.username}`)}`}>
+                <PiXLogo /> Share
+              </a>
+            </Button>
+          )}
+          {/* Wordware Button */}
+          <Button
+            size={'sm'}
+            asChild>
+            <a
+              className="flex-center gap-2"
+              target="_blank"
+              href="https://wordware.ai/">
+              <WordwareLogo
+                emblemOnly
+                color="white"
+                width={20}
+              />
+              Wordware
+            </a>
+          </Button>
+        </div>
+      </div>
       <div className="flex-center w-full flex-col gap-4">
         <div className="text-center text-lg font-light">Add new user to find if you are compatible souls</div>
         <NewPairForm />
       </div>
 
+      {/* Render the analysis result */}
       <Analysis
         unlocked={user.unlocked || false}
         // userData={result}
         userData={prepareUserData(result, user.unlocked || false)}
       />
-      {!result?.loveLife && user.unlocked && (
-        <StepIndicator
-          started={steps.paidWordwareStarted}
-          completed={steps.paidWordwareCompleted}
-          text="Extending your Personality"
-        />
+      {!result?.loveLife && user.unlocked && !steps.paidWordwareCompleted && (
+        <div className="flex-center w-full gap-4">
+          {steps.paidWordwareStarted ? (
+            steps.paidWordwareCompleted ? (
+              <PiCheckCircle
+                className="text-green-500"
+                size={24}
+              />
+            ) : (
+              <PiSpinner
+                className="animate-spin text-blue-500"
+                size={24}
+              />
+            )
+          ) : (
+            <PiCircle
+              className="text-gray-500"
+              size={24}
+            />
+          )}
+          <div>Unlocking your Personality</div>
+        </div>
       )}
     </div>
   )
