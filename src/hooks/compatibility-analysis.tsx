@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { CompatibilityAnalysis } from '@/components/analysis/compatibility'
 // import { CompatibilityAnalysis } from '@/components/analysis/compatibility'
-import { SelectUser } from '@/drizzle/schema'
+import { SelectPair, SelectUser } from '@/drizzle/schema'
 import { Steps, useTwitterAnalysis } from '@/hooks/twitter-analysis'
 import { parsePartialJson } from '@/lib/parse-partial-json'
 
@@ -12,15 +13,15 @@ export type CompatibilitySteps = {
   compatibilityAnalysisCompleted: boolean
 }
 
-export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser) => {
+export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser, pair: SelectPair) => {
   const { steps: user1Steps, result: user1Result } = useTwitterAnalysis(user1, true)
   const { steps: user2Steps, result: user2Result } = useTwitterAnalysis(user2, true)
-  const [compatibilityResult, setCompatibilityResult] = useState<any>(null)
+  const [compatibilityResult, setCompatibilityResult] = useState<CompatibilityAnalysis | undefined>((pair.analysis as CompatibilityAnalysis) || undefined)
   const [steps, setSteps] = useState<CompatibilitySteps>({
     user1Steps,
     user2Steps,
-    compatibilityAnalysisStarted: false,
-    compatibilityAnalysisCompleted: false,
+    compatibilityAnalysisStarted: pair.wordwareStarted || false,
+    compatibilityAnalysisCompleted: pair.wordwareCompleted || false,
   })
   const effectRan = useRef(false)
 
@@ -38,7 +39,7 @@ export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser) =
   }, [user1.username, user2.username, user1Steps, user2Steps, steps.compatibilityAnalysisStarted])
 
   const handleCompatibilityAnalysis = async (props: { usernames: string[]; full: boolean }) => {
-    const response = await fetch('/api/wordware/compatibility', {
+    const response = await fetch('/api/wordware/pair', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(props),
@@ -61,6 +62,7 @@ export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser) =
         result += decoder.decode(value, { stream: true })
 
         const parsed = parsePartialJson(result) as any
+        console.log('🟣 | file: compatibility-analysis.tsx:64 | handleCompatibilityAnalysis | parsed:', parsed)
 
         setCompatibilityResult({ ...parsed })
       }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { PiXThin } from 'react-icons/pi'
 
-import { findOrCreatePair, getUser } from '@/actions/actions'
+import { getOrCreatePair, getUser } from '@/actions/actions'
 import Topbar from '@/components/top-bar'
 
 import PairComponent from '../../../components/analysis/pair-component'
@@ -10,7 +10,7 @@ import { ProfileHighlight } from '../../../components/analysis/profile-highlight
 const PairPage = async ({ params: { username, usernamePair } }: { params: { username: string; usernamePair: string } }) => {
   //ALWAYS SORT THE USER IDS SO WE CAN USE THEM AS KEYS
   const [username1, username2] = [username, usernamePair].sort()
-  const pair = await findOrCreatePair(username1, username2)
+  const pair = await getOrCreatePair({ usernames: [username1, username2] })
   const [user1, user2] = await Promise.all([getUser({ username: username1 }), getUser({ username: username2 })])
 
   if (!user1 || !user2) return <div>Pair does not exist</div>
@@ -30,7 +30,10 @@ const PairPage = async ({ params: { username, usernamePair } }: { params: { user
         </div>
       </div>
 
-      <PairComponent users={[user1, user2]} />
+      <PairComponent
+        users={[user1, user2]}
+        pair={pair}
+      />
     </div>
   )
 }

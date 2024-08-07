@@ -1,5 +1,5 @@
 import { getUser, updateUser } from '@/actions/actions'
-import { TwitterAnalysis } from '@/app/[username]/result'
+import { TwitterAnalysis } from '@/components/analysis/analysis'
 
 /**
  * Maximum duration for the API route execution (in seconds)

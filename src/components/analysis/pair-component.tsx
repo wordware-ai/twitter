@@ -1,13 +1,13 @@
 'use client'
 
-import { SelectUser } from '@/drizzle/schema'
+import { SelectPair, SelectUser } from '@/drizzle/schema'
 import { useCompatibilityAnalysis } from '@/hooks/compatibility-analysis'
 
 import { ProgressIndicator, StepIndicator } from './progress-indicator'
 
-const PairComponent = ({ users }: { users: SelectUser[] }) => {
+const PairComponent = ({ users, pair }: { users: SelectUser[]; pair: SelectPair }) => {
   const [user1, user2] = users.sort()
-  const { steps, user1Steps, user1Result, user2Steps, user2Result, compatibilityResult } = useCompatibilityAnalysis(user1, user2)
+  const { steps, user1Steps, user1Result, user2Steps, user2Result, compatibilityResult } = useCompatibilityAnalysis(user1, user2, pair)
 
   return (
     <div className="flex-center w-full flex-col gap-8">
@@ -35,7 +35,8 @@ const PairComponent = ({ users }: { users: SelectUser[] }) => {
         text="Compatibility Analysis"
       />
       <pre>{JSON.stringify(steps, null, 2)}</pre>
-      <pre>{JSON.stringify(compatibilityResult, null, 2)}</pre>
+      <pre className="max-w-lg whitespace-pre-wrap">{JSON.stringify(compatibilityResult, null, 2)}</pre>
+      <pre>{JSON.stringify(pair, null, 2)}</pre>
     </div>
   )
 }
