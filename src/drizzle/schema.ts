@@ -38,6 +38,7 @@ export const users = pgTable(
     return {
       usernameIdx: index('username_idx').on(table.username),
       lowercaseUsernameIdx: index('lowercase_username_idx').on(table.lowercaseUsername),
+      createdAtIndex: index('created_at_index').on(table.createdAt),
     }
   },
 )
