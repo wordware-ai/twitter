@@ -4,8 +4,8 @@ import React from 'react'
 
 import { Markdown } from '@/components/markdown'
 
+import { cardData } from '../../lib/wordware-config'
 import AnalysisCard from './analysis-card'
-import { cardData } from './config'
 import { PaywallCard } from './paywall-card'
 import { WordwareCard } from './wordware-card'
 

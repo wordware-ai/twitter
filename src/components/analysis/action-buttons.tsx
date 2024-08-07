@@ -1,9 +1,10 @@
 import { PiXLogo } from 'react-icons/pi'
 
-import { TwitterAnalysis } from '@/app/[username]/analysis'
 import WordwareLogo from '@/components/logo'
 import PHButton from '@/components/ph-button'
 import { Button } from '@/components/ui/button'
+
+import { TwitterAnalysis } from './analysis'
 
 type ActionButtonsProps = {
   result: TwitterAnalysis | undefined

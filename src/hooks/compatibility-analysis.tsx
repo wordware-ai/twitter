@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { SelectUser } from '@/drizzle/schema'
 import { Steps, useTwitterAnalysis } from '@/hooks/twitter-analysis'
@@ -20,9 +20,12 @@ export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser) =
     compatibilityAnalysisStarted: false,
     compatibilityAnalysisCompleted: false,
   })
+  const effectRan = useRef(false)
 
   useEffect(() => {
-    if (user1Steps.wordwareCompleted && user2Steps.wordwareCompleted && !steps.compatibilityAnalysisStarted) {
+    if (user1Steps.tweetScrapeCompleted && user2Steps.tweetScrapeCompleted && !steps.compatibilityAnalysisStarted) {
+      if (effectRan.current) return
+      effectRan.current = true
       setSteps((prev) => ({ ...prev, compatibilityAnalysisStarted: true }))
       // Here you would call your compatibility analysis API
       // For now, we'll just simulate it with a timeout

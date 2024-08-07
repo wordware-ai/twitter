@@ -4,8 +4,8 @@ import { PiXThin } from 'react-icons/pi'
 import { getUser } from '@/actions/actions'
 import Topbar from '@/components/top-bar'
 
-import { ProfileHighlight } from '../_components/profile-highlight'
-import PairComponent from './pair-component'
+import PairComponent from '../../../components/analysis/pair-component'
+import { ProfileHighlight } from '../../../components/analysis/profile-highlight'
 
 const PairPage = async ({ params: { username, pair } }: { params: { username: string; pair: string } }) => {
   //ALWAYS SORT THE USER IDS SO WE CAN USE THEM AS KEYS

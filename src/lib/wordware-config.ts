@@ -177,7 +177,7 @@ export const cardData = [
 // The 'icon', 'colorClass', and 'bg' properties are used for styling.
 // The 'contentKey' is used to fetch the appropriate content for each card.
 
-export const compatibilityCardData = [
+export const compatibilityConfig = [
   {
     title: 'Person One Personality',
     icon: PiUsers,

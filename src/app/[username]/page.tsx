@@ -5,10 +5,10 @@ import { Metadata } from 'next/types'
 import { getUser } from '@/actions/actions'
 import NewUsernameForm from '@/components/new-username-form'
 
-import Topbar from '../../components/top-bar'
-import { ProfileHighlight } from './_components/profile-highlight'
+import { ProfileHighlight } from '../../components/analysis/profile-highlight'
 // import PHPopup from './ph-popup'
-import ResultComponent from './_components/result-component'
+import ResultComponent from '../../components/analysis/result-component'
+import Topbar from '../../components/top-bar'
 
 export const maxDuration = 300
 export const dynamic = 'force-dynamic'

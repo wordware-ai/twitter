@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { processScrapedUser } from '@/actions/actions'
-import { TwitterAnalysis } from '@/app/[username]/_components/analysis'
+import { TwitterAnalysis } from '@/components/analysis/analysis'
 import { SelectUser } from '@/drizzle/schema'
 import { parsePartialJson } from '@/lib/parse-partial-json'
 
