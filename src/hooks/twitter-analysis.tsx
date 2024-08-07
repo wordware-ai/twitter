@@ -37,14 +37,15 @@ export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = 
       if (shouldRunTweetScrape(user)) {
         tweetScrapeCompleted = await runTweetScrape(user, setSteps)
       }
+      let currentResult: TwitterAnalysis | undefined = undefined
 
       if (disableAnalysis) return
       if (shouldRunWordwareAnalysis(user, tweetScrapeCompleted || false)) {
-        await runWordwareAnalysis(user, setSteps)
+        currentResult = (await runWordwareAnalysis(user, setSteps)) as TwitterAnalysis
       }
 
       if (shouldRunPaidWordwareAnalysis(user, result)) {
-        await runPaidWordwareAnalysis(user, setSteps)
+        await runPaidWordwareAnalysis(user, setSteps, currentResult)
       }
     }
 
@@ -63,7 +64,7 @@ export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = 
     }
   }
 
-  const handleTweetAnalysis = async (props: { username: string; full: boolean }) => {
+  const handleTweetAnalysis = async (props: { username: string; full: boolean; currentAnalysis?: TwitterAnalysis | undefined }) => {
     const response = await fetch('/api/wordware', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -87,7 +88,11 @@ export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = 
         result += decoder.decode(value, { stream: true })
 
         const parsed = parsePartialJson(result) as TwitterAnalysis
-        const existingAnalysis = user.analysis as TwitterAnalysis
+
+        const existingAnalysis = {
+          ...(user.analysis as TwitterAnalysis),
+          ...props.currentAnalysis,
+        }
 
         setResult({ ...existingAnalysis, ...parsed })
       }
@@ -104,8 +109,9 @@ export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = 
 
   const shouldRunWordwareAnalysis = (user: SelectUser, tweetScrapeCompleted: boolean): boolean => {
     return (
-      (tweetScrapeCompleted && !user.wordwareStarted) ||
-      (tweetScrapeCompleted && !user.wordwareCompleted && Date.now() - user.wordwareStartedTime.getTime() > 60 * 1000)
+      (user.unlocked && tweetScrapeCompleted && !user.wordwareStarted) ||
+      (user.unlocked && tweetScrapeCompleted && !user.wordwareCompleted && Date.now() - user.wordwareStartedTime.getTime() > 60 * 1000) ||
+      false
     )
   }
 
@@ -134,13 +140,14 @@ export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = 
 
   const runWordwareAnalysis = async (user: SelectUser, setSteps: React.Dispatch<React.SetStateAction<Steps>>) => {
     setSteps((prev) => ({ ...prev, wordwareStarted: true }))
-    await handleTweetAnalysis({ username: user.username, full: false })
+    const result = await handleTweetAnalysis({ username: user.username, full: false })
     setSteps((prev) => ({ ...prev, wordwareCompleted: true }))
+    return result as TwitterAnalysis
   }
 
-  const runPaidWordwareAnalysis = async (user: SelectUser, setSteps: React.Dispatch<React.SetStateAction<Steps>>) => {
+  const runPaidWordwareAnalysis = async (user: SelectUser, setSteps: React.Dispatch<React.SetStateAction<Steps>>, result: TwitterAnalysis | undefined) => {
     setSteps((prev) => ({ ...prev, paidWordwareStarted: true }))
-    await handleTweetAnalysis({ username: user.username, full: true })
+    await handleTweetAnalysis({ username: user.username, full: true, currentAnalysis: result })
     setSteps((prev) => ({ ...prev, paidWordwareCompleted: true }))
   }
 
