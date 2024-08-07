@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 
+// import { CompatibilityAnalysis } from '@/components/analysis/compatibility'
 import { SelectUser } from '@/drizzle/schema'
 import { Steps, useTwitterAnalysis } from '@/hooks/twitter-analysis'
+import { parsePartialJson } from '@/lib/parse-partial-json'
 
 export type CompatibilitySteps = {
   user1Steps: Steps
@@ -26,17 +28,49 @@ export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser) =
     if (user1Steps.tweetScrapeCompleted && user2Steps.tweetScrapeCompleted && !steps.compatibilityAnalysisStarted) {
       if (effectRan.current) return
       effectRan.current = true
-      setSteps((prev) => ({ ...prev, compatibilityAnalysisStarted: true }))
-      // Here you would call your compatibility analysis API
-      // For now, we'll just simulate it with a timeout
-      setTimeout(() => {
-        setCompatibilityResult({
-          foo: 'bar',
-        })
+      ;(async () => {
+        setSteps((prev) => ({ ...prev, compatibilityAnalysisStarted: true }))
+        const usernames = [user1.username, user2.username].sort()
+        await handleCompatibilityAnalysis({ usernames, full: true })
         setSteps((prev) => ({ ...prev, compatibilityAnalysisCompleted: true }))
-      }, 3000)
+      })()
     }
-  }, [user1Steps, user2Steps, steps.compatibilityAnalysisStarted])
+  }, [user1.username, user2.username, user1Steps, user2Steps, steps.compatibilityAnalysisStarted])
+
+  const handleCompatibilityAnalysis = async (props: { usernames: string[]; full: boolean }) => {
+    const response = await fetch('/api/wordware/compatibility', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(props),
+    })
+
+    if (!response.body) {
+      console.error('No response body')
+      return
+    }
+
+    const reader = response.body.getReader()
+    const decoder = new TextDecoder()
+    let result = ''
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        result += decoder.decode(value, { stream: true })
+
+        const parsed = parsePartialJson(result) as any
+
+        setCompatibilityResult({ ...parsed })
+      }
+    } catch (error) {
+      console.error('Error reading stream', error)
+    } finally {
+      reader.releaseLock()
+      return parsePartialJson(result)
+    }
+  }
 
   return { steps, user1Steps, user1Result, user2Steps, user2Result, compatibilityResult }
 }

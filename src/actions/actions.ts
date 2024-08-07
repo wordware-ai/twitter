@@ -3,11 +3,11 @@
 import { unstable_cache as cache, unstable_noStore as noStore, revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { ApifyClient } from 'apify-client'
-import { desc, eq, inArray, sql } from 'drizzle-orm'
+import { and, desc, eq, inArray, sql } from 'drizzle-orm'
 
 import { UserCardData } from '@/app/top-list'
 import { db } from '@/drizzle/db'
-import { InsertUser, SelectUser, users } from '@/drizzle/schema'
+import { InsertUser, pairs, SelectUser, users } from '@/drizzle/schema'
 
 import { fetchUserData } from './profile-scraper'
 
@@ -428,13 +428,31 @@ export const getStatistics = cache(
 export const createPair = async (userId1: string, userId2: string) => {
   const [user1Id, user2Id] = [userId1, userId2].sort()
 
-  console.log({
-    user1Id,
-    user2Id,
-  })
+  return await db
+    .insert(pairs)
+    .values({
+      user1Id,
+      user2Id,
+    })
+    .returning()
+}
 
-  // return await db.insert(pairs).values({
-  //   user1Id,
-  //   user2Id,
-  // }).returning();
+export const findPair = async (userId1: string, userId2: string) => {
+  const [user1Id, user2Id] = [userId1, userId2].sort()
+
+  return await db
+    .select()
+    .from(pairs)
+    .where(and(eq(pairs.user1Id, user1Id), eq(pairs.user2Id, user2Id)))
+    .limit(1)
+}
+
+export const findOrCreatePair = async (userId1: string, userId2: string) => {
+  const existingPair = await findPair(userId1, userId2)
+
+  if (existingPair.length > 0) {
+    return existingPair[0]
+  }
+
+  return await createPair(userId1, userId2)
 }
