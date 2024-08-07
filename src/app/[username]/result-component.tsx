@@ -88,6 +88,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
           await handleTweetAnalysis({
             username: user.username,
             full: false,
+            existingAnalysis: result ?? {},
           })
 
           wordwarePart1Completed = true
@@ -118,6 +119,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
           await handleTweetAnalysis({
             username: user.username,
             full: true,
+            existingAnalysis: {},
           })
 
           // Update state to indicate Wordware analysis is completed
@@ -130,7 +132,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
     })()
   }, []) // Effect depends on user data
 
-  const handleTweetAnalysis = async (props: { username: string; full: boolean }) => {
+  const handleTweetAnalysis = async (props: { username: string; full: boolean; existingAnalysis: TwitterAnalysis }) => {
     const response = await fetch('/api/wordware', {
       method: 'POST',
       headers: {
@@ -156,9 +158,8 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
         result += decoder.decode(value, { stream: true })
 
         const parsed = parsePartialJson(result) as TwitterAnalysis
-        const existingAnalysis = user.analysis as TwitterAnalysis
 
-        setResult({ ...existingAnalysis, ...parsed })
+        setResult({ ...props.existingAnalysis, ...parsed })
       }
     } catch (error) {
       console.error('Error reading stream', error)
