@@ -8,12 +8,12 @@ import WordwareLogo from '@/components/logo'
 import NewPairForm from '@/components/new-pair-form'
 import PHButton from '@/components/ph-button'
 import { Button } from '@/components/ui/button'
-import { SelectUser } from '@/drizzle/schema'
+import { SelectPair, SelectUser } from '@/drizzle/schema'
 import { analysisPlaceholder } from '@/lib/constants'
 import { parsePartialJson } from '@/lib/parse-partial-json'
 import { cn } from '@/lib/utils'
 
-import { Analysis, TwitterAnalysis } from './analysis'
+import { CompatibilityAnalysis } from './compatibility'
 
 type Steps = {
   profileScraped: boolean
@@ -25,7 +25,7 @@ type Steps = {
   paidWordwareCompleted: boolean
 }
 
-const ResultComponent = ({ user }: { user: SelectUser }) => {
+const ResultComponent = ({ users, pair }: { users: SelectUser[]; pair: SelectPair }) => {
   // State to track the progress of analysis steps
   const [steps, setSteps] = useState<Steps>({
     profileScraped: user.profileScraped || false,
@@ -38,7 +38,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
   })
 
   // State to store the result of Twitter analysis
-  const [result, setResult] = useState<TwitterAnalysis | undefined>((user.analysis as TwitterAnalysis) || undefined)
+  const [compatibilityResult, setCompatibilityResult] = useState<CompatibilityAnalysis | undefined>((pair.analysis as CompatibilityAnalysis) || undefined)
   const effectRan = useRef(false)
 
   useEffect(() => {
