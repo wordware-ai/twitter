@@ -45,7 +45,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
         url={`https://twitter.wordware.ai/${user.username}`}
       />
 
-      {searchParams.get('password') === 'supersecret' && (
+      {searchParams.get('password') === process.env.NEXT_PUBLIC_PAIR_PASSWORD && (
         <div className="flex-center w-full flex-col gap-4">
           <div className="text-center text-lg font-light">Add new user to find if you are compatible souls</div>
           <NewPairForm />

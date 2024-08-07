@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 import { CompatibilityAnalysis } from '@/components/analysis/compatibility'
 // import { CompatibilityAnalysis } from '@/components/analysis/compatibility'
@@ -14,6 +15,9 @@ export type CompatibilitySteps = {
 }
 
 export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser, pair: SelectPair) => {
+  const searchParams = useSearchParams()
+  const password = searchParams.get('password')
+
   const { steps: user1Steps, result: user1Result } = useTwitterAnalysis(user1, true)
   const { steps: user2Steps, result: user2Result } = useTwitterAnalysis(user2, true)
   const [compatibilityResult, setCompatibilityResult] = useState<CompatibilityAnalysis | undefined>((pair.analysis as CompatibilityAnalysis) || undefined)
@@ -26,6 +30,7 @@ export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser, p
   const effectRan = useRef(false)
 
   useEffect(() => {
+    if (password !== 'supersecret') return
     if (user1Steps.tweetScrapeCompleted && user2Steps.tweetScrapeCompleted && !steps.compatibilityAnalysisStarted) {
       if (effectRan.current) return
       effectRan.current = true
