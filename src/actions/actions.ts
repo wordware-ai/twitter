@@ -9,7 +9,7 @@ import { UserCardData } from '@/app/top-list'
 import { db } from '@/drizzle/db'
 import { InsertPair, InsertUser, pairs, SelectUser, users } from '@/drizzle/schema'
 
-import { fetchUserData } from './profile-scraper'
+import { fetchUserData, getTweets } from './profile-scraper'
 
 export const getUser = async ({ username }: { username: SelectUser['username'] }) => {
   noStore()
@@ -217,42 +217,51 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
 }
 
 export const scrapeTweets = async ({ username }: { username: string }) => {
-  const input = {
-    startUrls: [`https://twitter.com/${username}`],
-    maxItems: 12,
-    sort: 'Latest',
-    tweetLanguage: 'en',
-    customMapFunction: `(object) => { 
-      return {
-        type: object.type,
-        text: object.text,
-        source: object.source,
-        retweetCount: object.retweetCount,
-        replyCount: object.replyCount,
-        likeCount: object.likeCount,
-        quoteCount: object.quoteCount,
-        viewCount: object.viewCount,
-        createdAt: object.createdAt,
-        lang: object.lang,
-        bookmarkCount: object.bookmarkCount,
-        isReply: object.isReply,
-        fastFollowersCount: object.fastFollowersCount,
-        favouritesCount: object.favouritesCount,
-        isRetweet: object.isRetweet,
-        isQuote: object.isQuote,
-      }
-    }`,
-  }
-
   try {
-    const run = await apifyClient.actor('apidojo/tweet-scraper').call(input)
-    const { items: tweets } = await apifyClient.dataset(run.defaultDatasetId).listItems()
-
+    const tweets = await getTweets(username)
+    if (!tweets) throw new Error('No tweets found')
+    console.log('YASSS JABADABADU')
     return { data: tweets, error: null }
   } catch (error) {
-    return {
-      data: null,
-      error: error,
+    //FALLBACK - APIFY
+
+    const input = {
+      startUrls: [`https://twitter.com/${username}`],
+      maxItems: 12,
+      sort: 'Latest',
+      tweetLanguage: 'en',
+      customMapFunction: `(object) => { 
+        return {
+          type: object.type,
+          text: object.text,
+          source: object.source,
+          retweetCount: object.retweetCount,
+          replyCount: object.replyCount,
+          likeCount: object.likeCount,
+          quoteCount: object.quoteCount,
+          viewCount: object.viewCount,
+          createdAt: object.createdAt,
+          lang: object.lang,
+          bookmarkCount: object.bookmarkCount,
+          isReply: object.isReply,
+          fastFollowersCount: object.fastFollowersCount,
+          favouritesCount: object.favouritesCount,
+          isRetweet: object.isRetweet,
+          isQuote: object.isQuote,
+        }
+      }`,
+    }
+
+    try {
+      const run = await apifyClient.actor('apidojo/tweet-scraper').call(input)
+      const { items: tweets } = await apifyClient.dataset(run.defaultDatasetId).listItems()
+
+      return { data: tweets, error: null }
+    } catch (error) {
+      return {
+        data: null,
+        error: error,
+      }
     }
   }
 }
