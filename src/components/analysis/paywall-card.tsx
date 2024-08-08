@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { PAYWALL } from '@/lib/config'
 import { cn } from '@/lib/utils'
 
 const FormSchema = z.object({
@@ -24,7 +25,7 @@ export const PriceButton = ({ username, price }: { username: string; price: stri
     onClick={() => {
       createCheckoutSession({ username, priceInt: parseInt(price) })
     }}
-    className="w-full bg-green-600 hover:bg-green-700"
+    className={cn('w-full bg-green-600 hover:bg-green-700', !PAYWALL && 'max-w-sm')}
     type="button">
     Unlock Full Analysis (${parseInt(price) / 100})
   </Button>

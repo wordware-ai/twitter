@@ -9,3 +9,7 @@ export const getURL = () => {
   url = url.charAt(url.length - 1) === '/' ? url : `${url}/`
   return url
 }
+
+//TRUE if user has to pay for the service
+//FALSE if paywall is disabled
+export const PAYWALL = false

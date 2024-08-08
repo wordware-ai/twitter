@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { processScrapedUser } from '@/actions/actions'
 import { TwitterAnalysis } from '@/components/analysis/analysis'
 import { SelectUser } from '@/drizzle/schema'
+import { PAYWALL } from '@/lib/config'
 import { parsePartialJson } from '@/lib/parse-partial-json'
 
 export type Steps = {
@@ -22,6 +23,7 @@ export type Steps = {
  * @param {boolean} [disableAnalysis=false] - Flag to disable the analysis process.
  * @returns {Object} An object containing the analysis steps and results.
  */
+
 export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = false) => {
   const [steps, setSteps] = useState<Steps>(initializeSteps(user))
   const [result, setResult] = useState<TwitterAnalysis | undefined>((user.analysis as TwitterAnalysis) || undefined)
@@ -103,18 +105,17 @@ export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = 
       return parsePartialJson(result)
     }
   }
+
   const shouldRunTweetScrape = (user: SelectUser): boolean => {
-    return (
-      (user.unlocked || false) &&
-      (!user.tweetScrapeStarted || (!user.tweetScrapeCompleted && Date.now() - user.tweetScrapeStartedTime.getTime() > 1 * 60 * 1000))
-    )
+    const unlockedCheck = PAYWALL ? user.unlocked || false : true
+    return unlockedCheck && (!user.tweetScrapeStarted || (!user.tweetScrapeCompleted && Date.now() - user.tweetScrapeStartedTime.getTime() > 1 * 60 * 1000))
   }
 
   const shouldRunWordwareAnalysis = (user: SelectUser, tweetScrapeCompleted: boolean): boolean => {
+    const unlockedCheck = PAYWALL ? user.unlocked || false : true
     return (
-      (user.unlocked && tweetScrapeCompleted && !user.wordwareStarted) ||
-      (user.unlocked && tweetScrapeCompleted && !user.wordwareCompleted && Date.now() - user.wordwareStartedTime.getTime() > 60 * 1000) ||
-      false
+      (unlockedCheck && tweetScrapeCompleted && !user.wordwareStarted) ||
+      (unlockedCheck && tweetScrapeCompleted && !user.wordwareCompleted && Date.now() - user.wordwareStartedTime.getTime() > 60 * 1000)
     )
   }
 
