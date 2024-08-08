@@ -16,6 +16,7 @@ const MostVisited = async ({ mostVisited }: { mostVisited: Array<{ name: string;
             {await Promise.all(
               mostVisited.slice(0, 50).map(async ({ name, visits }, index) => {
                 const user = await getUserCached({ username: name })
+                if (!user?.username) return null
                 return (
                   <li
                     key={name}
@@ -55,6 +56,7 @@ const MostVisited = async ({ mostVisited }: { mostVisited: Array<{ name: string;
             {await Promise.all(
               mostVisited.slice(50, 100).map(async ({ name, visits }, index) => {
                 const user = await getUserCached({ username: name })
+                if (!user?.username) return null
                 return (
                   <li
                     key={name}
