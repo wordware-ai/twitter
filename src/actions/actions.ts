@@ -243,7 +243,7 @@ export const scrapeTweets = async ({ twitterUserID, username }: { twitterUserID?
   if (twitterUserID) {
     try {
       const tweets = await fetchAndParseSocialDataTweets(twitterUserID)
-      console.log(`[${username}] ✅ SocialData ID Tweets: ${tweets.length}`)
+      console.log(`[${username}] ✅ SocialData ID Tweets: ${tweets.length} (1/4)`)
       return { data: tweets, error: null }
     } catch (error) {
       console.log(`[${username}] ⚠️ Erros SocialData ID Tweets (Attempt 1/4)`, error)
@@ -253,7 +253,7 @@ export const scrapeTweets = async ({ twitterUserID, username }: { twitterUserID?
 
   try {
     const tweets = await fetchAndParseSocialDataTweetsByUsername(username)
-    console.log(`[${username}] ✅ SocialData Username Tweets: ${tweets.length}`)
+    console.log(`[${username}] ✅ SocialData Username Tweets: ${tweets.length} (2/4)`)
     return { data: tweets, error: null }
   } catch (error) {
     console.log(`[${username}] ⚠️ Erros SocialData Tweets (Attempt 2/4)`, error)
@@ -264,10 +264,10 @@ export const scrapeTweets = async ({ twitterUserID, username }: { twitterUserID?
   try {
     const tweets = await getTweets(username)
     if (!tweets || tweets.length === 0) throw new Error('No tweets found')
-    console.log(`[${username}] ✅ TimelineWidget Tweets: ${tweets.length}`)
+    console.log(`[${username}] ✅ TimelineWidget Tweets: ${tweets.length} (3/4)`)
     return { data: tweets, error: null }
   } catch (error) {
-    console.log(`[${username}] ⚠️ Error TimelineWidget Tweets (Attempt 2/4)`, error)
+    console.log(`[${username}] ⚠️ Error TimelineWidget Tweets (Attempt 3/4)`, error)
     // Continue to fallback method if this fails
   }
 
@@ -304,7 +304,7 @@ export const scrapeTweets = async ({ twitterUserID, username }: { twitterUserID?
     const run = await apifyClient.actor('apidojo/tweet-scraper').call(input)
     const { items: tweets } = await apifyClient.dataset(run.defaultDatasetId).listItems()
     if (!tweets || tweets.length === 0) throw new Error('No tweets found with Apify')
-    console.log(`[${username}] ✅ Apify Tweets: ${tweets.length}`)
+    console.log(`[${username}] ✅ Apify Tweets: ${tweets.length} (4/4)`)
     return { data: tweets, error: null }
   } catch (error) {
     console.error(`[${username}] ⚠️ Error fetching tweets with Apify (Attempt 4/4)`, error)
