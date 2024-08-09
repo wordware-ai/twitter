@@ -48,7 +48,8 @@ export const getMostVisited = cache(
     })
     const data = await response.json()
     const insights = data.result
-    const mostVisited = insights
+    const filteredInsights = insights.filter((item: any) => item.label !== 'open')
+    const mostVisited = filteredInsights
       .map((item: any) => ({
         name: item.label.replace('/', ''),
         visits: item.aggregated_value,

@@ -7,7 +7,7 @@ import { CumulativeUsersChart, TrafficChart, UniqueUsersChart } from './charts'
 import LastUpdate from './last-update'
 import MostVisited from './most-visited'
 
-export const maxDuration = 30
+export const maxDuration = 60
 
 const Page = async () => {
   const { chartData, timestamp } = await getStatistics()
