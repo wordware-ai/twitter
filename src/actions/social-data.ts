@@ -95,7 +95,7 @@ export async function fetchAndParseSocialDataTweets(userId: string): Promise<Twe
         quoteCount: tweet.quote_count,
         viewCount: tweet.views_count || 0,
       }))
-      .slice(0, 12)
+      .slice(0, 14)
   } catch (error) {
     console.error(`Error fetching and parsing tweets for user ID ${userId}:`, error)
     throw new Error(`Failed to fetch and parse tweets for user ID ${userId}`)

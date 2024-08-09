@@ -219,15 +219,15 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
 }
 
 export const scrapeTweets = async ({ twitterUserID, username }: { twitterUserID?: string; username: string }) => {
-  console.log('🟣 | scrapeTweets | twitterUserID:', twitterUserID)
+  console.log(`[${username}] twitterUserID:`, twitterUserID)
   // Try fetching tweets from social data if twitterUserID is provided
   if (twitterUserID) {
     try {
       const tweets = await fetchAndParseSocialDataTweets(twitterUserID)
-      console.log(`✅✅SOCIAL DATA SUCCESS✅✅ ${tweets.length}`)
+      console.log(`[${username}] ✅ SocialData Tweets: ${tweets.length}`)
       return { data: tweets, error: null }
     } catch (error) {
-      console.error('Error fetching tweets from social data', error)
+      console.warn(`[${username}] ⚠️ Erros SocialData Tweets (Attempt 1/3)`, error)
       // Continue to next method if this fails
     }
   }
@@ -236,15 +236,15 @@ export const scrapeTweets = async ({ twitterUserID, username }: { twitterUserID?
   try {
     const tweets = await getTweets(username)
     if (!tweets || tweets.length === 0) throw new Error('No tweets found')
-    console.log('getTweets success ✅')
+    console.log(`✅ TimelineWidget Tweets: ${tweets.length} - ${username}`)
     return { data: tweets, error: null }
   } catch (error) {
-    console.error('Error fetching tweets with getTweets', error)
+    console.warn(`[${username}] ⚠️ Error TimelineWidget Tweets (Attempt 2/3)`, error)
     // Continue to fallback method if this fails
   }
 
   // Fallback: Use Apify as a last resort
-  console.log('Using Apify fallback for tweet scraping')
+  console.log(`[${username}] ⚠️ Using Apify fallback for tweet scraping:`)
   const input = {
     startUrls: [`https://twitter.com/${username}`],
     maxItems: 12,
@@ -276,9 +276,10 @@ export const scrapeTweets = async ({ twitterUserID, username }: { twitterUserID?
     const run = await apifyClient.actor('apidojo/tweet-scraper').call(input)
     const { items: tweets } = await apifyClient.dataset(run.defaultDatasetId).listItems()
     if (!tweets || tweets.length === 0) throw new Error('No tweets found with Apify')
+    console.log(`[${username}] ✅ Apify Tweets: ${tweets.length}`)
     return { data: tweets, error: null }
   } catch (error) {
-    console.error('Error fetching tweets with Apify', error)
+    console.error(`[${username}] ⚠️ Error fetching tweets with Apify (Attempt 3/3)`, error)
     return {
       data: null,
       error: 'Failed to fetch tweets from all available methods',

@@ -146,7 +146,7 @@ export async function POST(request: Request) {
                 controller.enqueue(value.value ?? '')
               }
             } else if (value.type === 'outputs') {
-              console.log('✨ here:', value.values.output, '. Now parsing')
+              console.log('✨ Wordware:', value.values.output, '. Now parsing')
               try {
                 const statusObject = full ? { paidWordwareStarted: true, paidWordwareCompleted: true } : { wordwareStarted: true, wordwareCompleted: true }
                 // Update user with the analysis from Wordware
