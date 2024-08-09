@@ -309,7 +309,6 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
     let tweets
     let error
     const twitterUserID = (user.fullProfile as { twitterUserID?: string })?.twitterUserID ?? undefined
-    console.log('🟣 |  processScrapedUser | twitterUserID:', twitterUserID)
 
     try {
       const res = await scrapeTweets({ username, twitterUserID: twitterUserID })
