@@ -25,7 +25,7 @@ export const PriceButton = ({ username, price }: { username: string; price: stri
     onClick={() => {
       createCheckoutSession({ username, priceInt: parseInt(price) })
     }}
-    className={cn('w-full bg-green-600 hover:bg-green-700', !PAYWALL && 'max-w-sm')}
+    className={cn('w-full bg-green-600 hover:bg-green-700', !PAYWALL && 'max-w-md')}
     type="button">
     Unlock Full Analysis (${parseInt(price) / 100})
   </Button>
