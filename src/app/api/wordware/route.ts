@@ -1,22 +1,11 @@
 import { getUser, updateUser } from '@/actions/actions'
+import { TweetType } from '@/actions/types'
 import { TwitterAnalysis } from '@/components/analysis/analysis'
 
 /**
  * Maximum duration for the API route execution (in seconds)
  */
 export const maxDuration = 300
-
-type TweetType = {
-  isRetweet: boolean
-  author: { userName: string }
-  createdAt: string
-  text: string
-  retweetCount: number
-  replyCount: number
-  likeCount: number
-  quoteCount: number
-  viewCount: number
-}
 
 /**
  * POST handler for the Wordware API route
@@ -64,10 +53,7 @@ export async function POST(request: Request) {
 
   const tweets = user.tweets as TweetType[]
 
-  // console.log('Tweets', tweets)
-
   const tweetsMarkdown = tweets.map(formatTweet).join('\n---\n\n')
-  console.log('Tweets markdown', tweetsMarkdown)
 
   const promptID = full ? process.env.WORDWARE_FULL_PROMPT_ID : process.env.WORDWARE_ROAST_PROMPT_ID
 

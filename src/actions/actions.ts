@@ -9,7 +9,9 @@ import { UserCardData } from '@/app/top-list'
 import { db } from '@/drizzle/db'
 import { InsertPair, InsertUser, pairs, SelectUser, users } from '@/drizzle/schema'
 
-import { fetchUserData, getTweets } from './profile-scraper'
+import { fetchAndParseSocialDataTweets } from './social-data'
+import { fetchUserData } from './twitter-api'
+import { getTweets } from './widget-scrape/tweets-widget-scrape'
 
 export const getUser = async ({ username }: { username: SelectUser['username'] }) => {
   noStore()
@@ -216,53 +218,70 @@ export const scrapeProfile = async ({ username }: { username: string }) => {
   }
 }
 
-export const scrapeTweets = async ({ username }: { username: string }) => {
+export const scrapeTweets = async ({ twitterUserID, username }: { twitterUserID?: string; username: string }) => {
+  console.log('🟣 | scrapeTweets | twitterUserID:', twitterUserID)
+  // Try fetching tweets from social data if twitterUserID is provided
+  if (twitterUserID) {
+    try {
+      const tweets = await fetchAndParseSocialDataTweets(twitterUserID)
+      console.log(`✅✅SOCIAL DATA SUCCESS✅✅ ${tweets.length}`)
+      return { data: tweets, error: null }
+    } catch (error) {
+      console.error('Error fetching tweets from social data', error)
+      // Continue to next method if this fails
+    }
+  }
+
+  // Try fetching tweets using getTweets function
   try {
     const tweets = await getTweets(username)
-    if (!tweets) throw new Error('No tweets found')
-
+    if (!tweets || tweets.length === 0) throw new Error('No tweets found')
     console.log('getTweets success ✅')
     return { data: tweets, error: null }
   } catch (error) {
-    //FALLBACK - APIFY
+    console.error('Error fetching tweets with getTweets', error)
+    // Continue to fallback method if this fails
+  }
 
-    const input = {
-      startUrls: [`https://twitter.com/${username}`],
-      maxItems: 12,
-      sort: 'Latest',
-      tweetLanguage: 'en',
-      customMapFunction: `(object) => { 
-        return {
-          type: object.type,
-          text: object.text,
-          source: object.source,
-          retweetCount: object.retweetCount,
-          replyCount: object.replyCount,
-          likeCount: object.likeCount,
-          quoteCount: object.quoteCount,
-          viewCount: object.viewCount,
-          createdAt: object.createdAt,
-          lang: object.lang,
-          bookmarkCount: object.bookmarkCount,
-          isReply: object.isReply,
-          fastFollowersCount: object.fastFollowersCount,
-          favouritesCount: object.favouritesCount,
-          isRetweet: object.isRetweet,
-          isQuote: object.isQuote,
-        }
-      }`,
-    }
-
-    try {
-      const run = await apifyClient.actor('apidojo/tweet-scraper').call(input)
-      const { items: tweets } = await apifyClient.dataset(run.defaultDatasetId).listItems()
-
-      return { data: tweets, error: null }
-    } catch (error) {
+  // Fallback: Use Apify as a last resort
+  console.log('Using Apify fallback for tweet scraping')
+  const input = {
+    startUrls: [`https://twitter.com/${username}`],
+    maxItems: 12,
+    sort: 'Latest',
+    tweetLanguage: 'en',
+    customMapFunction: `(object) => { 
       return {
-        data: null,
-        error: error,
+        type: object.type,
+        text: object.text,
+        source: object.source,
+        retweetCount: object.retweetCount,
+        replyCount: object.replyCount,
+        likeCount: object.likeCount,
+        quoteCount: object.quoteCount,
+        viewCount: object.viewCount,
+        createdAt: object.createdAt,
+        lang: object.lang,
+        bookmarkCount: object.bookmarkCount,
+        isReply: object.isReply,
+        fastFollowersCount: object.fastFollowersCount,
+        favouritesCount: object.favouritesCount,
+        isRetweet: object.isRetweet,
+        isQuote: object.isQuote,
       }
+    }`,
+  }
+
+  try {
+    const run = await apifyClient.actor('apidojo/tweet-scraper').call(input)
+    const { items: tweets } = await apifyClient.dataset(run.defaultDatasetId).listItems()
+    if (!tweets || tweets.length === 0) throw new Error('No tweets found with Apify')
+    return { data: tweets, error: null }
+  } catch (error) {
+    console.error('Error fetching tweets with Apify', error)
+    return {
+      data: null,
+      error: 'Failed to fetch tweets from all available methods',
     }
   }
 }
@@ -274,6 +293,11 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
     throw Error(`User not found: ${username}`)
   }
 
+  // If tweets are already scraped, return them
+  if (user.tweetScrapeCompleted) {
+    return user.tweets
+  }
+
   if (!user.tweetScrapeStarted || (!user.tweetScrapeCompleted && Date.now() - user.createdAt.getTime() > 3 * 60 * 1000)) {
     user = {
       ...user,
@@ -283,8 +307,11 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
     await updateUser({ user })
     let tweets
     let error
+    const twitterUserID = (user.fullProfile as { twitterUserID?: string })?.twitterUserID ?? undefined
+    console.log('🟣 |  processScrapedUser | twitterUserID:', twitterUserID)
+
     try {
-      const res = await scrapeTweets({ username })
+      const res = await scrapeTweets({ username, twitterUserID: twitterUserID })
       tweets = res.data
       error = res.error
       if (!tweets) throw new Error('No tweets found')
@@ -292,7 +319,7 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
       error = e
       console.warn('Tweet scraping failed. Trying again...)', e)
       try {
-        const res = await scrapeTweets({ username })
+        const res = await scrapeTweets({ username, twitterUserID: twitterUserID })
         tweets = res.data
         error = res.error
         console.error('🟣 | file: actions.ts:252 | processScrapedUserFirst | e:', e)
