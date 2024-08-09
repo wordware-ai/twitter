@@ -1,6 +1,7 @@
 import { PiCheckCircle, PiCircle, PiLockKey, PiSpinner } from 'react-icons/pi'
 
 import { Steps } from '@/hooks/twitter-analysis'
+import { PAYWALL } from '@/lib/config'
 import { cn } from '@/lib/utils'
 
 import { TwitterAnalysis } from './analysis'
@@ -34,7 +35,7 @@ export const ProgressIndicator = ({
         started={steps.tweetScrapeStarted}
         completed={steps.tweetScrapeCompleted}
         premium={true}
-        unlocked={userUnlocked}
+        unlocked={PAYWALL ? userUnlocked : true}
         text="Reading your Tweets"
       />
 
@@ -45,7 +46,7 @@ export const ProgressIndicator = ({
             started={steps.wordwareStarted}
             completed={steps.wordwareCompleted}
             premium={true}
-            unlocked={userUnlocked}
+            unlocked={PAYWALL ? userUnlocked : true}
             text="Creating your Personality"
           />
 
