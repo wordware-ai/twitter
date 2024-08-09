@@ -10,11 +10,9 @@ import MostVisited from './most-visited'
 export const maxDuration = 180
 
 const Page = async () => {
-  console.time('open')
   const { chartData, timestamp } = await getStatistics()
   const { trafficData } = await getTraffic()
   const { mostVisited } = await getMostVisited()
-  console.timeEnd('open')
 
   return (
     <div className="flex-center w-full flex-col gap-12 px-2 pb-12 pt-28 md:pt-20">
