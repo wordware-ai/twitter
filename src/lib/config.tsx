@@ -12,4 +12,4 @@ export const getURL = () => {
 
 //TRUE if user has to pay for the service
 //FALSE if paywall is disabled
-export const PAYWALL = true
+export const PAYWALL = false

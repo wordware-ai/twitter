@@ -9,7 +9,7 @@ import { UserCardData } from '@/app/top-list'
 import { db } from '@/drizzle/db'
 import { InsertPair, InsertUser, pairs, SelectUser, users } from '@/drizzle/schema'
 
-import { fetchAndParseSocialDataTweets } from './social-data'
+import { fetchAndParseSocialDataTweets, fetchAndParseSocialDataTweetsByUsername } from './social-data'
 import { fetchUserData } from './twitter-api'
 import { getTweets } from './widget-scrape/tweets-widget-scrape'
 
@@ -224,12 +224,21 @@ export const scrapeTweets = async ({ twitterUserID, username }: { twitterUserID?
   if (twitterUserID) {
     try {
       const tweets = await fetchAndParseSocialDataTweets(twitterUserID)
-      console.log(`[${username}] ✅ SocialData Tweets: ${tweets.length}`)
+      console.log(`[${username}] ✅ SocialData ID Tweets: ${tweets.length}`)
       return { data: tweets, error: null }
     } catch (error) {
-      console.warn(`[${username}] ⚠️ Erros SocialData Tweets (Attempt 1/3)`, error)
+      console.warn(`[${username}] ⚠️ Erros SocialData ID Tweets (Attempt 1/4)`, error)
       // Continue to next method if this fails
     }
+  }
+
+  try {
+    const tweets = await fetchAndParseSocialDataTweetsByUsername(username)
+    console.log(`[${username}] ✅ SocialData Username Tweets: ${tweets.length}`)
+    return { data: tweets, error: null }
+  } catch (error) {
+    console.warn(`[${username}] ⚠️ Erros SocialData Tweets (Attempt 2/4)`, error)
+    // Continue to next method if this fails
   }
 
   // Try fetching tweets using getTweets function
@@ -239,7 +248,7 @@ export const scrapeTweets = async ({ twitterUserID, username }: { twitterUserID?
     console.log(`[${username}] ✅ TimelineWidget Tweets: ${tweets.length}`)
     return { data: tweets, error: null }
   } catch (error) {
-    console.warn(`[${username}] ⚠️ Error TimelineWidget Tweets (Attempt 2/3)`, error)
+    console.warn(`[${username}] ⚠️ Error TimelineWidget Tweets (Attempt 2/4)`, error)
     // Continue to fallback method if this fails
   }
 
@@ -279,7 +288,7 @@ export const scrapeTweets = async ({ twitterUserID, username }: { twitterUserID?
     console.log(`[${username}] ✅ Apify Tweets: ${tweets.length}`)
     return { data: tweets, error: null }
   } catch (error) {
-    console.error(`[${username}] ⚠️ Error fetching tweets with Apify (Attempt 3/3)`, error)
+    console.error(`[${username}] ⚠️ Error fetching tweets with Apify (Attempt 4/4)`, error)
     return {
       data: null,
       error: 'Failed to fetch tweets from all available methods',

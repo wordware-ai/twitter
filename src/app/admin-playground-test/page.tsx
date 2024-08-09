@@ -1,7 +1,8 @@
-import { fetchAndParseSocialDataTweets } from '@/actions/social-data'
+import { fetchAndParseSocialDataTweetsByUsername } from '@/actions/social-data'
 
 const Page = async () => {
-  const data = await fetchAndParseSocialDataTweets('945756809356300294')
+  // const data = await fetchAndParseSocialDataTweets('945756809356300294')
+  const data = await fetchAndParseSocialDataTweetsByUsername('ky__zo')
   // const [data, setData] = useState<any>(null)
 
   // useEffect(() => {

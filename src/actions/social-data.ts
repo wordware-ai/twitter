@@ -101,3 +101,52 @@ export async function fetchAndParseSocialDataTweets(userId: string): Promise<Twe
     throw new Error(`Failed to fetch and parse tweets for user ID ${userId}`)
   }
 }
+
+export async function fetchTweetsByUsername(username: string) {
+  const url = `https://api.socialdata.tools/twitter/search?query=from%3A${username}%20-filter%3Areplies&type=Latest`
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${process.env.SOCIALDATA_API_KEY}`,
+        Accept: 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const data = await response.json()
+
+    return data.tweets as SocialDataTweet[]
+  } catch (error) {
+    console.error(`Error fetching tweets for username ${username}:`, error)
+    throw new Error(`Failed to fetch tweets for username ${username}`)
+  }
+}
+
+export async function fetchAndParseSocialDataTweetsByUsername(username: string): Promise<TweetType[]> {
+  try {
+    const tweets = await fetchTweetsByUsername(username)
+
+    return tweets
+      .map((tweet) => ({
+        isRetweet: !!tweet.retweeted_status,
+        author: {
+          userName: (tweet.user as SocialDataTweet['user']).screen_name || '',
+        },
+        createdAt: tweet.tweet_created_at,
+        text: tweet.full_text || tweet.text || '',
+        retweetCount: tweet.retweet_count,
+        replyCount: tweet.reply_count,
+        likeCount: tweet.favorite_count,
+        quoteCount: tweet.quote_count,
+        viewCount: tweet.views_count || 0,
+      }))
+      .slice(0, 14)
+  } catch (error) {
+    console.error(`Error fetching and parsing tweets for username ${username}:`, error)
+    throw new Error(`Failed to fetch and parse tweets for username ${username}`)
+  }
+}
