@@ -140,7 +140,7 @@ export const handleNewUsername = async ({ username, redirectPath }: { username: 
 
   let { data, error } = await fetchUserData({ screenName: username })
   if (error) {
-    console.warn(`[${username}] ⚠️ Profile TwitterAPI (1/3)`, error)
+    console.log(`[${username}] ⚠️ Profile TwitterAPI (1/3)`, error)
   } else {
     console.log(`[${username}] ✅ Profile TwitterAPI (1/3)`)
   }
@@ -148,7 +148,7 @@ export const handleNewUsername = async ({ username, redirectPath }: { username: 
   if (!data && error) {
     ;({ data, error } = await fetchUserDataBySocialData({ username }))
     if (!data) {
-      console.warn(`⚠️ [${username}] Profile SocialData (2/3)`, error)
+      console.log(`[${username}] ⚠️ Profile SocialData (2/3)`, error)
     } else {
       console.log(`[${username}] ✅ Profile SocialData (2/3)`)
     }
@@ -157,7 +157,7 @@ export const handleNewUsername = async ({ username, redirectPath }: { username: 
   if (!data && error) {
     ;({ data, error } = await scrapeProfile({ username }))
     if (!data) {
-      console.warn(`⚠️ [${username}] Profile Apify (3/3)`, error)
+      console.log(`[${username}] ⚠️ Profile Apify (3/3)`, error)
     } else {
       console.log(`[${username}] ✅ Profile Apify (3/3)`)
     }
@@ -246,7 +246,7 @@ export const scrapeTweets = async ({ twitterUserID, username }: { twitterUserID?
       console.log(`[${username}] ✅ SocialData ID Tweets: ${tweets.length}`)
       return { data: tweets, error: null }
     } catch (error) {
-      console.warn(`[${username}] ⚠️ Erros SocialData ID Tweets (Attempt 1/4)`, error)
+      console.log(`[${username}] ⚠️ Erros SocialData ID Tweets (Attempt 1/4)`, error)
       // Continue to next method if this fails
     }
   }
@@ -256,7 +256,7 @@ export const scrapeTweets = async ({ twitterUserID, username }: { twitterUserID?
     console.log(`[${username}] ✅ SocialData Username Tweets: ${tweets.length}`)
     return { data: tweets, error: null }
   } catch (error) {
-    console.warn(`[${username}] ⚠️ Erros SocialData Tweets (Attempt 2/4)`, error)
+    console.log(`[${username}] ⚠️ Erros SocialData Tweets (Attempt 2/4)`, error)
     // Continue to next method if this fails
   }
 
@@ -267,7 +267,7 @@ export const scrapeTweets = async ({ twitterUserID, username }: { twitterUserID?
     console.log(`[${username}] ✅ TimelineWidget Tweets: ${tweets.length}`)
     return { data: tweets, error: null }
   } catch (error) {
-    console.warn(`[${username}] ⚠️ Error TimelineWidget Tweets (Attempt 2/4)`, error)
+    console.log(`[${username}] ⚠️ Error TimelineWidget Tweets (Attempt 2/4)`, error)
     // Continue to fallback method if this fails
   }
 
@@ -345,15 +345,15 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
       if (!tweets) throw new Error('No tweets found')
     } catch (e) {
       error = e
-      console.warn('Tweet scraping failed. Trying again...)', e)
+      console.warn(`[${username}] ⚠️ All 3 attemtps failed. Trying again...`, e)
       try {
         const res = await scrapeTweets({ username, twitterUserID: twitterUserID })
         tweets = res.data
         error = res.error
-        console.error('🟣 | file: actions.ts:252 | processScrapedUserFirst | e:', e)
+        console.warn(`[${username}] ⚠️ All 6 attemtps failed.`, e)
         if (!tweets) throw new Error('No tweets found')
       } catch (e) {
-        console.error('🟣 | file: actions.ts:255 | processScrapedUserSecond | e:', e)
+        console.warn(`[${username}] ⚠️ Yeah it's fucked:`, e)
         throw e
       }
     }
