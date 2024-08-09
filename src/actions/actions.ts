@@ -236,7 +236,7 @@ export const scrapeTweets = async ({ twitterUserID, username }: { twitterUserID?
   try {
     const tweets = await getTweets(username)
     if (!tweets || tweets.length === 0) throw new Error('No tweets found')
-    console.log(`✅ TimelineWidget Tweets: ${tweets.length} - ${username}`)
+    console.log(`[${username}] ✅ TimelineWidget Tweets: ${tweets.length}`)
     return { data: tweets, error: null }
   } catch (error) {
     console.warn(`[${username}] ⚠️ Error TimelineWidget Tweets (Attempt 2/3)`, error)
