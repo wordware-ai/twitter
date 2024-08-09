@@ -40,15 +40,16 @@ export async function POST(request: Request) {
     const isRetweet = tweet.isRetweet ? 'RT ' : ''
     const author = tweet.author?.userName ?? username
     const createdAt = tweet.createdAt
-    const text = tweet.text
+    const text = tweet.text ?? '' // Ensure text is not undefined
+    const formattedText = text
       .split('\n')
       .map((line) => `${line}`)
       .join(`\n> `)
     return `**${isRetweet}@${author} - ${createdAt}**
 
-> ${text}
+> ${formattedText}
 
-*retweets: ${tweet.retweetCount}, replies: ${tweet.replyCount}, likes: ${tweet.likeCount}, quotes: ${tweet.quoteCount}, views: ${tweet.viewCount}*`
+*retweets: ${tweet.retweetCount ?? 0}, replies: ${tweet.replyCount ?? 0}, likes: ${tweet.likeCount ?? 0}, quotes: ${tweet.quoteCount ?? 0}, views: ${tweet.viewCount ?? 0}*`
   }
 
   const tweets = user.tweets as TweetType[]

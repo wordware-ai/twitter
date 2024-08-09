@@ -54,7 +54,7 @@ export async function fetchTimelineProfile(screenName: string): Promise<string> 
     }
     return await response.text()
   } catch (error) {
-    console.error('Error fetching timeline profile:', error)
+    // console.log('⚠️ Error ', error)
     throw new Error('Failed to fetch timeline profile')
   }
 }
