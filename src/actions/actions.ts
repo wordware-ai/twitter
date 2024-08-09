@@ -9,7 +9,7 @@ import { UserCardData } from '@/app/top-list'
 import { db } from '@/drizzle/db'
 import { InsertPair, InsertUser, pairs, SelectUser, users } from '@/drizzle/schema'
 
-import { fetchAndParseSocialDataTweets, fetchAndParseSocialDataTweetsByUsername } from './social-data'
+import { fetchAndParseSocialDataTweets, fetchAndParseSocialDataTweetsByUsername, fetchUserDataBySocialData } from './social-data'
 import { fetchUserData } from './twitter-api'
 import { getTweets } from './widget-scrape/tweets-widget-scrape'
 
@@ -139,9 +139,28 @@ export const handleNewUsername = async ({ username, redirectPath }: { username: 
   }
 
   let { data, error } = await fetchUserData({ screenName: username })
+  if (error) {
+    console.warn(`[${username}] ⚠️ Profile TwitterAPI (1/3)`, error)
+  } else {
+    console.log(`[${username}] ✅ Profile TwitterAPI (1/3)`)
+  }
+
+  if (!data && error) {
+    ;({ data, error } = await fetchUserDataBySocialData({ username }))
+    if (!data) {
+      console.warn(`⚠️ [${username}] Profile SocialData (2/3)`, error)
+    } else {
+      console.log(`[${username}] ✅ Profile SocialData (2/3)`)
+    }
+  }
 
   if (!data && error) {
     ;({ data, error } = await scrapeProfile({ username }))
+    if (!data) {
+      console.warn(`⚠️ [${username}] Profile Apify (3/3)`, error)
+    } else {
+      console.log(`[${username}] ✅ Profile Apify (3/3)`)
+    }
   }
 
   if (data && !error) {

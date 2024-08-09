@@ -1,15 +1,6 @@
 'use server'
 
-type DatabaseUser = {
-  username: string
-  url: string
-  name: string
-  profilePicture: string
-  description: string
-  location: string
-  fullProfile: object
-  followers: number
-}
+import { DatabaseUser } from './types'
 
 type TwitterUserData = {
   created_at: string

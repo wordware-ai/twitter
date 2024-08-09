@@ -1,4 +1,4 @@
-import { TweetType } from './types'
+import { DatabaseUser, TweetType } from './types'
 
 type SocialDataTweet = {
   tweet_created_at: string
@@ -148,5 +148,46 @@ export async function fetchAndParseSocialDataTweetsByUsername(username: string):
   } catch (error) {
     console.error(`Error fetching and parsing tweets for username ${username}:`, error)
     throw new Error(`Failed to fetch and parse tweets for username ${username}`)
+  }
+}
+
+export async function fetchUserDataBySocialData({ username }: { username: string }): Promise<{ data: DatabaseUser | null; error: string | null }> {
+  const url = `https://api.socialdata.tools/twitter/user/${username}`
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${process.env.SOCIALDATA_API_KEY}`,
+        Accept: 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+
+    const userData = await response.json()
+
+    const databaseUser: DatabaseUser = {
+      username: userData.screen_name,
+      url: userData.url,
+      name: userData.name,
+      profilePicture: userData.profile_image_url_https.replace('_normal.', '_400x400.'),
+      description: userData.description,
+      location: userData.location,
+      fullProfile: {
+        twitterUserID: userData.id_str,
+        ...userData,
+      },
+      followers: userData.followers_count,
+    }
+
+    return { data: databaseUser, error: null }
+  } catch (error) {
+    console.error(`Error fetching user data for username ${username}:`, error)
+    return {
+      data: null,
+      error: error instanceof Error ? error.message : 'No profile found',
+    }
   }
 }
