@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og'
 import type { NextRequest } from 'next/server'
 import { PiRobot } from 'react-icons/pi'
 
-import {  compatibilityConfig } from '@/lib/wordware-config'
+import { cardData } from '@/lib/wordware-config'
 
 export const runtime = 'edge'
 const light = fetch(new URL('./Inter-Light.ttf', import.meta.url)).then((res) => res.arrayBuffer())
@@ -73,7 +73,7 @@ function generateOG({
     bg,
     colorClass,
     title,
-  } = compatibilityConfig.find((card) => card.contentKey === section) || {
+  } = cardData.find((card) => card.contentKey === section) || {
     icon: PiRobot,
     bg: 'bg-white',
     colorClass: 'text-gray-800',

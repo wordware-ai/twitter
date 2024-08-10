@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og'
 import type { NextRequest } from 'next/server'
 import { PiRobot } from 'react-icons/pi'
 
-import { cardData } from '@/lib/wordware-config'
+import { compatibilityConfig } from '@/lib/wordware-config'
 
 export const runtime = 'edge'
 const light = fetch(new URL('./Inter-Light.ttf', import.meta.url)).then((res) => res.arrayBuffer())
@@ -70,7 +70,7 @@ function generatePairOG({
     bg,
     colorClass,
     title,
-  } = cardData.find((card) => card.contentKey === section) || {
+  } = compatibilityConfig.find((card) => card.contentKey === section) || {
     icon: PiRobot,
     bg: 'bg-white',
     colorClass: 'text-gray-800',
@@ -80,7 +80,9 @@ function generatePairOG({
   const renderContent = () => {
     try {
       const parsedContent = JSON.parse(content)
-      if (Array.isArray(parsedContent)) {
+      if (typeof parsedContent === 'string') {
+        return <div style={{ fontSize: '28px', fontWeight: 300 }}>{parsedContent.length > 250 ? parsedContent.slice(0, 250) + '...' : parsedContent}</div>
+      } else if (Array.isArray(parsedContent)) {
         return (
           <div
             tw="flex"
@@ -100,14 +102,47 @@ function generatePairOG({
         )
       } else if (typeof parsedContent === 'object') {
         return (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            {Object.entries(parsedContent).map(([key, value], index) => (
-              <div
-                key={index}
-                style={{ fontSize: '32px', fontWeight: 300 }}>
-                <span>{key}:</span> {typeof value === 'string' ? value.replace(/\*/g, '') : ''}
-              </div>
-            ))}
+          // <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          //   {Object.entries(parsedContent).map(([key, value], index) => (
+          //     <div
+          //       key={index}
+          //       style={{ fontSize: '32px', fontWeight: 300 }}>
+          //       <span>{key}:</span> {typeof value === 'string' ? value.replace(/\*/g, '') : ''}
+          //     </div>
+          //   ))}
+          // </div>
+          <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', maxWidth: '100%' }}>
+            {Object.entries(parsedContent).map(([key, value], index) => {
+              return (
+                <div
+                  key={index}
+                  style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '24px', fontWeight: 300 }}>
+                  <div style={{ display: 'flex', fontWeight: 600 }}>{key.replace('profile1', name1).replace('profile2', name2).replace(/\*/g, '')}:</div>{' '}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {Array.isArray(value) ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', paddingLeft: '2px', gap: '10px' }}>
+                        {value.slice(0, 2).map((item, i) => (
+                          <div
+                            key={i}
+                            style={{ display: 'flex' }}>
+                            {typeof item === 'string' ? item.replace(/\*/g, '') : ''}
+                          </div>
+                        ))}
+                        {value.length > 2 && <li>...</li>}
+                      </div>
+                    ) : typeof value === 'string' ? (
+                      value.length > 100 ? (
+                        value.slice(0, 100).replace(/\*/g, '') + '...'
+                      ) : (
+                        value.replace(/\*/g, '')
+                      )
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                </div>
+              )
+            })}
           </div>
         )
       }
@@ -157,7 +192,7 @@ function generatePairOG({
           <div
             tw={`${colorClass}`}
             style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Icon size={36} /> <span tw="text-3xl">Our {title} Analysis</span>
+            <Icon size={36} /> <span tw="text-3xl">Our {title}</span>
           </div>
         </div>
 

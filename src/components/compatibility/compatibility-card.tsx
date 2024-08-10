@@ -79,62 +79,34 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ names, unlocked, title, ico
       )
     } else if (typeof content === 'object') {
       return (
-        <>
-          <div className={`flex w-full flex-col gap-4 md:flex-row ${!isContentVisible ? 'blur-sm' : ''}`}>
-            {Object.entries(content).map(([key, value], index) => (
-              <div
-                className="w-full"
-                key={index}>
-                <span className="text-xl font-semibold">{key.replace('profile1', names[0]).replace('profile2', names[1])}:</span>
-                {Array.isArray(value) ? (
-                  <ul className="list-disc pl-5">
-                    {value.map((item, itemIndex) => (
-                      <li
-                        key={itemIndex}
-                        className="pl-6">
-                        <Markdown
-                          key={item}
-                          content={item || ''}
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <Markdown
-                    key={value}
-                    content={value || ''}
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-          {/* <ul className={`hidden list-none space-y-2 ${!isContentVisible ? 'blur-sm' : ''}`}>
-            {Object.entries(content).map(([key, value], index) => (
-              <li key={index}>
-                <span className="font-semibold">{key.replace('profile1', names[0]).replace('profile2', names[1])}:</span>
-                {Array.isArray(value) ? (
-                  <ul className="list-disc pl-5">
-                    {value.map((item, itemIndex) => (
-                      <li
-                        key={itemIndex}
-                        className="pl-6">
-                        <Markdown
-                          key={item}
-                          content={item || ''}
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <Markdown
-                    key={value}
-                    content={value || ''}
-                  />
-                )}
-              </li>
-            ))}
-          </ul> */}
-        </>
+        <div className={`flex w-full flex-col gap-4 md:flex-row ${!isContentVisible ? 'blur-sm' : ''}`}>
+          {Object.entries(content).map(([key, value], index) => (
+            <div
+              className="w-full"
+              key={index}>
+              <span className="text-xl font-semibold">{key.replace('profile1', names[0]).replace('profile2', names[1])}:</span>
+              {Array.isArray(value) ? (
+                <ul className="list-disc pl-5">
+                  {value.map((item, itemIndex) => (
+                    <li
+                      key={itemIndex}
+                      className="pl-6">
+                      <Markdown
+                        key={item}
+                        content={item || ''}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <Markdown
+                  key={value}
+                  content={value || ''}
+                />
+              )}
+            </div>
+          ))}
+        </div>
       )
     }
     return null
@@ -165,7 +137,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ names, unlocked, title, ico
                 <a
                   target="_blank"
                   className={cn(`flex-center gap-2 text-lg text-white`)}
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`this is my Twitter Personality analysis by AI Agent, built on @wordware_ai\n\n`)}&url=${encodeURIComponent(`https://twitter.wordware.ai/${username}/${usernamePair}?section=${contentKey}`)}`}>
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`here's our Twitter Compatibility Analysis for @${username} and @${usernamePair}, created by an AI Agent built on @wordware_ai.\n\n`)}&url=${encodeURIComponent(`https://twitter.wordware.ai/${username}/${usernamePair}?section=${contentKey}`)}`}>
                   <PiXLogo /> Share
                 </a>
               </Button>
