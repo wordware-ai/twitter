@@ -56,7 +56,7 @@ const PairComponent = ({ users, pair }: { users: SelectUser[]; pair: SelectPair 
         pairAnalysis={compatibilityResult}
         unlocked={unlocked}
       />
-      <pre className="max-w-lg whitespace-pre-wrap">{JSON.stringify(compatibilityResult, null, 2)}</pre>
+      {/* <pre className="max-w-lg whitespace-pre-wrap">{JSON.stringify(compatibilityResult, null, 2)}</pre> */}
     </div>
   )
 }
