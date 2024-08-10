@@ -2,11 +2,10 @@ import { getUser, updateUser } from '@/actions/actions'
 import { TweetType } from '@/actions/types'
 import { TwitterAnalysis } from '@/components/analysis/analysis'
 
-export const runtime = 'edge'
-
 /**
  * Maximum duration for the API route execution (in seconds)
  */
+export const maxDuration = 300
 
 /**
  * POST handler for the Wordware API route
