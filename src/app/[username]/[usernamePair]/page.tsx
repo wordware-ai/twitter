@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next/types'
 import { PiPlus } from 'react-icons/pi'
@@ -24,13 +25,19 @@ const PairPage = async ({ params: { username, usernamePair } }: { params: { user
         <div className="text-center text-xl font-light">
           Here&apos;s the <span className="font-medium">AI agent</span> analysis of your compatibility...
         </div>
-        <div className="flex flex-col items-center gap-2 md:flex-row md:gap-8">
+        <div className="flex flex-col items-center justify-center gap-2 md:flex-row md:gap-8">
           <div className="w-full md:w-5/12">
-            <ProfileHighlight user={user1} />
+            <Link href={`/${username1}`}>
+              <ProfileHighlight user={user1} />
+            </Link>
           </div>
           <PiPlus size={36} />
           <div className="w-full md:w-5/12">
-            <ProfileHighlight user={user2} />
+            <Link
+              href={`/${username2}`}
+              className="border-2 border-transparent transition-all hover:border-blue-200">
+              <ProfileHighlight user={user2} />
+            </Link>
           </div>
         </div>
       </div>

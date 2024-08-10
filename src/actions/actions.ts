@@ -539,14 +539,14 @@ export const getPair = async ({ usernames }: { usernames: string[] }) => {
   })
 }
 
-export const getOrCreatePair = async ({ usernames }: { usernames: string[] }) => {
+export const getOrCreatePair = async ({ usernames, shouldRedirect }: { usernames: string[]; shouldRedirect?: boolean }) => {
   noStore()
 
   const existingPair = await getPair({ usernames })
 
   if (existingPair) return existingPair
 
-  return await createPair({ usernames })
+  return await createPair({ usernames, shouldRedirect })
 }
 
 export const updatePair = async ({ pair }: { pair: InsertPair }) => {

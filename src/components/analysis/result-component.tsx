@@ -55,12 +55,19 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
         url={`https://twitter.wordware.ai/${user.username}`}
       />
 
-      {searchParams.get('password') === process.env.NEXT_PUBLIC_PAIR_PASSWORD && (
-        <div className="flex-center w-full flex-col gap-4">
-          <div className="text-center text-lg font-light">Add new user to find if you are compatible souls</div>
+      <div className="flex-center w-full flex-col gap-4">
+        <div className="text-center text-lg font-light">Add new user to find if you are compatible souls</div>
+        {steps.wordwareStarted && !steps.wordwareCompleted ? (
+          <>
+            <div className="mb-2 text-center font-light text-gray-400">Wait for the completion to finish</div>
+            <div className="pointer-events-none opacity-50">
+              <NewPairForm />
+            </div>
+          </>
+        ) : (
           <NewPairForm />
-        </div>
-      )}
+        )}
+      </div>
 
       <Analysis
         unlocked={user.unlocked || false}

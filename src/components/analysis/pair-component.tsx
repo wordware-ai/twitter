@@ -19,7 +19,7 @@ const PairComponent = ({ users, pair }: { users: SelectUser[]; pair: SelectPair 
 
   return (
     <div className="flex-center w-full flex-col gap-8">
-      <div className="flex-center w-full gap-8">
+      <div className="flex w-full max-w-lg flex-col items-center justify-center gap-2 md:flex-row md:gap-8">
         <div className="w-1/2">
           <ProgressIndicator
             steps={user1Steps}
