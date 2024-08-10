@@ -45,7 +45,7 @@ const PairPage = async ({ params: { username, usernamePair } }: { params: { user
 
 export default PairPage
 
-export async function generateMetadata({ params, searchParams }: { params: { username: string; usernamePair: string }; searchParams: { section: string } }) {
+export async function generateMetadata({ params }: { params: { username: string; usernamePair: string }; searchParams: { section: string } }) {
   const [username1, username2] = [params.username, params.usernamePair].sort()
   const [user1, user2] = await Promise.all([getUser({ username: username1 }), getUser({ username: username2 })])
   const pair = await getPair({ usernames: [username1, username2] })
@@ -53,7 +53,8 @@ export async function generateMetadata({ params, searchParams }: { params: { use
   if (!user1 || !user2 || !pair) return notFound()
 
   const imageParams = new URLSearchParams()
-  const section = searchParams.section || 'about'
+  // const section = searchParams.section || 'about'
+  const section = 'about' //TODO: Hardcode about for now, to make it dynamic we need to design the full OG image generator for all the section types
   const content = (pair.analysis as any)?.[section]
 
   imageParams.set('name1', user1.name || '')

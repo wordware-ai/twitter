@@ -13,6 +13,7 @@ import {
   PiHandHeart,
   PiHandsPraying,
   PiHeart,
+  PiHeartBreak,
   PiLightbulb,
   PiLink,
   PiMaskHappy,
@@ -372,7 +373,7 @@ export const compatibilityConfig = [
   },
   {
     title: 'Breakup Percentage',
-    icon: PiScissors,
+    icon: PiHeartBreak,
     contentKey: 'breakup_percentage',
     colorClass: 'text-red-400',
     color: 'red',

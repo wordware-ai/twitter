@@ -8,25 +8,26 @@ export const runtime = 'edge'
 const light = fetch(new URL('./Inter-Light.ttf', import.meta.url)).then((res) => res.arrayBuffer())
 const bold = fetch(new URL('./Inter-SemiBold.ttf', import.meta.url)).then((res) => res.arrayBuffer())
 
-/**
- * Handles GET requests to generate Open Graph images.
- * @param {NextRequest} request - The incoming request object.
- * @returns {Promise<ImageResponse|Response>} The generated image or an error response.
- */
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl
-  const picture = searchParams.get('picture') || ''
-  const name = searchParams.get('name') || ''
-  const username = searchParams.get('username') || ''
+  const picture1 = searchParams.get('picture1') || ''
+  const name1 = searchParams.get('name1') || ''
+  const username1 = searchParams.get('username1') || ''
+  const picture2 = searchParams.get('picture2') || ''
+  const name2 = searchParams.get('name2') || ''
+  const username2 = searchParams.get('username2') || ''
   const content = searchParams.get('content') || ''
   const section = searchParams.get('section') || ''
 
   try {
     return new ImageResponse(
-      generateOG({
-        picture,
-        name,
-        username,
+      generatePairOG({
+        picture1,
+        name1,
+        username1,
+        picture2,
+        name2,
+        username2,
         content,
         section,
       }),
@@ -45,26 +46,22 @@ export async function GET(request: NextRequest) {
   }
 }
 
-/**
- * Generates the Open Graph image content.
- * @param {Object} params - The parameters for generating the OG image.
- * @param {string} params.picture - URL of the user's profile picture.
- * @param {string} params.name - User's name.
- * @param {string} params.username - User's username.
- * @param {string} params.content - Content to be displayed in the image.
- * @param {string} params.section - Section identifier for styling.
- * @returns {React.ReactElement} The React element representing the OG image.
- */
-function generateOG({
-  picture,
-  name,
-  username,
+function generatePairOG({
+  picture1,
+  name1,
+  username1,
+  picture2,
+  name2,
+  username2,
   content,
   section,
 }: {
-  picture: string
-  name: string
-  username: string
+  picture1: string
+  name1: string
+  username1: string
+  picture2: string
+  name2: string
+  username2: string
   content: string
   section: string
 }): React.ReactElement {
@@ -77,30 +74,26 @@ function generateOG({
     icon: PiRobot,
     bg: 'bg-white',
     colorClass: 'text-gray-800',
-    title: 'Persona',
+    title: 'Compatibility',
   }
 
-  /**
-   * Renders the content based on its type and structure.
-   * @returns {React.ReactElement} The rendered content.
-   */
   const renderContent = () => {
     try {
       const parsedContent = JSON.parse(content)
       if (Array.isArray(parsedContent)) {
         return (
           <div
-            tw=" flex"
+            tw="flex"
             style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {parsedContent.slice(0, 3).map((item, index) => (
               <div
                 key={index}
                 tw="mt-3"
                 style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-                <div style={{ fontSize: '38px', fontWeight: 300, width: typeof item === 'string' ? '100%' : '25%' }}>
+                <div style={{ fontSize: '32px', fontWeight: 300, width: typeof item === 'string' ? '100%' : '25%' }}>
                   {typeof item === 'string' ? item : item.title}
                 </div>
-                {typeof item !== 'string' && <div style={{ fontSize: '32px', fontWeight: 300, width: '75%' }}>{item.subtitle?.replace(/\*/g, '')}</div>}
+                {typeof item !== 'string' && <div style={{ fontSize: '28px', fontWeight: 300, width: '75%' }}>{item.subtitle?.replace(/\*/g, '')}</div>}
               </div>
             ))}
           </div>
@@ -111,7 +104,7 @@ function generateOG({
             {Object.entries(parsedContent).map(([key, value], index) => (
               <div
                 key={index}
-                style={{ fontSize: '38px', fontWeight: 300 }}>
+                style={{ fontSize: '32px', fontWeight: 300 }}>
                 <span>{key}:</span> {typeof value === 'string' ? value.replace(/\*/g, '') : ''}
               </div>
             ))}
@@ -122,10 +115,9 @@ function generateOG({
       console.warn('Failed to parse content:', e)
     }
 
-    // Fallback for unparseable content
     return (
-      <div style={{ fontSize: '38px', fontWeight: 300 }}>
-        {content ? (content.length > 300 ? content.slice(0, 300).replace(/\*/g, '') + '...' : content.replace(/\*/g, '')) : ''}
+      <div style={{ fontSize: '32px', fontWeight: 300 }}>
+        {content ? (content.length > 250 ? content.slice(0, 250).replace(/\*/g, '') + '...' : content.replace(/\*/g, '')) : ''}
       </div>
     )
   }
@@ -148,7 +140,6 @@ function generateOG({
           flexDirection: 'column',
           borderRadius: '16px',
           padding: '36px',
-          // paddingBottom: '44px',
           paddingTop: '36px',
           height: '100%',
           position: 'relative',
@@ -161,13 +152,12 @@ function generateOG({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            // borderBottom: '1px solid #0d0d0d',
             paddingBottom: '26px',
           }}>
           <div
             tw={`${colorClass}`}
             style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Icon size={36} /> <span tw="text-3xl">My {title} by the AI Agent</span>
+            <Icon size={36} /> <span tw="text-3xl">Our {title} Analysis</span>
           </div>
         </div>
 
@@ -186,25 +176,50 @@ function generateOG({
             right: '48px',
             display: 'flex',
             alignItems: 'center',
-            gap: '16px',
+            gap: '24px',
           }}>
-          {picture && (
-            <img
-              src={picture}
-              alt="Profile picture"
-              style={{ width: '64px', height: '64px', borderRadius: '50%' }}
-            />
-          )}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div
-              tw="font-bold"
-              style={{ fontWeight: 'bold', fontSize: '20px' }}>
-              {name}
+          {/* User 1 */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            {picture1 && (
+              <img
+                src={picture1}
+                alt="Profile picture 1"
+                style={{ width: '64px', height: '64px', borderRadius: '50%' }}
+              />
+            )}
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div
+                tw="font-bold"
+                style={{ fontWeight: 'bold', fontSize: '20px' }}>
+                {name1}
+              </div>
+              <div
+                tw="font-bold "
+                style={{ display: 'flex', fontSize: '18px', color: '#7e7e7e' }}>
+                @{username1}
+              </div>
             </div>
-            <div
-              tw="font-bold "
-              style={{ display: 'flex', fontSize: '18px', color: '#7e7e7e' }}>
-              @{username}
+          </div>
+          {/* User 2 */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            {picture2 && (
+              <img
+                src={picture2}
+                alt="Profile picture 2"
+                style={{ width: '64px', height: '64px', borderRadius: '50%' }}
+              />
+            )}
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div
+                tw="font-bold"
+                style={{ fontWeight: 'bold', fontSize: '20px' }}>
+                {name2}
+              </div>
+              <div
+                tw="font-bold "
+                style={{ display: 'flex', fontSize: '18px', color: '#7e7e7e' }}>
+                @{username2}
+              </div>
             </div>
           </div>
         </div>

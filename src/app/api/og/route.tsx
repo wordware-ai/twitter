@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og'
 import type { NextRequest } from 'next/server'
 import { PiRobot } from 'react-icons/pi'
 
-import { cardData } from '@/lib/wordware-config'
+import {  compatibilityConfig } from '@/lib/wordware-config'
 
 export const runtime = 'edge'
 const light = fetch(new URL('./Inter-Light.ttf', import.meta.url)).then((res) => res.arrayBuffer())
@@ -73,7 +73,7 @@ function generateOG({
     bg,
     colorClass,
     title,
-  } = cardData.find((card) => card.contentKey === section) || {
+  } = compatibilityConfig.find((card) => card.contentKey === section) || {
     icon: PiRobot,
     bg: 'bg-white',
     colorClass: 'text-gray-800',
@@ -119,7 +119,7 @@ function generateOG({
         )
       }
     } catch (e) {
-      console.warn('Failed to parse content:', e)
+      console.log('ℹ️ OG content parse error, moving to fallback', e)
     }
 
     // Fallback for unparseable content
