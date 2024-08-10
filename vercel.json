@@ -1,9 +1,9 @@
 {
   "functions": {
-    "api/stripe/**.js": {
+    "app/api/stripe/**.js": {
       "memory": 256
     },
-    "api/wordware/**.js": {
+    "app/api/wordware/**.js": {
       "memory": 256
     }
   }
