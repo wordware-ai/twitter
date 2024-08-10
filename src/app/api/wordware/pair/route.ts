@@ -59,12 +59,12 @@ export async function POST(request: Request) {
 *retweets: ${tweet.retweetCount}, replies: ${tweet.replyCount}, likes: ${tweet.likeCount}, quotes: ${tweet.quoteCount}, views: ${tweet.viewCount}*`
   }
 
-  const timestamp = new Date().toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-  })
+  // const timestamp = new Date().toLocaleTimeString('en-US', {
+  //   hour: '2-digit',
+  //   minute: '2-digit',
+  //   second: '2-digit',
+  //   hour12: false,
+  // })
 
   const tweets1 = user1.tweets as TweetType[]
   const tweetsMarkdown1 = tweets1.map(formatTweet).join('\n---\n\n')

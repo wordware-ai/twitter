@@ -28,12 +28,15 @@ const NewPairForm = () => {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (pathname.replace('/', '') === values.username) {
+    const cleanedUsername = cleanUsername(values.username)
+    if (pathname.replace('/', '').toLowerCase() === cleanedUsername.toLowerCase()) {
       toast.error('You cannot pair with yourself')
       return
     }
-    const cleanedUsername = cleanUsername(values.username)
-    const response = await handleNewUsername({ username: cleanedUsername, redirectPath: `${pathname}/${cleanedUsername}` })
+    const response = await handleNewUsername({
+      username: cleanedUsername,
+      redirectPath: `${pathname}/${cleanedUsername}`,
+    })
 
     if (response?.error) {
       toast.error(response.error)
