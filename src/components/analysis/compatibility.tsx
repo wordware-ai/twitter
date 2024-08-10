@@ -6,59 +6,60 @@ import { PiQuestion } from 'react-icons/pi'
 import { Markdown } from '@/components/markdown'
 
 import { compatibilityConfig } from '../../lib/wordware-config'
-import AnalysisCard from './analysis-card'
+import CompatibilityCard from '../compatibility/compatibility-card'
+import { CompatibilityPaywallCard } from './compatibility-paywall-card'
 import { WordwareCard } from './wordware-card'
 
 export type CompatibilityAnalysis = {
-  [key: string]: string | string[] | { [key: string]: string[] } | undefined
-  twitter_names: string[]
-  emojis: string
+  [key: string]: string | string[] | { [key: string]: string[] | string } | undefined
+  mbti: {
+    profile1: string
+    profile2: string
+  }
   about: string
-  personality_type_match: string
-  characteristics: string[]
-  romantic_green_flags: {
-    person1: string[]
-    person2: string[]
-  }
-  romantic_red_flags: {
-    person1: string[]
-    person2: string[]
-  }
-  romantic_songs: string[]
-  romantinc_dealbreaker: string
-  secret_desires: string
-  drama: string
-  humor: string
-  threat: string
   crazy: string
-  dominant: string
-  dynamic: string
-  financial_compatibility: string
-  emotional_compatibility: string
-  communication_style_compatibility: string
-  disagreements: string
-  tension: string
-  goals_alingment: string
-  free_time: string
-  best_idea_to_work: string
-  making_millions_with_idea: string
-  yc: string
-  marriage: string
+  drama: string
+  emojis: string
   divorce: string
+  marriage: string
+  '3rd_wheel': string
+  free_time: string
+  red_flags: {
+    profile1: string[]
+    profile2: string[]
+  }
+  dealbreaker: string
+  green_flags: {
+    profile1: string[]
+    profile2: string[]
+  }
+  follower_flex: string
+  risk_appetite: string
+  love_languages: string
+  secret_desires: string
   friends_forever: string
+  jealousy_levels: string
+  attachment_style: string
+  values_alignment: string
   breakup_percentage: string
-  personality_assesments: string[]
   overall_compability: string
-  business: string
+  personality_type_match: string
+  emotional_compatibility: string
+  financial_compatibility: string
+  communication_style_compatibility: string
+  twitter_names: string[]
 }
 
 type CompatibilityProps = {
+  names: string[]
   unlocked: boolean
   pairAnalysis: CompatibilityAnalysis | undefined
 }
 
-const Compatibility: React.FC<CompatibilityProps> = ({ pairAnalysis }) => {
+const Compatibility: React.FC<CompatibilityProps> = ({ pairAnalysis, unlocked, names }) => {
   // const streamingStarted = !!userData?.about
+  const profile1Name = names[0] || 'Person 1'
+  const profile2Name = names[1] || 'Person 2'
 
   const renderAnalysisCards = () => {
     const configKeys = new Set(compatibilityConfig.map((card) => card.contentKey))
@@ -82,9 +83,10 @@ const Compatibility: React.FC<CompatibilityProps> = ({ pairAnalysis }) => {
 
     return allCards.map((card, index) => (
       <React.Fragment key={card.contentKey}>
-        {index === 1 && <WordwareCard />}
+        {index === 1 && !unlocked && <CompatibilityPaywallCard />}
         {index === 7 && <WordwareCard />}
-        <AnalysisCard
+        <CompatibilityCard
+          names={[profile1Name, profile2Name]}
           {...card}
           content={pairAnalysis?.[card.contentKey] || ''}
           unlocked={true}

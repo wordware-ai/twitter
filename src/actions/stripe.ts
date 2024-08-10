@@ -5,10 +5,44 @@ import { redirect } from 'next/navigation'
 import { getURL } from '@/lib/config'
 import { stripe } from '@/lib/stripe'
 
-export const createCheckoutSession = async ({ username, priceInt }: { username: string; priceInt: number }) => {
-  const cleanUsername = username.replace('/', '')
-  const metadataObject = {
-    username: cleanUsername,
+type CheckoutSessionType =
+  | {
+      username: string
+      priceInt: number
+      type: 'user'
+    }
+  | {
+      username1: string
+      username2: string
+      priceInt: number
+      type: 'pair'
+    }
+
+export const createCheckoutSession = async (params: CheckoutSessionType) => {
+  if (params.type === 'user' && !params.username) return { error: 'Username is required' }
+  if (params.type === 'pair' && !params.username1 && !params.username2) return { error: 'Usernames are required' }
+
+  let metadataObject: Record<string, string> = {}
+  let successUrl = ''
+  let cancelUrl = ''
+
+  if (params.type === 'user') {
+    metadataObject = {
+      username: params.username.replace('/', ''),
+      type: params.type,
+    }
+    successUrl = `${getURL()}${params.username}?success=true`
+    cancelUrl = `${getURL()}${params.username}?error=cancel`
+  }
+  if (params.type === 'pair') {
+    const [username1, username2] = [params.username1, params.username2].sort()
+    metadataObject = {
+      username1: username1.replace('/', ''),
+      username2: username2.replace('/', ''),
+      type: params.type,
+    }
+    successUrl = `${getURL()}${username1}/${username2}/?success=true`
+    cancelUrl = `${getURL()}${username1}/${username2}/?error=cancel`
   }
 
   const sessionConfig = {
@@ -19,7 +53,7 @@ export const createCheckoutSession = async ({ username, priceInt }: { username: 
         price_data: {
           product: process.env.STRIPE_PRODUCT_ID,
           currency: 'USD',
-          unit_amount: priceInt,
+          unit_amount: params.priceInt,
         },
         quantity: 1,
       },
@@ -30,8 +64,8 @@ export const createCheckoutSession = async ({ username, priceInt }: { username: 
     allow_promotion_codes: undefined as boolean | undefined,
     metadata: metadataObject,
     mode: 'payment' as const,
-    success_url: `${getURL()}${cleanUsername}?success=true`,
-    cancel_url: `${getURL()}${cleanUsername}?error=cancel`,
+    success_url: successUrl,
+    cancel_url: cancelUrl,
   }
 
   const session = await stripe.checkout.sessions.create(sessionConfig)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LockIcon } from 'lucide-react'
 import posthog from 'posthog-js'
@@ -13,26 +13,29 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { PAYWALL } from '@/lib/config'
 import { cn } from '@/lib/utils'
 
 const FormSchema = z.object({
   email: z.string().email(),
 })
 
-export const PriceButton = ({ username, price }: { username: string; price: string }) => (
-  <Button
-    onClick={() => {
-      createCheckoutSession({ username, priceInt: parseInt(price), type: 'user' })
-    }}
-    className={cn('w-full bg-green-600 hover:bg-green-700', !PAYWALL && 'max-w-md')}
-    type="button">
-    Unlock Full Analysis (${parseInt(price) / 100})
-  </Button>
-)
+export const CompatibilityPriceButton = ({ price }: { price: string }) => {
+  const { username, usernamePair } = useParams()
+  return (
+    <Button
+      onClick={() => {
+        createCheckoutSession({ username1: username as string, username2: usernamePair as string, priceInt: parseInt(price), type: 'pair' })
+      }}
+      className={cn('w-full max-w-md bg-green-600 hover:bg-green-700')}
+      type="button">
+      Unlock Full Analysis (${parseInt(price) / 100})
+    </Button>
+  )
+}
 
-export const PaywallCard: React.FC = () => {
+export const CompatibilityPaywallCard: React.FC = () => {
   const searchParams = useSearchParams()
+  const { username, usernamePair } = useParams()
   const pathname = usePathname()
   const router = useRouter()
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -48,7 +51,7 @@ export const PaywallCard: React.FC = () => {
 
   async function onSubmit(values: z.infer<typeof FormSchema>) {
     // Attempt to create a contact in Loops
-    const { success } = await unlockGeneration({ username: pathname, email: values.email })
+    const { success } = await unlockGeneration({ username: username as string, usernamePair: usernamePair as string, email: values.email })
     if (!success) {
       toast.error('Something went wrong')
     } else {
@@ -79,10 +82,7 @@ export const PaywallCard: React.FC = () => {
         {paywallFlag && paywallFlag !== 'control' ? (
           <>
             <p className="mb-4">Unlock all insights by purchasing below.</p>
-            <PriceButton
-              username={pathname}
-              price={paywallFlag as string}
-            />
+            <CompatibilityPriceButton price={paywallFlag as string} />
             <p className="mt-4 text-sm text-gray-800">
               Full access includes comprehensive persona analysis, including: <strong>Roast</strong>, <strong>Strengths</strong>, <strong>Weaknesses</strong>,{' '}
               <strong>Love Life</strong>, <strong>Money</strong>, <strong>Health</strong>, <strong>Biggest Goal</strong>, <strong>Colleague Perspective</strong>

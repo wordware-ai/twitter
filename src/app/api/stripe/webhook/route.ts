@@ -3,7 +3,7 @@ import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
-import { unlockUser } from '@/actions/actions'
+import { unlockPair, unlockUser } from '@/actions/actions'
 import { stripe } from '@/lib/stripe'
 
 // import { changeSubscriptionStatus } from '@/utils/server-actions/stripe'
@@ -46,18 +46,29 @@ export async function POST(req: Request) {
 
   // Process the event if it's one we're interested in
   if (relevantEvents.has(event.type)) {
-    console.log('🟣 | file: route.ts:45 | POST | event.type:', event.type)
     try {
       switch (event.type) {
         case 'checkout.session.completed':
           const checkoutSession = event.data.object as Stripe.Checkout.Session
           console.log('🟣 Checkout Session Completed:', checkoutSession)
-          if (checkoutSession.metadata?.username) {
+
+          if (checkoutSession.metadata?.type === 'pair') {
+            const [username1, username2] = [checkoutSession.metadata.username1, checkoutSession.metadata.username2].sort()
+            console.log('Webhook: UNLOCKING PAIR: ', username1, username2)
+            await unlockPair({ username1, username2, unlockType: 'stripe' })
+          }
+          if (checkoutSession.metadata?.type === 'user') {
+            console.log('Webhook: UNLOCKING USER: ', checkoutSession.metadata.username)
             await unlockUser({ username: checkoutSession.metadata.username, unlockType: 'stripe' })
             revalidatePath(`/${checkoutSession.metadata.username}`)
-          } else {
-            console.error('Username not found in checkout session metadata')
           }
+
+          // if (checkoutSession.metadata?.username) {
+          //   await unlockUser({ username: checkoutSession.metadata.username, unlockType: 'stripe' })
+          //   revalidatePath(`/${checkoutSession.metadata.username}`)
+          // } else {
+          //   console.error('Username not found in checkout session metadata')
+          // }
           break
         default:
           throw new Error('Unhandled relevant event!')

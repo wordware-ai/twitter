@@ -399,7 +399,17 @@ export const createLoopsContact = async ({ email }: { email: string }) => {
   }
 }
 
-export const unlockGeneration = async ({ username, email }: { username: string; email: string }) => {
+export const unlockGeneration = async ({
+  username,
+  usernamePair,
+  email,
+  type = 'user',
+}: {
+  username: string
+  usernamePair?: string
+  email: string
+  type?: 'pair' | 'user'
+}) => {
   const options = {
     method: 'POST',
     headers: { Authorization: `Bearer ${process.env.LOOPS_API_KEY}`, 'Content-Type': 'application/json' },
@@ -418,7 +428,12 @@ export const unlockGeneration = async ({ username, email }: { username: string; 
     if (!response.ok) {
       throw new Error(data.message || response.statusText)
     }
-    await unlockUser({ username: username.replace('/', ''), unlockType: 'email' })
+    if (type === 'user') {
+      await unlockUser({ username: username.replace('/', ''), unlockType: 'email' })
+    }
+    if (type === 'pair' && usernamePair) {
+      await unlockPair({ username1: username, username2: usernamePair, unlockType: 'email' })
+    }
 
     revalidatePath(username)
     return { success: true }
@@ -537,4 +552,29 @@ export const getOrCreatePair = async ({ usernames }: { usernames: string[] }) =>
 export const updatePair = async ({ pair }: { pair: InsertPair }) => {
   if (!pair.id) throw new Error('Pair ID is required for update')
   return await db.update(pairs).set(pair).where(eq(pairs.id, pair.id))
+}
+
+export const unlockPair = async ({ username1, username2, unlockType }: { username1: string; username2: string; unlockType: 'email' | 'stripe' | 'free' }) => {
+  try {
+    const [user1lowercaseUsername, user2lowercaseUsername] = [username1.toLowerCase(), username2.toLowerCase()].sort()
+
+    const r = await db
+      .update(pairs)
+      .set({
+        unlocked: true,
+        unlockType: unlockType,
+      })
+      .where(and(eq(pairs.user1lowercaseUsername, user1lowercaseUsername), eq(pairs.user2lowercaseUsername, user2lowercaseUsername)))
+      .returning({
+        id: pairs.id,
+      })
+    console.log('Updated pair', r)
+
+    return { success: true }
+  } catch (error) {
+    if (error instanceof Error) {
+      return { success: false, error: error.message }
+    }
+    return { success: false, error: 'An unknown error occurred' }
+  }
 }

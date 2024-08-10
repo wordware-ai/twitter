@@ -1,0 +1,375 @@
+{
+  "id": "e49833b0-38e1-4083-8e2a-010f8edcdca7",
+  "prevId": "7398ca41-a246-4a8a-8dac-9775f3b82537",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.pairs": {
+      "name": "pairs",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "concat('pair_', uuid_generate_v4())"
+        },
+        "user1_lowercase_username": {
+          "name": "user1_lowercase_username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user2_lowercase_username": {
+          "name": "user2_lowercase_username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "analysis": {
+          "name": "analysis",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "unlocked": {
+          "name": "unlocked",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "unlock_type": {
+          "name": "unlock_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "wordware_started": {
+          "name": "wordware_started",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "wordware_started_time": {
+          "name": "wordware_started_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "wordware_completed": {
+          "name": "wordware_completed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        }
+      },
+      "indexes": {
+        "unique_user_pair_idx": {
+          "name": "unique_user_pair_idx",
+          "columns": [
+            {
+              "expression": "user1_lowercase_username",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "user2_lowercase_username",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "pairs_user1_lowercase_username_users_lowercase_username_fk": {
+          "name": "pairs_user1_lowercase_username_users_lowercase_username_fk",
+          "tableFrom": "pairs",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user1_lowercase_username"
+          ],
+          "columnsTo": [
+            "lowercase_username"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "pairs_user2_lowercase_username_users_lowercase_username_fk": {
+          "name": "pairs_user2_lowercase_username_users_lowercase_username_fk",
+          "tableFrom": "pairs",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user2_lowercase_username"
+          ],
+          "columnsTo": [
+            "lowercase_username"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "concat('usr_', uuid_generate_v4())"
+        },
+        "username": {
+          "name": "username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "lowercase_username": {
+          "name": "lowercase_username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "profile_picture": {
+          "name": "profile_picture",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "location": {
+          "name": "location",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "error": {
+          "name": "error",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "full_profile": {
+          "name": "full_profile",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tweets": {
+          "name": "tweets",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "analysis": {
+          "name": "analysis",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "followers": {
+          "name": "followers",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "unlocked": {
+          "name": "unlocked",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "unlock_type": {
+          "name": "unlock_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "profile_scraped": {
+          "name": "profile_scraped",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "tweet_scrape_started": {
+          "name": "tweet_scrape_started",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "tweet_scrape_started_time": {
+          "name": "tweet_scrape_started_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "tweet_scrape_completed": {
+          "name": "tweet_scrape_completed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "wordware_started": {
+          "name": "wordware_started",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "wordware_started_time": {
+          "name": "wordware_started_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "wordware_completed": {
+          "name": "wordware_completed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "paid_wordware_started": {
+          "name": "paid_wordware_started",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "paid_wordware_started_time": {
+          "name": "paid_wordware_started_time",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "paid_wordware_completed": {
+          "name": "paid_wordware_completed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        }
+      },
+      "indexes": {
+        "username_idx": {
+          "name": "username_idx",
+          "columns": [
+            {
+              "expression": "username",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "lowercase_username_idx": {
+          "name": "lowercase_username_idx",
+          "columns": [
+            {
+              "expression": "lowercase_username",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "created_at_index": {
+          "name": "created_at_index",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "users_username_unique": {
+          "name": "users_username_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "username"
+          ]
+        },
+        "users_lowercase_username_unique": {
+          "name": "users_lowercase_username_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "lowercase_username"
+          ]
+        }
+      }
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

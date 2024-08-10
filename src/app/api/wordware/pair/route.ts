@@ -58,23 +58,13 @@ export async function POST(request: Request) {
 
 *retweets: ${tweet.retweetCount}, replies: ${tweet.replyCount}, likes: ${tweet.likeCount}, quotes: ${tweet.quoteCount}, views: ${tweet.viewCount}*`
   }
+  const timestamp = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })
 
   const tweets1 = user1.tweets as TweetType[]
   const tweetsMarkdown1 = tweets1.map(formatTweet).join('\n---\n\n')
 
   const tweets2 = user2.tweets as TweetType[]
   const tweetsMarkdown2 = tweets2.map(formatTweet).join('\n---\n\n')
-
-  const userOnePayload = {
-    tweets: `Tweets: ${tweetsMarkdown1}`,
-    profilePicture: user1.profilePicture,
-    fullProfile: user1.fullProfile,
-  }
-  const userTwoPayload = {
-    tweets: `Tweets: ${tweetsMarkdown2}`,
-    profilePicture: user2.profilePicture,
-    fullProfile: user2.fullProfile,
-  }
 
   const promptID = process.env.WORDWARE_PAIR_PROMPT_ID
 
@@ -87,8 +77,10 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       inputs: {
-        userOne: JSON.stringify(userOnePayload),
-        userTwo: JSON.stringify(userTwoPayload),
+        userOneProfile: user1.fullProfile,
+        userOneTweets: `Tweets: ${tweetsMarkdown1}`,
+        userTwoProfile: user2.fullProfile,
+        userTwoTweets: `Tweets: ${tweetsMarkdown2}`,
       },
       version: '^1.0',
     }),
@@ -130,7 +122,7 @@ export async function POST(request: Request) {
           }
 
           const chunk = decoder.decode(value)
-          console.log('🟣 | file: route.ts:80 | start | chunk:', chunk)
+          console.log(`🟣 ${timestamp} | chunk:`, chunk)
 
           // Process the chunk character by character
           for (let i = 0, len = chunk.length; i < len; ++i) {

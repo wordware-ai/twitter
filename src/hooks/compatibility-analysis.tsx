@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { CompatibilityAnalysis } from '@/components/analysis/compatibility'
-// import { CompatibilityAnalysis } from '@/components/analysis/compatibility'
 import { SelectPair, SelectUser } from '@/drizzle/schema'
 import { Steps, useTwitterAnalysis } from '@/hooks/twitter-analysis'
 import { parsePartialJson } from '@/lib/parse-partial-json'
@@ -26,6 +25,7 @@ export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser, p
   const effectRan = useRef(false)
 
   useEffect(() => {
+    if (!pair.unlocked) return
     if (user1Steps.tweetScrapeCompleted && user2Steps.tweetScrapeCompleted && !steps.compatibilityAnalysisStarted) {
       if (effectRan.current) return
       effectRan.current = true
@@ -36,9 +36,10 @@ export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser, p
         setSteps((prev) => ({ ...prev, compatibilityAnalysisCompleted: true }))
       })()
     }
-  }, [user1.username, user2.username, user1Steps, user2Steps, steps.compatibilityAnalysisStarted])
+  }, [user1.username, user2.username, user1Steps, user2Steps, steps.compatibilityAnalysisStarted, pair.unlocked])
 
   const handleCompatibilityAnalysis = async (props: { usernames: string[]; full: boolean }) => {
+    if (steps.compatibilityAnalysisStarted) return
     const response = await fetch('/api/wordware/pair', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -74,5 +75,5 @@ export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser, p
     }
   }
 
-  return { steps, user1Steps, user1Result, user2Steps, user2Result, compatibilityResult }
+  return { steps, user1Steps, user1Result, user2Steps, user2Result, compatibilityResult, unlocked: pair.unlocked || false }
 }
