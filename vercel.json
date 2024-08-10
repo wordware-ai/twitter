@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/stripe/webhook/route.js": {
+    "api/stripe/**.js": {
       "memory": 256
     },
     "api/wordware/**.js": {
