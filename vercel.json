@@ -1,0 +1,10 @@
+{
+  "functions": {
+    "api/stripe/webhook/route.js": {
+      "memory": 256
+    },
+    "api/wordware/**.js": {
+      "memory": 256
+    }
+  }
+}
