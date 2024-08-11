@@ -13,8 +13,8 @@ export type CompatibilitySteps = {
 }
 
 export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser, pair: SelectPair) => {
-  const { steps: user1Steps, result: user1Result } = useTwitterAnalysis(user1, true)
-  const { steps: user2Steps, result: user2Result } = useTwitterAnalysis(user2, true)
+  const { steps: user1Steps, result: user1Result } = useTwitterAnalysis(user1, true, pair.unlocked || false)
+  const { steps: user2Steps, result: user2Result } = useTwitterAnalysis(user2, true, pair.unlocked || false)
   const [compatibilityResult, setCompatibilityResult] = useState<CompatibilityAnalysis | undefined>((pair.analysis as CompatibilityAnalysis) || undefined)
   const [steps, setSteps] = useState<CompatibilitySteps>({
     user1Steps,
@@ -26,7 +26,7 @@ export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser, p
 
   useEffect(() => {
     if (!pair.unlocked) return
-    if (user1Steps.tweetScrapeCompleted && user2Steps.tweetScrapeCompleted && !steps.compatibilityAnalysisStarted) {
+    if (user1Steps.tweetScrapeCompleted && user2Steps.tweetScrapeCompleted && !steps.compatibilityAnalysisCompleted) {
       if (effectRan.current) return
       effectRan.current = true
       ;(async () => {
@@ -39,7 +39,10 @@ export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser, p
   }, [user1.username, user2.username, user1Steps, user2Steps, steps.compatibilityAnalysisStarted, pair.unlocked])
 
   const handleCompatibilityAnalysis = async (props: { usernames: string[]; full: boolean }) => {
-    if (steps.compatibilityAnalysisStarted) return
+    if (steps.compatibilityAnalysisStarted && Date.now() - pair.wordwareStartedTime.getTime() < 2 * 60 * 1000) {
+      console.log('Not starting compatibility analysis', steps.compatibilityAnalysisStarted, Date.now() - pair.wordwareStartedTime.getTime())
+      return
+    }
     const response = await fetch('/api/wordware/pair', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -75,5 +78,13 @@ export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser, p
     }
   }
 
-  return { steps, user1Steps, user1Result, user2Steps, user2Result, compatibilityResult, unlocked: pair.unlocked || false }
+  return {
+    steps,
+    user1Steps,
+    user1Result,
+    user2Steps,
+    user2Result,
+    compatibilityResult,
+    unlocked: pair.unlocked || false,
+  }
 }

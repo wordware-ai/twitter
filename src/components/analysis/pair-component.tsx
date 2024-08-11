@@ -25,7 +25,7 @@ const PairComponent = ({ users, pair }: { users: SelectUser[]; pair: SelectPair 
             steps={user1Steps}
             result={user1Result}
             disableAnalysis={true}
-            userUnlocked={user1.unlocked || false}
+            userUnlocked={pair.unlocked || false}
           />
         </div>
         <div className="w-1/2">
@@ -33,7 +33,7 @@ const PairComponent = ({ users, pair }: { users: SelectUser[]; pair: SelectPair 
             steps={user2Steps}
             result={user2Result}
             disableAnalysis={true}
-            userUnlocked={user2.unlocked || false}
+            userUnlocked={pair.unlocked || false}
           />
         </div>
       </div>

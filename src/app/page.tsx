@@ -1,9 +1,10 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
-import { PiBrain, PiGithubLogo } from 'react-icons/pi'
+import { PiBrain, PiGithubLogo, PiXLogo } from 'react-icons/pi'
 
 import Quote from '@/app/quote'
 import WordwareLogo from '@/components/logo'
+import NewPairFormBothNames from '@/components/new-pair-form-both-names'
 import NewUsernameForm from '@/components/new-username-form'
 import PHButton from '@/components/ph-button'
 import { Button } from '@/components/ui/button'
@@ -17,7 +18,7 @@ const Page = () => {
     <section>
       <div className="flex flex-col md:flex-row">
         <div className="relative flex min-h-screen flex-col justify-center bg-[#F9FAFB] p-8 sm:p-12 md:w-1/2 md:p-16 lg:p-24">
-          <h2 className="flex items-center justify-start gap-4">
+          <h2 className="flex items-center justify-start gap-4 pb-8">
             Powered by{' '}
             <a
               href="https://wordware.ai/"
@@ -31,30 +32,55 @@ const Page = () => {
           <div className="grow" />
 
           <div>
-            <h1 className="mb-8 text-4xl md:text-5xl 2xl:text-6xl">
-              discover your <br />
-              <span
-                className="bg-clip-text text-transparent"
-                style={{ backgroundColor: '#CB9F9F' }}>
-                {' '}
-                twitter{' '}
-              </span>
-              personality
-            </h1>
-            <p className="text-sm text-red-900">
-              We&apos;re currently experiencing high demand.
-              <br />
-              Thank you for your patience as we work to accommodate all users.
-            </p>
+            <div>
+              <h1 className="mb-8 text-4xl md:text-5xl 2xl:text-6xl">
+                discover your <br />
+                <span
+                  className="bg-clip-text text-transparent"
+                  style={{ backgroundColor: '#CB9F9F' }}>
+                  {' '}
+                  twitter{' '}
+                </span>
+                personality 🔥
+              </h1>
 
-            <div className="mb-8 flex items-center pt-2">
-              <Suspense>
-                <NewUsernameForm />
-              </Suspense>
+              <div className="mb-8 flex w-full flex-col pt-2">
+                <div className="flex w-full items-center">
+                  <Suspense>
+                    <NewUsernameForm />
+                  </Suspense>
+                </div>
+              </div>
+            </div>
+            <div className="pt-8">
+              <h1 className="mb-8 text-4xl md:text-5xl 2xl:text-6xl">
+                check your{' '}
+                <span className="inline-flex items-center align-middle">
+                  <PiXLogo />
+                  <PiXLogo />
+                  <PiXLogo />
+                </span>
+                <br />
+                <span
+                  className="bg-clip-text text-transparent"
+                  style={{ backgroundColor: '#6DB1BF' }}>
+                  {' '}
+                  compatibility
+                </span>{' '}
+                💞
+              </h1>
+
+              <div className="mb-8 flex w-full flex-col pt-2">
+                <div className="flex w-full items-center">
+                  <Suspense>
+                    <NewPairFormBothNames />
+                  </Suspense>
+                </div>
+              </div>
             </div>
 
             <div className="mb-8 pt-8 text-base 2xl:text-lg">
-              This is an AI Agent built with{' '}
+              These are AI Agents built with{' '}
               <a
                 className="font-medium underline-offset-4 hover:underline"
                 target="_blank"
@@ -63,10 +89,10 @@ const Page = () => {
               </a>
               , it will:
               <ul className="mt-2 list-disc space-y-1 pl-8">
-                <li>find your twitter account online</li>
-                <li>an AI agent will read your tweets</li>
+                <li>find Twitter accounts online</li>
+                <li>will read your profile and tweets</li>
                 <li>then it will use Large Language Models - like the ones in ChatGPT - to analyse your personality</li>
-                <li>finally, it&apos;ll create a website with the analysis</li>
+                <li>finally, it&apos;ll create a website with the analysis of your personality or compatibility</li>
               </ul>
             </div>
           </div>

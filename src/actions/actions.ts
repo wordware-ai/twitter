@@ -134,8 +134,12 @@ export const updateUser = async ({ user }: { user: InsertUser }) => {
 
 export const handleNewUsername = async ({ username, redirectPath }: { username: string; redirectPath?: string }) => {
   const user = await getUser({ username })
-  if (user && redirectPath) {
-    redirect(redirectPath)
+  if (user) {
+    if (redirectPath) {
+      redirect(redirectPath)
+    } else {
+      return { error: false, found: true }
+    }
   }
 
   let { data, error } = await fetchUserData({ screenName: username })
@@ -544,7 +548,13 @@ export const getOrCreatePair = async ({ usernames, shouldRedirect }: { usernames
 
   const existingPair = await getPair({ usernames })
 
-  if (existingPair) return existingPair
+  if (existingPair) {
+    if (shouldRedirect) {
+      redirect(`/${usernames[0]}/${usernames[1]}`)
+    } else {
+      return existingPair
+    }
+  }
 
   return await createPair({ usernames, shouldRedirect })
 }
