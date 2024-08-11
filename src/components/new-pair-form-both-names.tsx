@@ -20,8 +20,6 @@ const formSchema = z.object({
 })
 
 const NewPairFormBothNames = () => {
-  const pathname = usePathname()
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,13 +37,24 @@ const NewPairFormBothNames = () => {
     }
     const response = await handleNewUsername({
       username: cleanedUsername1,
-      redirectPath: `${pathname}/${cleanedUsername1}`,
     })
+    console.log('Response1', response)
 
     if (response?.error) {
       toast.error(response.error)
       return
     }
+
+    const response2 = await handleNewUsername({
+      username: cleanedUsername2,
+    })
+    console.log('Response2', response2)
+
+    if (response2?.error) {
+      toast.error(response2.error)
+      return
+    }
+
     await getOrCreatePair({ usernames: [cleanedUsername1, cleanedUsername2], shouldRedirect: true })
   }
 
@@ -110,7 +119,7 @@ const NewPairFormBothNames = () => {
       </Form>
       {/* Display loading spinner when form is submitting or submission is successful */}
       {form.formState.isSubmitting && (
-        <div className="flex items-center gap-2 text-sm">
+        <div className="flex items-center gap-2 pt-4 text-sm">
           <PiSpinner className="animate-spin" />
           Checking compatibility...
         </div>
