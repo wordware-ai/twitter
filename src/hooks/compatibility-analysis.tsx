@@ -26,7 +26,7 @@ export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser, p
 
   useEffect(() => {
     if (!pair.unlocked) return
-    if (user1Steps.tweetScrapeCompleted && user2Steps.tweetScrapeCompleted && !steps.compatibilityAnalysisStarted) {
+    if (user1Steps.tweetScrapeCompleted && user2Steps.tweetScrapeCompleted && !steps.compatibilityAnalysisCompleted) {
       if (effectRan.current) return
       effectRan.current = true
       ;(async () => {
@@ -39,7 +39,10 @@ export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser, p
   }, [user1.username, user2.username, user1Steps, user2Steps, steps.compatibilityAnalysisStarted, pair.unlocked])
 
   const handleCompatibilityAnalysis = async (props: { usernames: string[]; full: boolean }) => {
-    if (steps.compatibilityAnalysisStarted) return
+    if (steps.compatibilityAnalysisStarted && Date.now() - pair.wordwareStartedTime.getTime() < 2 * 60 * 1000) {
+      console.log('Not starting compatibility analysis', steps.compatibilityAnalysisStarted, Date.now() - pair.wordwareStartedTime.getTime())
+      return
+    }
     const response = await fetch('/api/wordware/pair', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
