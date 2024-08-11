@@ -42,12 +42,11 @@ export type CompatibilityAnalysis = {
   attachment_style: string
   values_alignment: string
   breakup_percentage: string
-  overall_compability: string
+  overall_compatibility: string
   personality_type_match: string
   emotional_compatibility: string
   financial_compatibility: string
   communication_style_compatibility: string
-  twitter_names: string[]
 }
 
 type CompatibilityProps = {
