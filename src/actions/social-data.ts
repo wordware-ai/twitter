@@ -47,10 +47,6 @@ type SocialDataTweet = {
   views_count: number
   bookmark_count: number
   is_pinned: boolean
-  articleDetailsArray: any | null
-  article: any | null
-  parserEntryId: any | null
-  controllerComponentName: string
 }
 
 export async function fetchTweets(userId: string) {
@@ -151,7 +147,10 @@ export async function fetchAndParseSocialDataTweetsByUsername(username: string):
   }
 }
 
-export async function fetchUserDataBySocialData({ username }: { username: string }): Promise<{ data: DatabaseUser | null; error: string | null }> {
+export async function fetchUserDataBySocialData({ username }: { username: string }): Promise<{
+  data: DatabaseUser | null
+  error: string | null
+}> {
   const url = `https://api.socialdata.tools/twitter/user/${username}`
 
   try {

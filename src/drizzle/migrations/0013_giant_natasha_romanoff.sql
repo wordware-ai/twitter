@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS "created_at_pair_idx" ON "pairs" USING btree ("created_at");

@@ -59,7 +59,6 @@ export const pairs = pgTable(
     analysis: jsonb('analysis'),
     unlocked: boolean('unlocked').default(false),
     unlockType: text('unlock_type').$type<'stripe' | 'email' | 'free'>(),
-
     wordwareStarted: boolean('wordware_started').default(false),
     wordwareStartedTime: timestamp('wordware_started_time').notNull().defaultNow(),
     wordwareCompleted: boolean('wordware_completed').default(false),
@@ -67,6 +66,7 @@ export const pairs = pgTable(
   (table) => {
     return {
       userPairIdx: uniqueIndex('unique_user_pair_idx').on(table.user1lowercaseUsername, table.user2lowercaseUsername),
+      createdAtPairIndex: index('created_at_pair_idx').on(table.createdAt),
     }
   },
 )

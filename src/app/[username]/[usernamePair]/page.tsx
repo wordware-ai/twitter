@@ -5,15 +5,18 @@ import { Metadata } from 'next/types'
 import { PiPlus } from 'react-icons/pi'
 
 import { getPair, getUser } from '@/actions/actions'
+import { ProfileHighlight } from '@/components/analysis/profile-highlight'
 import Topbar from '@/components/top-bar'
 
 import PairComponent from '../../../components/analysis/pair-component'
-import { ProfileHighlight } from '../../../components/analysis/profile-highlight'
 
 const PairPage = async ({ params: { username, usernamePair } }: { params: { username: string; usernamePair: string } }) => {
+  console.log('Page for', username, 'and', usernamePair)
   //ALWAYS SORT THE USER IDS SO WE CAN USE THEM AS KEYS
   const [username1, username2] = [username, usernamePair].sort()
   const pair = await getPair({ usernames: [username1, username2] })
+
+  // User pairs have to have been created before getting to this page
   const [user1, user2] = await Promise.all([getUser({ username: username1 }), getUser({ username: username2 })])
 
   if (!user1 || !user2 || !pair) return <div>Pair does not exist</div>
@@ -26,16 +29,14 @@ const PairPage = async ({ params: { username, usernamePair } }: { params: { user
           Here&apos;s the <span className="font-medium">AI agent</span> analysis of your compatibility...
         </div>
         <div className="flex flex-col items-center justify-center gap-2 md:flex-row md:gap-8">
-          <div className="w-full md:w-5/12">
+          <div className="w-full rounded-lg p-2 hover:bg-stone-200 md:w-5/12">
             <Link href={`/${username1}`}>
               <ProfileHighlight user={user1} />
             </Link>
           </div>
           <PiPlus size={36} />
-          <div className="w-full md:w-5/12">
-            <Link
-              href={`/${username2}`}
-              className="border-2 border-transparent transition-all hover:border-blue-200">
+          <div className="w-full rounded-lg p-2 hover:bg-stone-200 md:w-5/12">
+            <Link href={`/${username2}`}>
               <ProfileHighlight user={user2} />
             </Link>
           </div>
@@ -61,7 +62,8 @@ export async function generateMetadata({ params, searchParams }: { params: { use
 
   const imageParams = new URLSearchParams()
   const section = searchParams.section || 'about'
-  // const section = 'about' //TODO: Hardcode about for now, to make it dynamic we need to design the full OG image generator for all the section types
+  // const section = 'about' //TODO: Hardcode about for now, to make it dynamic we need to design the full OG image
+  // generator for all the section types
   const content = (pair.analysis as any)?.[section]
 
   imageParams.set('name1', user1.name || '')
