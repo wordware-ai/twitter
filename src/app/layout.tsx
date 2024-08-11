@@ -2,6 +2,8 @@ import { Inter } from 'next/font/google'
 
 import './globals.css'
 
+import { Analytics } from '@vercel/analytics/react'
+
 import Callout from '@/components/callout'
 import { DeveloperInfo } from '@/components/developer-info'
 import Footer from '@/components/footer'
@@ -89,6 +91,7 @@ export default function RootLayout({
             <DeveloperInfo />
           </>
         </Providers>
+        <Analytics />
       </body>
     </html>
   )
