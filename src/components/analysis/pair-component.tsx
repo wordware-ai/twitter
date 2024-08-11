@@ -46,7 +46,7 @@ const PairComponent = ({ users, pair }: { users: SelectUser[]; pair: SelectPair 
           text="Compatibility Analysis"
         />
       )}
-      {!unlocked && <CompatibilityPriceButton price={paywallFlag as string} />}
+      {!unlocked && !pair.analysis && <CompatibilityPriceButton price={paywallFlag as string} />}
       <ActionButtons
         shareActive={!!compatibilityResult?.about}
         text={`this is my and ${user2.username}'s Compatibility analysis by AI Agent, built on @wordware_ai`}

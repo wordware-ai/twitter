@@ -82,7 +82,7 @@ const Compatibility: React.FC<CompatibilityProps> = ({ pairAnalysis, unlocked, n
 
     return allCards.map((card, index) => (
       <React.Fragment key={card.contentKey}>
-        {index === 1 && !unlocked && <CompatibilityPaywallCard />}
+        {index === 1 && !unlocked && !pairAnalysis && <CompatibilityPaywallCard />}
         {index === 7 && <WordwareCard />}
         <CompatibilityCard
           names={[profile1Name, profile2Name]}
