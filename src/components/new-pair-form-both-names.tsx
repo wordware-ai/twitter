@@ -12,7 +12,7 @@ import { getOrCreatePair, handleNewUsername } from '@/actions/actions'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { cleanUsername, cn } from '@/lib/utils'
+import { cleanUsername } from '@/lib/utils'
 
 const formSchema = z.object({
   username1: z.string().min(3).max(50),
