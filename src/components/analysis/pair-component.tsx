@@ -5,6 +5,7 @@ import posthog from 'posthog-js'
 
 import { SelectPair, SelectUser } from '@/drizzle/schema'
 import { useCompatibilityAnalysis } from '@/hooks/compatibility-analysis'
+import { PAIRS_PAYWALL } from '@/lib/config'
 
 import ActionButtons from './action-buttons'
 import Compatibility from './compatibility'
@@ -25,7 +26,7 @@ const PairComponent = ({ users, pair }: { users: SelectUser[]; pair: SelectPair 
             steps={user1Steps}
             result={user1Result}
             disableAnalysis={true}
-            userUnlocked={pair.unlocked || false}
+            userUnlocked={!PAIRS_PAYWALL || pair.unlocked || false}
           />
         </div>
         <div className="w-1/2">
@@ -33,7 +34,7 @@ const PairComponent = ({ users, pair }: { users: SelectUser[]; pair: SelectPair 
             steps={user2Steps}
             result={user2Result}
             disableAnalysis={true}
-            userUnlocked={pair.unlocked || false}
+            userUnlocked={!PAIRS_PAYWALL || pair.unlocked || false}
           />
         </div>
       </div>

@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { processScrapedUser } from '@/actions/actions'
 import { TwitterAnalysis } from '@/components/analysis/analysis'
 import { SelectUser } from '@/drizzle/schema'
-import { PAYWALL } from '@/lib/config'
+import { PERSONALITY_PART1_PAYWALL } from '@/lib/config'
 import { parsePartialJson } from '@/lib/parse-partial-json'
 
 export type Steps = {
@@ -107,7 +107,7 @@ export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = 
   }
 
   const shouldRunTweetScrape = (user: SelectUser): boolean => {
-    const isUnlocked = PAYWALL ? user.unlocked || false : true
+    const isUnlocked = PERSONALITY_PART1_PAYWALL ? user.unlocked || false : true
     return (
       (forceScrape || isUnlocked) &&
       (!user.tweetScrapeStarted || (!user.tweetScrapeCompleted && Date.now() - user.tweetScrapeStartedTime.getTime() > 1 * 60 * 1000))
@@ -115,7 +115,7 @@ export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = 
   }
 
   const shouldRunWordwareAnalysis = (user: SelectUser, tweetScrapeCompleted: boolean): boolean => {
-    const unlockedCheck = PAYWALL ? user.unlocked || false : true
+    const unlockedCheck = PERSONALITY_PART1_PAYWALL ? user.unlocked || false : true
     return (
       (unlockedCheck && tweetScrapeCompleted && !user.wordwareStarted) ||
       (unlockedCheck && tweetScrapeCompleted && !user.wordwareCompleted && Date.now() - user.wordwareStartedTime.getTime() > 60 * 1000)
