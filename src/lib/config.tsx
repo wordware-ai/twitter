@@ -12,5 +12,5 @@ export const getURL = () => {
 
 //TRUE if user has to pay for the service
 //FALSE if paywall is disabled
-export const PERSONALITY_PART1_PAYWALL = true
+export const PERSONALITY_PART1_PAYWALL = false
 export const PAIRS_PAYWALL = true
