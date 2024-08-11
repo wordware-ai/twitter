@@ -24,7 +24,7 @@ export type Steps = {
  * @returns {Object} An object containing the analysis steps and results.
  */
 
-export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = false) => {
+export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = false, forceScrape: boolean = false) => {
   const [steps, setSteps] = useState<Steps>(initializeSteps(user))
   const [result, setResult] = useState<TwitterAnalysis | undefined>((user.analysis as TwitterAnalysis) || undefined)
   const effectRan = useRef(false)
@@ -107,8 +107,11 @@ export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = 
   }
 
   const shouldRunTweetScrape = (user: SelectUser): boolean => {
-    const unlockedCheck = PAYWALL ? user.unlocked || false : true
-    return unlockedCheck && (!user.tweetScrapeStarted || (!user.tweetScrapeCompleted && Date.now() - user.tweetScrapeStartedTime.getTime() > 1 * 60 * 1000))
+    const isUnlocked = PAYWALL ? user.unlocked || false : true
+    return (
+      (forceScrape || isUnlocked) &&
+      (!user.tweetScrapeStarted || (!user.tweetScrapeCompleted && Date.now() - user.tweetScrapeStartedTime.getTime() > 1 * 60 * 1000))
+    )
   }
 
   const shouldRunWordwareAnalysis = (user: SelectUser, tweetScrapeCompleted: boolean): boolean => {

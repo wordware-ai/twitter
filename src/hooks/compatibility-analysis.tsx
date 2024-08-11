@@ -13,8 +13,8 @@ export type CompatibilitySteps = {
 }
 
 export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser, pair: SelectPair) => {
-  const { steps: user1Steps, result: user1Result } = useTwitterAnalysis(user1, true)
-  const { steps: user2Steps, result: user2Result } = useTwitterAnalysis(user2, true)
+  const { steps: user1Steps, result: user1Result } = useTwitterAnalysis(user1, true, pair.unlocked || false)
+  const { steps: user2Steps, result: user2Result } = useTwitterAnalysis(user2, true, pair.unlocked || false)
   const [compatibilityResult, setCompatibilityResult] = useState<CompatibilityAnalysis | undefined>((pair.analysis as CompatibilityAnalysis) || undefined)
   const [steps, setSteps] = useState<CompatibilitySteps>({
     user1Steps,
@@ -75,5 +75,13 @@ export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser, p
     }
   }
 
-  return { steps, user1Steps, user1Result, user2Steps, user2Result, compatibilityResult, unlocked: pair.unlocked || false }
+  return {
+    steps,
+    user1Steps,
+    user1Result,
+    user2Steps,
+    user2Result,
+    compatibilityResult,
+    unlocked: pair.unlocked || false,
+  }
 }
