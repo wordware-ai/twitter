@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next/types'
 
 import { getUser } from '@/actions/actions'
+import NewPairForm from '@/components/new-pair-form'
 import NewUsernameForm from '@/components/new-username-form'
 
 import { ProfileHighlight } from '../../components/analysis/profile-highlight'
@@ -34,10 +35,14 @@ const Page = async ({ params }: { params: { username: string } }) => {
 
       <div className="flex-center container mx-auto flex-col space-y-4 px-4">
         <div className="text-center text-2xl font-light">Try with your own profile</div>
-        <div className="flex-center">
-          <Suspense>
-            <NewUsernameForm />
-          </Suspense>
+        <div className="flex-center flex-col space-y-6">
+          <div className="w-fit">
+            <Suspense>
+              <NewUsernameForm />
+            </Suspense>
+          </div>
+          <p>— or see how compatible you are with someone else 💞💼💍🚩🚀 —</p>
+          <NewPairForm />
         </div>
       </div>
     </div>
