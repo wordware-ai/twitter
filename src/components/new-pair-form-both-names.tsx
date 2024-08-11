@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from 'react'
-import { usePathname } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { PiSparkle, PiSpinner } from 'react-icons/pi'
