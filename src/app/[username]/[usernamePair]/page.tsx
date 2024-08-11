@@ -6,6 +6,7 @@ import { PiPlus } from 'react-icons/pi'
 
 import { getPair, getUser } from '@/actions/actions'
 import { ProfileHighlight } from '@/components/analysis/profile-highlight'
+import NewPairFormBothNames from '@/components/new-pair-form-both-names'
 import Topbar from '@/components/top-bar'
 
 import PairComponent from '../../../components/analysis/pair-component'
@@ -47,6 +48,10 @@ const PairPage = async ({ params: { username, usernamePair } }: { params: { user
         users={[user1, user2]}
         pair={pair}
       />
+      <div className="my-8 flex w-full max-w-sm flex-col items-center space-y-4">
+        <p className="text-lg">Check compatibility with someone else!</p>
+        <NewPairFormBothNames />
+      </div>
     </div>
   )
 }
