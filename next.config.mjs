@@ -30,7 +30,7 @@ const nextConfig = {
   //   // !! WARN !!
   //   ignoreBuildErrors: true,
   // },
-  staticPageGenerationTimeout: 180,
+  staticPageGenerationTimeout: 240,
 }
 
 export default nextConfig
