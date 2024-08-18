@@ -7,7 +7,7 @@ import { PiSparkle, PiSpinner } from 'react-icons/pi'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { getOrCreatePair, handleNewUsername } from '@/actions/actions'
+import { handleNewUsername, handlePair } from '@/actions/actions'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -54,7 +54,7 @@ const NewPairFormBothNames = () => {
       return
     }
 
-    await getOrCreatePair({ usernames: [cleanedUsername1, cleanedUsername2], shouldRedirect: true })
+    await handlePair({ usernames: [cleanedUsername1, cleanedUsername2], shouldRedirect: true })
   }
 
   return (

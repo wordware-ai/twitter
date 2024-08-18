@@ -1,10 +1,8 @@
 import { PiCheckCircle, PiCircle, PiLockKey, PiSpinner } from 'react-icons/pi'
 
-import { Steps } from '@/hooks/twitter-analysis'
 import { PERSONALITY_PART1_PAYWALL } from '@/lib/config'
 import { cn } from '@/lib/utils'
-
-import { TwitterAnalysis } from './analysis'
+import { Steps, TwitterAnalysis } from '@/types'
 
 export const ProgressIndicator = ({
   steps,

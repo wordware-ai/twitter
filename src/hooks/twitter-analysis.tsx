@@ -1,20 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { processScrapedUser } from '@/actions/actions'
-import { TwitterAnalysis } from '@/components/analysis/analysis'
 import { SelectUser } from '@/drizzle/schema'
-import { PERSONALITY_PART1_PAYWALL } from '@/lib/config'
+import { PERSONALITY_PART1_PAYWALL, PERSONALITY_PART2_PAYWALL } from '@/lib/config'
 import { parsePartialJson } from '@/lib/parse-partial-json'
-
-export type Steps = {
-  profileScraped: boolean
-  tweetScrapeStarted: boolean
-  tweetScrapeCompleted: boolean
-  wordwareStarted: boolean
-  wordwareCompleted: boolean
-  paidWordwareStarted: boolean
-  paidWordwareCompleted: boolean
-}
+import { Steps, TwitterAnalysis } from '@/types'
 
 /**
  * Custom hook for analyzing Twitter user data.
@@ -123,13 +113,17 @@ export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = 
   }
 
   const shouldRunPaidWordwareAnalysis = (user: SelectUser, result: TwitterAnalysis | undefined): boolean => {
-    return (
+    const unlockedCheck = PERSONALITY_PART2_PAYWALL ? user.unlocked || false : true
+    console.log('🟣 | file: twitter-analysis.tsx:117 | shouldRunPaidWordwareAnalysis | unlockedCheck:', unlockedCheck)
+    const verdict =
       (!user.paidWordwareCompleted &&
         (!result || !result.loveLife) &&
         ((user.unlocked && !user.paidWordwareStarted) ||
           (user.unlocked && !user.paidWordwareCompleted && Date.now() - user.paidWordwareStartedTime.getTime() > 60 * 1000))) ||
       false
-    )
+
+    console.log('🟣 | file: twitter-analysis.tsx:119 | shouldRunPaidWordwareAnalysis | verdict:', verdict)
+    return unlockedCheck || verdict
   }
 
   const runTweetScrape = async (user: SelectUser, setSteps: React.Dispatch<React.SetStateAction<Steps>>): Promise<boolean> => {

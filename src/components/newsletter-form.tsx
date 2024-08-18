@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { createLoopsContact } from '@/actions/actions'
+import { newsletterSignup } from '@/actions/actions'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -36,7 +36,7 @@ export function NewsletterForm() {
    */
   async function onSubmit(values: z.infer<typeof FormSchema>) {
     // Attempt to create a contact in Loops
-    const { success } = await createLoopsContact({ email: values.email })
+    const { success } = await newsletterSignup({ email: values.email })
     if (!success) {
       toast.error('Something went wrong')
     } else {

@@ -1,6 +1,6 @@
-import { getStatistics } from '@/actions/actions'
-import { getMostVisited, getTraffic } from '@/actions/posthog'
 import Topbar from '@/components/top-bar'
+import { getStatistics } from '@/drizzle/queries'
+import { getMostVisited, getTraffic } from '@/lib/posthog'
 
 import Authors from './authors'
 import { CumulativeUsersChart, TrafficChart, UniqueUsersChart } from './charts'

@@ -39,6 +39,7 @@ export const users = pgTable(
       usernameIdx: index('username_idx').on(table.username),
       lowercaseUsernameIdx: index('lowercase_username_idx').on(table.lowercaseUsername),
       createdAtIndex: index('created_at_index').on(table.createdAt),
+      createdAtDateHourIdx: index('created_at_date_hour_idx').on(sql`DATE(${table.createdAt}), EXTRACT(HOUR FROM ${table.createdAt})`),
     }
   },
 )
@@ -70,6 +71,20 @@ export const pairs = pgTable(
     }
   },
 )
+
+// export const userStatistics = pgTable(
+//   'user_statistics',
+//   {
+//     timestamp: timestamp('timestamp').notNull(),
+//     uniqueUsersCount: integer('unique_users_count').notNull(),
+//     uniquePairsCount: integer('unique_pairs_count').notNull(),
+//   },
+//   (table) => {
+//     return {
+//       timestampIdx: uniqueIndex('timestamp_idx').on(table.timestamp),
+//     }
+//   },
+// )
 
 export type InsertUser = typeof users.$inferInsert
 export type SelectUser = typeof users.$inferSelect

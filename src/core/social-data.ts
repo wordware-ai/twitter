@@ -1,4 +1,6 @@
-import { DatabaseUser, TweetType } from './types'
+import 'server-only'
+
+import { DatabaseUser, TweetType } from '../types'
 
 type SocialDataTweet = {
   tweet_created_at: string

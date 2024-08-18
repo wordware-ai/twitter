@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
-import { unlockGeneration } from '@/actions/actions'
+import { unlockGenerationByEmail } from '@/actions/actions'
 import { createCheckoutSession } from '@/actions/stripe'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -51,7 +51,7 @@ export const CompatibilityPaywallCard: React.FC = () => {
 
   async function onSubmit(values: z.infer<typeof FormSchema>) {
     // Attempt to create a contact in Loops
-    const { success } = await unlockGeneration({ username: username as string, usernamePair: usernamePair as string, email: values.email })
+    const { success } = await unlockGenerationByEmail({ username: username as string, usernamePair: usernamePair as string, email: values.email })
     if (!success) {
       toast.error('Something went wrong')
     } else {

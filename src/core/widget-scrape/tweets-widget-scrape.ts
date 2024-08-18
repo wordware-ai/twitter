@@ -1,9 +1,11 @@
+import 'server-only'
+
 import { JSDOM } from 'jsdom'
 import { getRandom } from 'random-useragent'
 
-import { TweetType } from '../types'
+import { TweetType } from '@/types'
 
-export async function fetchTimelineProfile(screenName: string): Promise<string> {
+async function fetchTimelineProfile(screenName: string): Promise<string> {
   // const guestToken = await getGuestToken()
   const url = `https://syndication.twitter.com/srv/timeline-profile/screen-name/${screenName}`
   const params = new URLSearchParams({
@@ -59,7 +61,7 @@ export async function fetchTimelineProfile(screenName: string): Promise<string> 
   }
 }
 
-export async function extractTweets(htmlContent: string): Promise<any[]> {
+async function extractTweets(htmlContent: string): Promise<any[]> {
   // Create a DOM from the HTML content
   const dom = new JSDOM(htmlContent)
   const document = dom.window.document
@@ -82,14 +84,6 @@ export async function extractTweets(htmlContent: string): Promise<any[]> {
   return tweets.slice(0, 12)
 }
 
-export async function getTweets(screenName: string) {
-  const htmlContent = await fetchTimelineProfile(screenName)
-  const tweets = await extractTweets(htmlContent)
-  const parsedTweets = tweets.map(parseTweet)
-
-  return parsedTweets
-}
-
 function parseTweet(tweet: any): TweetType {
   return {
     isRetweet: !!tweet.retweeted_status,
@@ -104,4 +98,12 @@ function parseTweet(tweet: any): TweetType {
     quoteCount: tweet.quote_count,
     viewCount: tweet.view_count || 0, // Twitter doesn't always provide view count
   }
+}
+
+export async function getTweetsTwitterWidget(screenName: string) {
+  const htmlContent = await fetchTimelineProfile(screenName)
+  const tweets = await extractTweets(htmlContent)
+  const parsedTweets = tweets.map(parseTweet)
+
+  return parsedTweets
 }
