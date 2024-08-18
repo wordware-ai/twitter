@@ -189,17 +189,20 @@ export const getStatistics = cache(
         COUNT(DISTINCT id) AS unique_users_count
       FROM users
       GROUP BY DATE(created_at), EXTRACT(HOUR FROM created_at)
-      ORDER BY DATE(created_at), EXTRACT(HOUR FROM created_at)
     `)
 
     let cumulative = 0
-    const formattedResult = result.rows.map((row: any) => {
-      cumulative += parseInt(row.unique_users_count)
-      return {
+    const formattedResult = result.rows
+      .map((row: any) => ({
         timestamp: `${row.date}T${row.hour.toString().padStart(2, '0')}:00:00Z`,
         unique: parseInt(row.unique_users_count),
-        cumulative: cumulative,
-      }
+        cumulative: 0, // We'll calculate this after sorting
+      }))
+      .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
+
+    formattedResult.forEach((item) => {
+      cumulative += item.unique
+      item.cumulative = cumulative
     })
 
     // Remove the last item from the array (which might be incomplete data for the current hour)
@@ -210,6 +213,37 @@ export const getStatistics = cache(
   ['statistics'],
   { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
 )
+
+// export const getStatistics = cache(
+//   async () => {
+//     const result = await db.execute(sql`
+//       SELECT
+//         DATE(created_at) AS date,
+//         EXTRACT(HOUR FROM created_at) AS hour,
+//         COUNT(DISTINCT id) AS unique_users_count
+//       FROM users
+//       GROUP BY DATE(created_at), EXTRACT(HOUR FROM created_at)
+//       ORDER BY DATE(created_at), EXTRACT(HOUR FROM created_at)
+//     `)
+
+//     let cumulative = 0
+//     const formattedResult = result.rows.map((row: any) => {
+//       cumulative += parseInt(row.unique_users_count)
+//       return {
+//         timestamp: `${row.date}T${row.hour.toString().padStart(2, '0')}:00:00Z`,
+//         unique: parseInt(row.unique_users_count),
+//         cumulative: cumulative,
+//       }
+//     })
+
+//     // Remove the last item from the array (which might be incomplete data for the current hour)
+//     const lastElement = formattedResult[formattedResult.length - 2] // Get the second to last element
+//     const lastTimestamp = lastElement ? new Date(lastElement.timestamp) : new Date()
+//     return { chartData: formattedResult.slice(0, -1), timestamp: lastTimestamp.toISOString() }
+//   },
+//   ['statistics'],
+//   { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
+// )
 
 export const insertPair = async ({ usernames }: { usernames: string[] }) => {
   const [user1lowercaseUsername, user2lowercaseUsername] = [usernames[0].toLowerCase(), usernames[1].toLowerCase()].sort()

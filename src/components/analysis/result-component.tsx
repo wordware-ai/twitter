@@ -7,6 +7,7 @@ import posthog from 'posthog-js'
 import { PriceButton } from '@/components/analysis/paywall-card'
 import { SelectUser } from '@/drizzle/schema'
 import { useTwitterAnalysis } from '@/hooks/twitter-analysis'
+import { PERSONALITY_PART2_PAYWALL } from '@/lib/config'
 import { analysisPlaceholder } from '@/lib/constants'
 import { TwitterAnalysis } from '@/types'
 
@@ -42,9 +43,9 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
       <ProgressIndicator
         steps={steps}
         result={result}
-        userUnlocked={user.unlocked || false}
+        userUnlocked={!PERSONALITY_PART2_PAYWALL || user.unlocked || false}
       />
-      {!user.unlocked && (
+      {PERSONALITY_PART2_PAYWALL && !user.unlocked && (
         <PriceButton
           username={user.username}
           price={paywallFlag as string}
@@ -71,10 +72,10 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
       </div>
 
       <Analysis
-        unlocked={user.unlocked || false}
-        userData={prepareUserData(result, user.unlocked || false)}
+        unlocked={!PERSONALITY_PART2_PAYWALL || user.unlocked || false}
+        userData={prepareUserData(result, !PERSONALITY_PART2_PAYWALL || user.unlocked || false)}
       />
-      {!result?.loveLife && user.unlocked && (
+      {!result?.loveLife && (!PERSONALITY_PART2_PAYWALL || user.unlocked) && (
         <StepIndicator
           started={steps.paidWordwareStarted}
           completed={steps.paidWordwareCompleted}
