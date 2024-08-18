@@ -1,16 +1,17 @@
 import Topbar from '@/components/top-bar'
-import { getStatistics } from '@/drizzle/queries'
+// import { getStatistics } from '@/drizzle/queries'
 import { getMostVisited, getTraffic } from '@/lib/posthog'
 
 import Authors from './authors'
-import { CumulativeUsersChart, TrafficChart, UniqueUsersChart } from './charts'
-import LastUpdate from './last-update'
+import { TrafficChart } from './charts'
+// import { CumulativeUsersChart, TrafficChart, UniqueUsersChart } from './charts'
+// import LastUpdate from './last-update'
 import MostVisited from './most-visited'
 
 export const maxDuration = 180
 
 const Page = async () => {
-  const { chartData, timestamp } = await getStatistics()
+  // const { chartData, timestamp } = await getStatistics()
   const { trafficData } = await getTraffic()
   const { mostVisited } = await getMostVisited()
 
@@ -20,7 +21,7 @@ const Page = async () => {
       <div className="w-full max-w-4xl space-y-6">
         <div className="space-y-4">
           <h1 className="text-start text-4xl font-bold">Open Project</h1>
-          <LastUpdate timestamp={timestamp} />
+          {/* <LastUpdate timestamp={timestamp} /> */}
           <p>
             Twitter Personality by Wordware is a fully Open Project, which not only the code is open source, but we&apos;re also happy to share all the critical
             metrics and statistics.
@@ -32,7 +33,7 @@ const Page = async () => {
           <Authors />
         </div>
 
-        <div className="space-y-4">
+        {/* <div className="space-y-4">
           <h2 className="text-start text-2xl font-bold">Cumulative users</h2>
           <p>
             Our project launched on Product Hunt and Twitter simultaneously. While it initially gained little traction on Product Hunt, it unexpectedly went
@@ -47,7 +48,7 @@ const Page = async () => {
             times.
           </p>
           <UniqueUsersChart chartData={chartData} />
-        </div>
+        </div>*/}
         <div className="space-y-4">
           <h2 className="text-start text-2xl font-bold">Website traffic</h2>
           <p>Data provided by Posthog</p>

@@ -71,6 +71,20 @@ export const pairs = pgTable(
   },
 )
 
+export const userStatistics = pgTable(
+  'user_statistics',
+  {
+    timestamp: timestamp('timestamp').notNull(),
+    uniqueUsersCount: integer('unique_users_count').notNull(),
+    uniquePairsCount: integer('unique_pairs_count').notNull(),
+  },
+  (table) => {
+    return {
+      timestampIdx: uniqueIndex('timestamp_idx').on(table.timestamp),
+    }
+  },
+)
+
 export type InsertUser = typeof users.$inferInsert
 export type SelectUser = typeof users.$inferSelect
 export type InsertPair = typeof pairs.$inferInsert
