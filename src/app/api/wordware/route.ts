@@ -1,11 +1,11 @@
-import { getUser, updateUser } from '@/actions/actions'
-import { TweetType } from '@/actions/types'
-import { TwitterAnalysis } from '@/components/analysis/analysis'
+import { getUser, updateUser } from '@/drizzle/queries'
+import { TweetType, TwitterAnalysis } from '@/types'
 
 /**
  * Maximum duration for the API route execution (in seconds)
  */
 export const maxDuration = 300
+// export const runtime = 'edge'
 
 /**
  * POST handler for the Wordware API route

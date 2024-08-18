@@ -4,10 +4,10 @@ import { notFound } from 'next/navigation'
 import { Metadata } from 'next/types'
 import { PiPlus } from 'react-icons/pi'
 
-import { getPair, getUser } from '@/actions/actions'
 import { ProfileHighlight } from '@/components/analysis/profile-highlight'
 import NewPairFormBothNames from '@/components/new-pair-form-both-names'
 import Topbar from '@/components/top-bar'
+import { getPair, getUser } from '@/drizzle/queries'
 
 import PairComponent from '../../../components/analysis/pair-component'
 

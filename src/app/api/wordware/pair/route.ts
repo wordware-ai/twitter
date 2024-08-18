@@ -1,9 +1,10 @@
-import { getPair, getUser, updatePair } from '@/actions/actions'
+import { getPair, getUser, updatePair } from '@/drizzle/queries'
 
 /**
  * Maximum duration for the API route execution (in seconds)
  */
 export const maxDuration = 300
+// export const runtime = 'edge'
 
 type TweetType = {
   isRetweet: boolean

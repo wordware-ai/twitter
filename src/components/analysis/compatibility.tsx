@@ -4,50 +4,12 @@ import React from 'react'
 import { PiQuestion } from 'react-icons/pi'
 
 import { Markdown } from '@/components/markdown'
+import { CompatibilityAnalysis } from '@/types'
 
 import { compatibilityConfig } from '../../lib/wordware-config'
 import CompatibilityCard from '../compatibility/compatibility-card'
 import { CompatibilityPaywallCard } from './compatibility-paywall-card'
 import { WordwareCard } from './wordware-card'
-
-export type CompatibilityAnalysis = {
-  [key: string]: string | string[] | { [key: string]: string[] | string } | undefined
-  mbti: {
-    profile1: string
-    profile2: string
-  }
-  about: string
-  crazy: string
-  drama: string
-  emojis: string
-  divorce: string
-  marriage: string
-  '3rd_wheel': string
-  free_time: string
-  red_flags: {
-    profile1: string[]
-    profile2: string[]
-  }
-  dealbreaker: string
-  green_flags: {
-    profile1: string[]
-    profile2: string[]
-  }
-  follower_flex: string
-  risk_appetite: string
-  love_languages: string
-  secret_desires: string
-  friends_forever: string
-  jealousy_levels: string
-  attachment_style: string
-  values_alignment: string
-  breakup_percentage: string
-  overall_compatibility: string
-  personality_type_match: string
-  emotional_compatibility: string
-  financial_compatibility: string
-  communication_style_compatibility: string
-}
 
 type CompatibilityProps = {
   names: string[]

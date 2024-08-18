@@ -2,9 +2,9 @@ import { Suspense } from 'react'
 import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next/types'
 
-import { getUser } from '@/actions/actions'
 import NewPairForm from '@/components/new-pair-form'
 import NewUsernameForm from '@/components/new-username-form'
+import { getUser } from '@/drizzle/queries'
 
 import { ProfileHighlight } from '../../components/analysis/profile-highlight'
 // import PHPopup from './ph-popup'
@@ -14,6 +14,7 @@ import Topbar from '../../components/top-bar'
 export const maxDuration = 300
 export const dynamic = 'force-dynamic'
 
+// LEE Case 2
 const Page = async ({ params }: { params: { username: string } }) => {
   const data = await getUser({ username: params.username })
 

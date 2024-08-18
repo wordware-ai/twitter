@@ -1,5 +1,5 @@
-import { getAuthors } from '@/actions/actions'
 import WordwareLogo from '@/components/logo'
+import { getAuthors } from '@/drizzle/queries'
 
 const Authors = async () => {
   const authors = await getAuthors()

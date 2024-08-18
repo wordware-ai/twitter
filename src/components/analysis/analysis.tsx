@@ -3,32 +3,12 @@
 import React from 'react'
 
 import { Markdown } from '@/components/markdown'
+import { TwitterAnalysis } from '@/types'
 
 import { cardData } from '../../lib/wordware-config'
 import AnalysisCard from './analysis-card'
 import { PaywallCard } from './paywall-card'
 import { WordwareCard } from './wordware-card'
-
-export type TwitterAnalysis = {
-  [key: string]: string | { title: string; subtitle: string }[] | string[] | undefined
-  about?: string
-  roast?: string
-  strengths?: { title: string; subtitle: string }[]
-  weaknesses?: { title: string; subtitle: string }[]
-  loveLife?: string
-  money?: string
-  health?: string
-  biggestGoal?: string
-  colleaguePerspective?: string
-  pickupLines?: string[]
-  famousPersonComparison?: string
-  previousLife?: string
-  animal?: string
-  fiftyDollarThing?: string
-  career?: string
-  lifeSuggestion?: string
-  emojis?: string
-}
 
 type AnalysisProps = {
   unlocked: boolean

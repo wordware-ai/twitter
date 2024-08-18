@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { CompatibilityAnalysis } from '@/components/analysis/compatibility'
 import { SelectPair, SelectUser } from '@/drizzle/schema'
-import { Steps, useTwitterAnalysis } from '@/hooks/twitter-analysis'
+import { useTwitterAnalysis } from '@/hooks/twitter-analysis'
 import { PAIRS_PAYWALL } from '@/lib/config'
 import { parsePartialJson } from '@/lib/parse-partial-json'
+import { CompatibilityAnalysis, Steps } from '@/types'
 
-export type CompatibilitySteps = {
+type CompatibilitySteps = {
   user1Steps: Steps
   user2Steps: Steps
   compatibilityAnalysisStarted: boolean

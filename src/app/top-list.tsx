@@ -1,8 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
 
-import { getFeatured, getTop } from '@/actions/actions'
 import WordwareLogo from '@/components/logo'
+import { getFeatured, getTop } from '@/drizzle/queries'
 
 const wordwareBoys = ['kozerafilip', 'bertie_ai', 'unable0_']
 

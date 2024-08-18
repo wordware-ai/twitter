@@ -8,10 +8,11 @@ import { PriceButton } from '@/components/analysis/paywall-card'
 import { SelectUser } from '@/drizzle/schema'
 import { useTwitterAnalysis } from '@/hooks/twitter-analysis'
 import { analysisPlaceholder } from '@/lib/constants'
+import { TwitterAnalysis } from '@/types'
 
 import NewPairForm from '../new-pair-form'
 import ActionButtons from './action-buttons'
-import { Analysis, TwitterAnalysis } from './analysis'
+import { Analysis } from './analysis'
 import { ProgressIndicator, StepIndicator } from './progress-indicator'
 
 const ResultComponent = ({ user }: { user: SelectUser }) => {

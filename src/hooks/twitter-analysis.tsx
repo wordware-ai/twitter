@@ -1,20 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { processScrapedUser } from '@/actions/actions'
-import { TwitterAnalysis } from '@/components/analysis/analysis'
 import { SelectUser } from '@/drizzle/schema'
 import { PERSONALITY_PART1_PAYWALL } from '@/lib/config'
 import { parsePartialJson } from '@/lib/parse-partial-json'
-
-export type Steps = {
-  profileScraped: boolean
-  tweetScrapeStarted: boolean
-  tweetScrapeCompleted: boolean
-  wordwareStarted: boolean
-  wordwareCompleted: boolean
-  paidWordwareStarted: boolean
-  paidWordwareCompleted: boolean
-}
+import { Steps, TwitterAnalysis } from '@/types'
 
 /**
  * Custom hook for analyzing Twitter user data.

@@ -3,35 +3,16 @@ import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
-import { unlockPair, unlockUser } from '@/actions/actions'
+import { unlockPair, unlockUser } from '@/drizzle/queries'
 import { stripe } from '@/lib/stripe'
 
-// import { changeSubscriptionStatus } from '@/utils/server-actions/stripe'
+const relevantEvents = new Set(['checkout.session.completed'])
 
-/**
- * Set of Stripe event types that this webhook handler will process
- */
-const relevantEvents = new Set([
-  //   'product.created',
-  //   'product.updated',
-  //   'price.created',
-  //   'price.updated',
-  'checkout.session.completed',
-  //   'customer.subscription.created',
-  //   'customer.subscription.updated',
-  //   'customer.subscription.deleted',
-])
-
-/**
- * Handles POST requests for Stripe webhook events
- * @param {Request} req - The incoming request object
- */
 export async function POST(req: Request) {
   const body = await req.text()
   const signature = headers().get('Stripe-Signature') as string
-  console.log('🟣 | file: route.ts:30 | POST | signature:', signature)
+
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
-  console.log('🟣 | file: route.ts:32 | POST | webhookSecret:', webhookSecret)
 
   let event: Stripe.Event
 
@@ -40,7 +21,7 @@ export async function POST(req: Request) {
     if (!signature || !webhookSecret) return
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
   } catch (err: any) {
-    console.warn('❗️ Webhook Error:', err.message)
+    console.warn('❗️ Stripe Webhook Error:', err.message)
     return new Response(`Webhook Error: ${err.message}`, { status: 400 })
   }
 
@@ -74,13 +55,12 @@ export async function POST(req: Request) {
           throw new Error('Unhandled relevant event!')
       }
     } catch (error) {
-      console.warn('❗️ Webhook handler failed:', error)
+      console.warn('❗️ Stripe Webhook handler failed:', error)
       return new Response('Webhook handler failed. View your nextjs function logs.', {
         status: 400,
       })
     }
   }
 
-  // Acknowledge receipt of the event
   return NextResponse.json({ received: true })
 }

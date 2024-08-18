@@ -1,6 +1,6 @@
-'use server'
+import 'server-only'
 
-import { DatabaseUser } from './types'
+import { DatabaseUser } from '../types'
 
 type TwitterUserData = {
   created_at: string

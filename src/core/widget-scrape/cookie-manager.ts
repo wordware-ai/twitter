@@ -1,3 +1,5 @@
+import 'server-only'
+
 interface TwitterCookie {
   guest_id: string
   kdt: string

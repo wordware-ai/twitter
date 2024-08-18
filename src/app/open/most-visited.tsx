@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { getUserCached } from '@/actions/actions'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { getUserCached } from '@/drizzle/queries'
 
 const MostVisited = async ({ mostVisited }: { mostVisited: Array<{ name: string; visits: number }> }) => {
   return (
