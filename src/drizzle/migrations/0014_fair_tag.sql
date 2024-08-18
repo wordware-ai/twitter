@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS "created_at_date_hour_idx" ON "users" USING btree (DATE("created_at"), EXTRACT(HOUR FROM "created_at"));

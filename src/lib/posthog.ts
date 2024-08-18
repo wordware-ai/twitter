@@ -55,7 +55,6 @@ export const getMostVisited = cache(
         visits: item.aggregated_value,
       }))
       .filter((item: { name: string; visits: number }) => item.name !== undefined)
-    console.log('🟣 | file: posthog.ts:57 | mostVisited:', mostVisited)
 
     return { mostVisited }
   },
