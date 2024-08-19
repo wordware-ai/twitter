@@ -174,7 +174,7 @@ export async function POST(request: Request) {
                 controller.enqueue(encoder.encode(value.value ?? ''))
               }
             } else if (value.type === 'outputs') {
-              console.log('✨ Wordware:', value.values.output, '. Now parsing')
+              console.log(`[${pair.user1lowercaseUsername}, ${pair.user2lowercaseUsername}] ✨ Wordware:`, value.values.output, '. Now parsing')
               try {
                 // Update user with the analysis from Wordware
                 await updatePair({

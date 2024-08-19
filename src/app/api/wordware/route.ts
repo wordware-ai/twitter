@@ -147,7 +147,7 @@ export async function POST(request: Request) {
                 controller.enqueue(encoder.encode(value.value ?? ''))
               }
             } else if (value.type === 'outputs') {
-              console.log('✨ Wordware:', value.values.output, '. Now parsing')
+              console.log(`[${user.username}]  Wordware:`, value.values.output, '. Now parsing')
               try {
                 const statusObject = full
                   ? {
