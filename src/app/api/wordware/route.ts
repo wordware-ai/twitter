@@ -5,13 +5,9 @@ import { TweetType, TwitterAnalysis } from '@/types'
  * Maximum duration for the API route execution (in seconds)
  */
 export const maxDuration = 300
-// export const runtime = 'edge'
+export const dynamic = 'force-dynamic'
+export const runtime = 'edge'
 
-/**
- * POST handler for the Wordware API route
- * @param {Request} request - The incoming request object
- * @returns {Promise<Response>} The response object
- */
 export async function POST(request: Request) {
   // Extract username from the request body
   const { username, full } = await request.json()
