@@ -126,6 +126,7 @@ export async function POST(request: Request) {
   // Create a readable stream to process the response
   const stream = new ReadableStream({
     async start(controller) {
+      controller.enqueue(encoder.encode(''))
       try {
         while (true) {
           const { done, value } = await reader.read()
