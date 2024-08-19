@@ -126,7 +126,9 @@ export async function POST(request: Request) {
   // Create a readable stream to process the response
   const stream = new ReadableStream({
     async start(controller) {
+      //Edge runtime requires to send a first chunk within the first 30 seconds. We send an empty string to keep the connection alive.
       controller.enqueue(encoder.encode(''))
+
       try {
         while (true) {
           const { done, value } = await reader.read()
