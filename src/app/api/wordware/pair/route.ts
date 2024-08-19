@@ -119,6 +119,7 @@ export async function POST(request: Request) {
 
   // Set up decoder and buffer for processing the stream
   const decoder = new TextDecoder()
+  const encoder = new TextEncoder()
   let buffer: string[] = []
   let finalOutput = false
 
@@ -167,7 +168,7 @@ export async function POST(request: Request) {
               }
             } else if (value.type === 'chunk') {
               if (finalOutput) {
-                controller.enqueue(value.value ?? '')
+                controller.enqueue(encoder.encode(value.value ?? ''))
               }
             } else if (value.type === 'outputs') {
               console.log('✨ Wordware:', value.values.output, '. Now parsing')
