@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input'
 import { cleanUsername } from '@/lib/utils'
 
 const formSchema = z.object({
-  username: z.string().min(3).max(50),
+  username: z.string().min(2).max(50),
 })
 
 const NewUsernameForm = () => {

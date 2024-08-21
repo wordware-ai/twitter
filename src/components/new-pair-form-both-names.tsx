@@ -14,8 +14,8 @@ import { Input } from '@/components/ui/input'
 import { cleanUsername } from '@/lib/utils'
 
 const formSchema = z.object({
-  username1: z.string().min(3).max(50),
-  username2: z.string().min(3).max(50),
+  username1: z.string().min(2).max(50),
+  username2: z.string().min(2).max(50),
 })
 
 const NewPairFormBothNames = () => {
