@@ -1,8 +1,9 @@
-import React from 'react'
 import Link from 'next/link'
 
 import WordwareLogo from '@/components/logo'
-import { getFeatured, getTop } from '@/drizzle/queries'
+import { getFeatured, getTop, getTopPairs } from '@/drizzle/queries'
+
+import { MarqueePairs, MarqueeUsers } from './marquee-list'
 
 const wordwareBoys = ['kozerafilip', 'bertie_ai', 'unable0_']
 
@@ -84,16 +85,22 @@ const TopList = async () => {
   // Fetch top users from the backend
   const top = await getTop()
 
+  const topPairs = await getTopPairs()
+
   // Fetch featured users from the backend
   const featured = await getFeatured()
 
   return (
-    <div className="flex-center w-full flex-col gap-16 p-4 py-40 sm:p-12 md:p-24">
-      {/* Display grid of top users */}
-      <UserGrid
+    <div className="flex-center w-full flex-col gap-16 overflow-hidden p-4 py-40 sm:p-12 md:p-24">
+      <MarqueeUsers
         users={top}
-        title="Most Popular"
+        title="Popular Roasts"
       />
+      <MarqueePairs
+        pairs={topPairs}
+        title="Popular Compatibilities"
+      />
+
       {/* Display grid of featured users */}
       <UserGrid
         users={featured}

@@ -87,7 +87,7 @@ export const getTop = cache(async (): Promise<UserCardData[]> => {
   return db.query.users.findMany({
     where: eq(users.wordwareCompleted, true),
     orderBy: desc(users.followers),
-    limit: 12,
+    limit: 20,
     columns: {
       id: true,
       username: true,
@@ -97,6 +97,67 @@ export const getTop = cache(async (): Promise<UserCardData[]> => {
     },
   })
 }, ['top-users'])
+
+const topPairs = [
+  ['leeerob', 'rauchg'],
+  ['t3dotgg', 'theprimeagen'],
+  ['beyonce', 'sc'],
+  ['cristiano', 'realmadrid'],
+  ['taylorswift13', 'tkelce'],
+  ['barackobama', 'michelleobama'],
+  ['tomholland1996', 'zendaya'],
+  ['billgates', 'melindagates'],
+  ['blakelively', 'vancityreynolds'],
+  ['giseleofficial', 'tombrady'],
+  ['camila_cabello', 'shawnmendes'],
+  ['ninja', 'pokimanelol'],
+  ['conangray', 'oliviarodrigo'],
+  ['mrbeast', 'pewdiepie'],
+  ['kingjames', 'lakers'],
+  ['narendramodi', 'pmoindia'],
+  ['elonmusk', 'tesla'],
+  ['rogerfederer', 'rafaelnadal'],
+  ['markruffalo', 'chrishemsworth'],
+  ['nba', 'stephencurry30'],
+  ['ronnie2k', 'nba2k'],
+]
+
+export const getTopPairs = cache(async (): Promise<[UserCardData, UserCardData][]> => {
+  const pairPromises = topPairs.map(async ([username1, username2]) => {
+    const [user1, user2] = await Promise.all([
+      db.query.users.findFirst({
+        where: eq(users.lowercaseUsername, username1.toLowerCase()),
+        columns: {
+          id: true,
+          username: true,
+          name: true,
+          profilePicture: true,
+          followers: true,
+        },
+      }),
+      db.query.users.findFirst({
+        where: eq(users.lowercaseUsername, username2.toLowerCase()),
+        columns: {
+          id: true,
+          username: true,
+          name: true,
+          profilePicture: true,
+          followers: true,
+        },
+      }),
+    ])
+
+    if (!user1 || !user2) {
+      console.warn(`One or both users not found: ${username1}, ${username2}`)
+      return null
+    }
+
+    return [user1, user2] as [UserCardData, UserCardData]
+  })
+
+  const pairs = await Promise.all(pairPromises)
+  return pairs.filter((pair): pair is [UserCardData, UserCardData] => pair !== null)
+}, ['top-pairs-4'])
 
 export const getFeatured = cache(async (): Promise<UserCardData[]> => {
   return await db.query.users.findMany({

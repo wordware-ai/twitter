@@ -14,9 +14,9 @@ export const maxDuration = 181
 
 const Page = () => {
   return (
-    <section>
+    <section className="">
       <div className="flex flex-col md:flex-row">
-        <div className="relative flex min-h-screen flex-col justify-center bg-[#F9FAFB] p-8 sm:p-12 md:w-1/2 md:p-16 lg:p-24">
+        <div className="relative flex min-h-[80svh] flex-col justify-center bg-[#F9FAFB] p-8 sm:p-12 md:w-1/2 md:p-16 lg:p-24">
           {/* <h2 className="flex items-center justify-start gap-4 pb-8">
             Powered by{' '}
             <a
