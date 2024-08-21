@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { PiBrain, PiGithubLogo, PiXLogo } from 'react-icons/pi'
 
 import Quote from '@/app/quote'
-import WordwareLogo from '@/components/logo'
 import NewPairFormBothNames from '@/components/new-pair-form-both-names'
 import NewUsernameForm from '@/components/new-username-form'
 import PHButton from '@/components/ph-button'

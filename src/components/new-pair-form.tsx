@@ -60,14 +60,14 @@ const NewPairForm = () => {
                   <div className="flex items-center">
                     <Input
                       disabled={form.formState.isSubmitting}
-                      className="w-full rounded-l-sm rounded-r-none border-blue-500"
+                      className="w-full rounded-l-sm rounded-r-none border-black"
                       placeholder="@username"
                       {...field}
                     />
                     <Button
                       disabled={form.formState.isSubmitting}
                       type="submit"
-                      className="flex-center gap-2 rounded-l-none rounded-r-sm bg-blue-500 hover:bg-blue-600">
+                      className="flex-center gap-2 rounded-l-none rounded-r-sm bg-black">
                       <PiSparkle />
                       Check Compatibility
                     </Button>

@@ -4,6 +4,9 @@ import { IconType } from 'react-icons'
 import { PiXLogo } from 'react-icons/pi'
 
 import WordwareLogo from '@/components/logo'
+import linkedin from '@/components/logos/linkedin.svg'
+import threads from '@/components/logos/threads.svg'
+import whatsapp from '@/components/logos/whatsapp.svg'
 import { Markdown } from '@/components/markdown'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
@@ -109,18 +112,55 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ unlocked, title, icon: Icon
                 <span className={`text-xl font-light ${colorClass}`}>{title}</span>
               </div>
               {/* Share button */}
-              <Button
-                size={'sm'}
-                variant={'ghost'}
-                className={`border border-transparent transition-all duration-100 hover:border-black hover:bg-transparent ${bg} `}
-                asChild>
+              <div className="flex items-center gap-2">
+                <Button
+                  size={'sm'}
+                  variant={'ghost'}
+                  className={`border border-transparent transition-all duration-100 hover:border-black hover:bg-transparent ${bg} `}
+                  asChild>
+                  <a
+                    target="_blank"
+                    className={cn(`flex-center rounded-md text-lg text-white`)}
+                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`this is my Twitter Personality analysis by AI Agent, built on @wordware_ai\n\n`)}&url=${encodeURIComponent(`https://twitter.wordware.ai/${username}?section=${contentKey}`)}`}>
+                    <PiXLogo /> Share
+                  </a>
+                </Button>
+
                 <a
                   target="_blank"
-                  className={cn(`flex-center gap-2 text-lg text-white`)}
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`this is my Twitter Personality analysis by AI Agent, built on @wordware_ai\n\n`)}&url=${encodeURIComponent(`https://twitter.wordware.ai/${username}?section=${contentKey}`)}`}>
-                  <PiXLogo /> Share
+                  className={cn(`flex-center rounded-md p-1 text-lg text-white hover:bg-gray-200`)}
+                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`this is my Twitter Personality analysis by AI Agent, built on @wordware_ai\n\n https://twitter.wordware.ai/${username}?section=${contentKey}`)}`}>
+                  <img
+                    src={whatsapp.src}
+                    alt="Whatsapp"
+                    width={24}
+                    height={24}
+                  />
                 </a>
-              </Button>
+
+                <a
+                  target="_blank"
+                  className={cn(`flex-center rounded-md p-[7px] text-lg text-white hover:bg-gray-200`)}
+                  href={`https://www.linkedin.com/feed/?shareActive=true&shareUrl=${encodeURIComponent(`https://twitter.wordware.ai/${username}?section=${contentKey}`)}&text=${encodeURIComponent(`This is my Twitter Personality analysis by AI Agent, built on @wordware_ai #wordwareai`)}`}>
+                  <img
+                    src={linkedin.src}
+                    alt="LinkedIn"
+                    width={18}
+                    height={18}
+                  />
+                </a>
+                <a
+                  target="_blank"
+                  className={cn(`flex-center rounded-md p-[7px] text-lg text-white hover:bg-gray-200`)}
+                  href={`https://www.threads.net/intent/post?text=${encodeURIComponent(`This is my Twitter Personality analysis by AI Agent, built on @wordware_ai #wordwareai\nhttps://twitter.wordware.ai/${username}?section=${contentKey}`)}`}>
+                  <img
+                    src={threads.src}
+                    alt="Threads"
+                    width={18}
+                    height={18}
+                  />
+                </a>
+              </div>
             </CardTitle>
             <div className="w-full border-b border-gray-300" />
           </CardHeader>

@@ -95,7 +95,7 @@ export async function POST(request: Request) {
         userTwoProfile: JSON.stringify(user2.fullProfile),
         userTwoTweets: `Tweets: ${tweetsMarkdown2}`,
       },
-      version: '^1.0',
+      version: '^1.15',
     }),
   })
 

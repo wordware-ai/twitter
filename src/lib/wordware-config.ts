@@ -186,6 +186,15 @@ export const cardData = [
 
 export const compatibilityConfig = [
   {
+    title: 'Roast',
+    icon: PiFire,
+    contentKey: 'roast',
+    colorClass: 'text-red-500',
+    color: 'red',
+    bg: 'bg-red-500',
+    wide: true, // This card will be displayed wider than others
+  },
+  {
     title: 'MBTI',
     icon: PiChartPie,
     contentKey: 'mbti',
@@ -380,4 +389,5 @@ export const compatibilityConfig = [
     color: 'red',
     bg: 'bg-red-400',
   },
+  { title: 'Overall Compability', icon: PiPercent, contentKey: 'overall_compatibility', colorClass: 'text-indigo-400', color: 'indigo', bg: 'bg-indigo-400' },
 ]
