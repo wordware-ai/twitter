@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { PiSparkle, PiSpinner } from 'react-icons/pi'
+import { PiPlusLight, PiSparkle, PiSpinner } from 'react-icons/pi'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -63,47 +63,50 @@ const NewPairFormBothNames = () => {
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex w-full min-w-0 max-w-sm">
-          <div className="flex w-full flex-col">
-            <FormField
-              control={form.control}
-              name="username1"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className="flex items-center">
+          <div className="flex w-full flex-col gap-2">
+            <div className="flex justify-between gap-1">
+              <FormField
+                control={form.control}
+                name="username1"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
                       <Input
                         disabled={form.formState.isSubmitting}
-                        className="w-full rounded-b-none rounded-t-sm border-blue-500"
+                        className="w-full rounded-b-none border-black"
                         placeholder="@username"
                         {...field}
                       />
-                    </div>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="username2"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className="flex items-center">
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <div className="flex-center">
+                <PiPlusLight className="text-black" />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="username2"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
                       <Input
                         disabled={form.formState.isSubmitting}
-                        className="w-full rounded-none border-t-0 border-blue-500"
+                        className="w-full rounded-b-none border-black"
                         placeholder="@username"
                         {...field}
                       />
-                    </div>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+
             <Button
               disabled={form.formState.isSubmitting}
               type="submit"
-              className="w-full gap-2 rounded-b-sm rounded-t-none bg-blue-500 hover:bg-blue-600">
+              className="w-full gap-2 rounded-b-sm rounded-t-none">
               <PiSparkle />
               Check Compatibility
             </Button>

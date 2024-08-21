@@ -18,7 +18,7 @@ const Page = () => {
     <section>
       <div className="flex flex-col md:flex-row">
         <div className="relative flex min-h-screen flex-col justify-center bg-[#F9FAFB] p-8 sm:p-12 md:w-1/2 md:p-16 lg:p-24">
-          <h2 className="flex items-center justify-start gap-4 pb-8">
+          {/* <h2 className="flex items-center justify-start gap-4 pb-8">
             Powered by{' '}
             <a
               href="https://wordware.ai/"
@@ -28,20 +28,21 @@ const Page = () => {
                 width={134}
               />
             </a>
-          </h2>
+          </h2> */}
           <div className="grow" />
 
           <div>
             <div>
-              <h1 className="mb-8 text-4xl md:text-5xl 2xl:text-6xl">
+              <h1 className="mb-8 text-4xl md:text-5xl 2xl:text-5xl">
                 discover your <br />
-                <span
-                  className="bg-clip-text text-transparent"
-                  style={{ backgroundColor: '#CB9F9F' }}>
-                  {' '}
-                  twitter{' '}
-                </span>
-                personality 🔥
+                <div className="flex items-center gap-2">
+                  <PiXLogo className="min-w-[40px]" /> <span className="hidden md:block">twitter</span>
+                  <span
+                    className="bg-clip-text text-transparent"
+                    style={{ backgroundColor: '#CB9F9F' }}>
+                    personality
+                  </span>
+                </div>
               </h1>
 
               <div className="mb-8 flex w-full flex-col pt-2">
@@ -51,26 +52,17 @@ const Page = () => {
                   </Suspense>
                 </div>
               </div>
-            </div>
-            <div className="pt-8">
-              <h1 className="mb-8 text-4xl md:text-5xl 2xl:text-6xl">
-                check your{' '}
-                <span className="inline-flex items-center align-middle">
-                  <PiXLogo />
-                  <PiXLogo />
-                  <PiXLogo />
-                </span>
-                <br />
-                <span
-                  className="bg-clip-text text-transparent"
-                  style={{ backgroundColor: '#6DB1BF' }}>
-                  {' '}
-                  compatibility
-                </span>{' '}
-                💞
-              </h1>
 
               <div className="mb-8 flex w-full flex-col pt-2">
+                <h1 className="mb-8 text-4xl md:text-5xl 2xl:text-5xl">
+                  or check
+                  <span
+                    className="bg-clip-text text-transparent"
+                    style={{ backgroundColor: '#6DB1BF' }}>
+                    {' '}
+                    compatibility
+                  </span>{' '}
+                </h1>
                 <div className="flex w-full items-center">
                   <Suspense>
                     <NewPairFormBothNames />
@@ -79,7 +71,7 @@ const Page = () => {
               </div>
             </div>
 
-            <div className="mb-8 pt-8 text-base 2xl:text-lg">
+            <div className="mb-8 pt-8 text-base">
               These are AI Agents built with{' '}
               <a
                 className="font-medium underline-offset-4 hover:underline"

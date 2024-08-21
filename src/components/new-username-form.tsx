@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { PiSpinner } from 'react-icons/pi'
+import { PiFlame, PiSpinner } from 'react-icons/pi'
 import { z } from 'zod'
 
 import { handleNewUsername } from '@/actions/actions'
@@ -67,7 +67,8 @@ const NewUsernameForm = () => {
                     <Button
                       disabled={form.formState.isSubmitting}
                       type="submit"
-                      className="rounded-l-none rounded-r-sm">
+                      className="flex-center gap-2 rounded-l-none rounded-r-sm">
+                      <PiFlame />
                       Discover
                     </Button>
                   </div>

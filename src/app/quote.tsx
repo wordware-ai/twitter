@@ -5,18 +5,22 @@ const Quote: React.FC = () => {
   return (
     <div className="font-inter flex flex-col items-center space-y-8 rounded-lg p-8 text-center">
       <div className="flex flex-col items-center p-8">
-        <WordwareLogo
-          color="black"
-          width={400}
-        />
+        Powered by{' '}
+        <a
+          href="https://wordware.ai/"
+          target="_blank">
+          <WordwareLogo
+            color="black"
+            width={400}
+          />
+        </a>
         <p className="my-12 text-2xl font-normal text-[#1a1a1a]">— The easiest way to build AI apps —</p>
-
         <div className="mt-4 space-y-4 text-lg">
           <p>The only programming language you need is plain English.</p>
           <p>Edit the AI powering this app and see how easy it is:</p>
           <div className="pt-4">
             <Button
-              size={'sm'}
+              // size={'md'}
               variant={'outline'}
               asChild>
               <a
