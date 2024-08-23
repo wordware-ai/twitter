@@ -6,7 +6,7 @@ import posthog from 'posthog-js'
 
 import { PriceButton } from '@/components/analysis/paywall-card'
 import { SelectUser } from '@/drizzle/schema'
-import { useTwitterAnalysis } from '@/hooks/twitter-analysis'
+import { useTwitterAnalysis } from '@/hooks/use-twitter-analysis'
 import { PERSONALITY_PART2_PAYWALL } from '@/lib/config'
 import { analysisPlaceholder } from '@/lib/constants'
 import { TwitterAnalysis } from '@/types'

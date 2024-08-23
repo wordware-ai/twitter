@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import posthog from 'posthog-js'
 
 import { SelectPair, SelectUser } from '@/drizzle/schema'
-import { useCompatibilityAnalysis } from '@/hooks/compatibility-analysis'
+import { useCompatibilityAnalysis } from '@/hooks/use-compatibility-analysis'
 import { PAIRS_PAYWALL } from '@/lib/config'
 
 import ActionButtons from './action-buttons'
@@ -23,6 +23,7 @@ const PairComponent = ({ users, pair }: { users: SelectUser[]; pair: SelectPair 
       <div className="flex w-full max-w-lg flex-col items-center justify-center gap-2 md:flex-row md:gap-8">
         <div className="w-1/2">
           <ProgressIndicator
+            compatibilityFinished={!!compatibilityResult}
             steps={user1Steps}
             result={user1Result}
             disableAnalysis={true}
@@ -31,6 +32,7 @@ const PairComponent = ({ users, pair }: { users: SelectUser[]; pair: SelectPair 
         </div>
         <div className="w-1/2">
           <ProgressIndicator
+            compatibilityFinished={!!compatibilityResult}
             steps={user2Steps}
             result={user2Result}
             disableAnalysis={true}

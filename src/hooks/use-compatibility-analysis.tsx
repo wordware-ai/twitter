@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { SelectPair, SelectUser } from '@/drizzle/schema'
-import { useTwitterAnalysis } from '@/hooks/twitter-analysis'
+import { useTwitterAnalysis } from '@/hooks/use-twitter-analysis'
 import { PAIRS_PAYWALL } from '@/lib/config'
 import { parsePartialJson } from '@/lib/parse-partial-json'
 import { CompatibilityAnalysis, Steps } from '@/types'
@@ -65,6 +65,7 @@ export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser, p
         if (done) break
 
         result += decoder.decode(value, { stream: true })
+        console.log('🟣 | file: compatibility-analysis.tsx:68 | handleCompatibilityAnalysis | result:', result)
 
         const parsed = parsePartialJson(result) as any
         console.log('🟣 | file: compatibility-analysis.tsx:64 | handleCompatibilityAnalysis | parsed:', parsed)

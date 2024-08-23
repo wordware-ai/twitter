@@ -217,7 +217,7 @@ export const compatibilityConfig = [
     colorClass: 'text-red-500',
     color: 'red',
     bg: 'bg-red-500',
-    wide: true,
+    wide: false,
   },
   {
     title: 'Green Flags',
@@ -226,7 +226,7 @@ export const compatibilityConfig = [
     colorClass: 'text-green-500',
     color: 'green',
     bg: 'bg-green-500',
-    wide: true,
+    wide: false,
   },
   {
     title: 'Dealbreaker',
@@ -389,5 +389,4 @@ export const compatibilityConfig = [
     color: 'red',
     bg: 'bg-red-400',
   },
-  { title: 'Overall Compability', icon: PiPercent, contentKey: 'overall_compatibility', colorClass: 'text-indigo-400', color: 'indigo', bg: 'bg-indigo-400' },
 ]

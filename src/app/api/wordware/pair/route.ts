@@ -22,6 +22,12 @@ type TweetType = {
 export async function POST(request: Request) {
   // Extract username from the request body
   const { usernames } = await request.json()
+  const timestamp = new Date().toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  })
 
   // Fetch user data and check if Wordware has already been started
   const user1 = await getUser({ username: usernames[0] })
@@ -76,6 +82,7 @@ export async function POST(request: Request) {
   // console.log('Profile 2', user2.fullProfile)
 
   const promptID = process.env.WORDWARE_PAIR_PROMPT_ID
+  console.log('🟣 | file: route.ts:79 | POST | promptID:', promptID)
 
   if (!promptID) {
     throw Error(`No prompt id, please define WORDWARE_PAIR_PROMPT_ID environment variable`)
@@ -95,7 +102,7 @@ export async function POST(request: Request) {
         userTwoProfile: JSON.stringify(user2.fullProfile),
         userTwoTweets: `Tweets: ${tweetsMarkdown2}`,
       },
-      version: '^1.15',
+      version: '^1.10',
     }),
   })
 
@@ -171,6 +178,7 @@ export async function POST(request: Request) {
               }
             } else if (value.type === 'chunk') {
               if (finalOutput) {
+                console.log(`⏱️ ${timestamp}:`, value.value)
                 controller.enqueue(encoder.encode(value.value ?? ''))
               }
             } else if (value.type === 'outputs') {

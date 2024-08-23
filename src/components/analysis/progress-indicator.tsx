@@ -9,15 +9,17 @@ export const ProgressIndicator = ({
   result,
   userUnlocked,
   disableAnalysis = false,
+  compatibilityFinished = true,
 }: {
+  compatibilityFinished?: boolean
   steps: Steps
   result: TwitterAnalysis | undefined
   userUnlocked: boolean
   disableAnalysis?: boolean
 }) => {
-  const showProgressIndicator = disableAnalysis
-    ? !steps.tweetScrapeCompleted
-    : !steps.wordwareCompleted || (!result?.loveLife && userUnlocked && !steps.paidWordwareCompleted)
+  const showProgressIndicator =
+    !compatibilityFinished ||
+    (disableAnalysis ? !steps.tweetScrapeCompleted : !steps.wordwareCompleted || (!result?.loveLife && userUnlocked && !steps.paidWordwareCompleted))
 
   return (
     <div className={cn('w-full max-w-[280px] flex-col items-center justify-center gap-4', showProgressIndicator ? 'flex' : 'hidden')}>
