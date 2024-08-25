@@ -43,6 +43,14 @@ const Footer = () => {
           </a>
         </div>
       </div>
+      <div className="space-y-2">
+        <div>Refund Policy</div>
+        <p className="max-w-xl text-sm">
+          If you wish to request a refund or discuss any issues regarding Twitter Personality purchase, please contact us at{' '}
+          <a href="mailto:hello@wordware.ai">hello@wordware.ai</a>. Our team will assist you in resolving your concerns and processing any applicable refunds.
+        </p>
+      </div>
+
       <p className="text-xs">Copyright © 2024 HeyDaily Inc. (dba Wordware)</p>
     </div>
   )
