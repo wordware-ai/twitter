@@ -6,7 +6,7 @@ import { TweetType, TwitterAnalysis } from '@/types'
  */
 export const maxDuration = 300
 export const dynamic = 'force-dynamic'
-export const runtime = 'edge'
+// export const runtime = 'edge'
 
 export async function POST(request: Request) {
   // Extract username from the request body

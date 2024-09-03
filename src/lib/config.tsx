@@ -14,4 +14,4 @@ export const getURL = () => {
 //FALSE if paywall is disabled
 export const PERSONALITY_PART1_PAYWALL = false
 export const PERSONALITY_PART2_PAYWALL = true
-export const PAIRS_PAYWALL = true
+export const PAIRS_PAYWALL = false

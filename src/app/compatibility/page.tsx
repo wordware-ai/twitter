@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import { Metadata } from 'next'
 import Link from 'next/link'
 import { PiBrain, PiGithubLogo, PiXLogo } from 'react-icons/pi'
 
@@ -8,9 +9,26 @@ import NewUsernameForm from '@/components/new-username-form'
 import PHButton from '@/components/ph-button'
 import { Button } from '@/components/ui/button'
 
-import TopList from './top-list'
+import TopList from '../top-list'
 
 export const maxDuration = 181
+
+export const metadata: Metadata = {
+  openGraph: {
+    images: [
+      {
+        url: '/social/og-pairs.png', // Replace with your actual image path
+        width: 1200,
+        height: 630,
+        alt: 'Twitter Compatibility Check',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/social/og-pairs.png'], // Replace with your actual image path
+  },
+}
 
 const Page = () => {
   return (
@@ -21,8 +39,24 @@ const Page = () => {
 
           <div>
             <div>
+              <div className="mb-8 flex w-full flex-col pt-2">
+                <h1 className="mb-8 text-4xl md:text-5xl 2xl:text-5xl">
+                  discover your
+                  <span
+                    className="bg-clip-text text-transparent"
+                    style={{ backgroundColor: '#6DB1BF' }}>
+                    {' '}
+                    compatibility
+                  </span>{' '}
+                </h1>
+                <div className="flex w-full items-center">
+                  <Suspense>
+                    <NewPairFormBothNames />
+                  </Suspense>
+                </div>
+              </div>
               <h1 className="mb-8 text-4xl md:text-5xl 2xl:text-5xl">
-                discover your <br />
+                or check <br />
                 <div className="flex items-center gap-2">
                   <PiXLogo className="min-w-[40px]" /> <span className="hidden md:block">twitter</span>
                   <span
@@ -37,23 +71,6 @@ const Page = () => {
                 <div className="flex w-full items-center">
                   <Suspense>
                     <NewUsernameForm />
-                  </Suspense>
-                </div>
-              </div>
-
-              <div className="mb-8 flex w-full flex-col pt-2">
-                <h1 className="mb-8 text-4xl md:text-5xl 2xl:text-5xl">
-                  or check
-                  <span
-                    className="bg-clip-text text-transparent"
-                    style={{ backgroundColor: '#6DB1BF' }}>
-                    {' '}
-                    compatibility
-                  </span>{' '}
-                </h1>
-                <div className="flex w-full items-center">
-                  <Suspense>
-                    <NewPairFormBothNames />
                   </Suspense>
                 </div>
               </div>
@@ -114,7 +131,7 @@ const Page = () => {
             </div>
           </div>
         </div>
-        <div className="flex h-full w-full items-center justify-center bg-[#F6F0F0] md:h-auto md:w-1/2">
+        <div className="flex h-full w-full items-center justify-center bg-[#F1F2F6] md:h-auto md:w-1/2">
           <div className="hidden md:block">
             <Quote />
           </div>

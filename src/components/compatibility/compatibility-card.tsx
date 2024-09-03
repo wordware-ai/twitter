@@ -68,7 +68,9 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ names, unlocked, title, ico
       return (
         <ul className={`list-none space-y-2 ${!isContentVisible ? 'blur-sm' : ''}`}>
           {content.map((item, index) => (
-            <li key={index}>
+            <li
+              key={index}
+              className="pl-6">
               {typeof item === 'string' ? (
                 item
               ) : (
