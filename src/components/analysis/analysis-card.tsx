@@ -53,6 +53,9 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ unlocked, title, icon: Icon
   const isContentVisible = isRoast || unlocked
 
   const renderContent = useCallback(() => {
+    console.log('content', JSON.stringify(content))
+    console.log('typeof content', typeof content)
+
     if (typeof content === 'string') {
       // const displayContent = isContentVisible ? content : obfuscateContent(content)
 
@@ -81,17 +84,26 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ unlocked, title, icon: Icon
           ))}
         </ul>
       )
-    } else if (typeof content === 'object') {
+    } else if (typeof content === 'object' && content !== null) {
       return (
         <ul className={`list-none space-y-2 ${!isContentVisible ? 'blur-sm' : ''}`}>
           {Object.entries(content).map(([key, value], index) => (
             <li key={index}>
-              <span className="font-semibold">{key}:</span> {value}
+              {typeof value === 'object' && value !== null && 'title' in value && 'subtitle' in value ? (
+                <>
+                  <span className="font-semibold">{String(value.title)}:</span> {String(value.subtitle)}
+                </>
+              ) : (
+                <>
+                  <span className="font-semibold">{key}:</span> {String(value)}
+                </>
+              )}
             </li>
           ))}
         </ul>
       )
     }
+
     return null
   }, [content, isContentVisible])
 
