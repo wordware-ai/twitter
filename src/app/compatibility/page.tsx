@@ -9,6 +9,8 @@ import NewUsernameForm from '@/components/new-username-form'
 import PHButton from '@/components/ph-button'
 import { Button } from '@/components/ui/button'
 
+import TopList from '../top-list'
+
 // import TopList from '../top-list'
 
 export const maxDuration = 181
@@ -137,7 +139,7 @@ const Page = () => {
           </div>
         </div>
       </div>
-      {/* <TopList /> */}
+      <TopList />
     </section>
   )
 }
