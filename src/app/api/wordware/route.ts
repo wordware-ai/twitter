@@ -54,6 +54,18 @@ export async function POST(request: Request) {
 
   const promptID = full ? process.env.WORDWARE_FULL_PROMPT_ID : process.env.WORDWARE_ROAST_PROMPT_ID
 
+  console.log(
+    'body:',
+    JSON.stringify({
+      inputs: {
+        tweets: `Tweets: ${tweetsMarkdown}`,
+        profilePicture: user.profilePicture,
+        profileInfo: user.fullProfile,
+        version: '^1.7',
+      },
+    }),
+  )
+
   // Make a request to the Wordware API
   const runResponse = await fetch(`https://app.wordware.ai/api/released-app/${promptID}/run`, {
     method: 'POST',
@@ -66,17 +78,18 @@ export async function POST(request: Request) {
         tweets: `Tweets: ${tweetsMarkdown}`,
         profilePicture: user.profilePicture,
         profileInfo: user.fullProfile,
-        version: '^1.0',
+        version: '^1.7',
       },
     }),
   })
+  console.log('🟣 | ERROR | file: route.ts:40 | POST | runResponse:', runResponse)
 
   // console.log('🟣 | file: route.ts:40 | POST | runResponse:', runResponse)
   // Get the reader from the response body
   const reader = runResponse.body?.getReader()
   if (!reader || !runResponse.ok) {
     // console.error('No reader')
-    console.log('🟣 | ERROR | file: route.ts:40 | POST | runResponse:', runResponse)
+
     return Response.json({ error: 'No reader' }, { status: 400 })
   }
 

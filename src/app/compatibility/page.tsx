@@ -139,7 +139,7 @@ const Page = () => {
           </div>
         </div>
       </div>
-      <TopList />
+      {/* <TopList /> */}
     </section>
   )
 }
