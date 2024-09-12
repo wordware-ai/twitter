@@ -9,7 +9,7 @@ import NewUsernameForm from '@/components/new-username-form'
 import PHButton from '@/components/ph-button'
 import { Button } from '@/components/ui/button'
 
-import TopList from '../top-list'
+// import TopList from '../top-list'
 
 // import TopList from '../top-list'
 
