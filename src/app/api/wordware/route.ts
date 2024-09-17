@@ -82,7 +82,7 @@ export async function POST(request: Request) {
         },
         profileInfo: JSON.stringify(user.fullProfile),
       },
-      version: '^1.7',
+      version: '^1.0',
     }),
   })
 
