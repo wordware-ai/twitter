@@ -49,6 +49,18 @@ const Footer = () => {
           If you wish to request a refund or discuss any issues regarding Twitter Personality purchase, please contact us at{' '}
           <a href="mailto:hello@wordware.ai">hello@wordware.ai</a>. Our team will assist you in resolving your concerns and processing any applicable refunds.
         </p>
+        <div className="space-x-4 pt-3">
+          <a
+            className="underline-offset-4 hover:underline"
+            href="/terms">
+            terms & conditions
+          </a>
+          <a
+            className="underline-offset-4 hover:underline"
+            href="/privacy">
+            privacy policy
+          </a>
+        </div>
       </div>
 
       <p className="text-xs">Copyright © 2024 HeyDaily Inc. (dba Wordware)</p>
