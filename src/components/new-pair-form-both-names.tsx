@@ -110,6 +110,14 @@ const NewPairFormBothNames = () => {
               <PiSparkle />
               Check Compatibility
             </Button>
+            <p className="text-xs">
+              by clicking check compatibility you agree to our{' '}
+              <a
+                className="underline-offset-4 hover:underline"
+                href="/terms">
+                terms
+              </a>
+            </p>
             {form.formState.errors.username1 && (
               <p className="mt-2 text-sm font-medium text-destructive">Error with first username: {form.formState.errors.username1?.message}</p>
             )}

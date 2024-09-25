@@ -73,6 +73,14 @@ const NewUsernameForm = () => {
                     </Button>
                   </div>
                 </FormControl>
+                <p className="text-xs">
+                  by clicking discover you agree to our{' '}
+                  <a
+                    className="underline-offset-4 hover:underline"
+                    href="/terms">
+                    terms
+                  </a>
+                </p>
                 <FormMessage />
               </FormItem>
             )}
