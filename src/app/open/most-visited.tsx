@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { PiUser } from 'react-icons/pi'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { getUserCached } from '@/drizzle/queries'
@@ -22,15 +23,19 @@ const MostVisited = async ({ mostVisited }: { mostVisited: Array<{ name: string;
                     key={name}
                     className="flex items-center space-x-4">
                     <div>{index + 1}</div>
-                    {user?.profilePicture && (
-                      <Image
-                        src={user.profilePicture}
-                        alt={`${user.username}'s profile picture`}
-                        width={48}
-                        height={48}
-                        className="rounded-full"
-                      />
-                    )}
+                    {user?.profilePicture ? (
+                      <div className="relative h-12 w-12">
+                        <Image
+                          src={user.profilePicture}
+                          alt={`${user.username}'s profile picture`}
+                          width={48}
+                          height={48}
+                          className="z-10 rounded-full"
+                        />
+                        <PiUser className="absolute inset-2 -z-10 h-8 w-8 text-gray-400" />
+                      </div>
+                    ) : null}
+
                     <div>
                       <Link
                         href={`/${user?.username}`}

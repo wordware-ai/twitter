@@ -54,7 +54,7 @@ export const getAuthors = cache(async (): Promise<UserCardData[]> => {
       id: '5',
       username: 'danny_hunt_code',
       name: 'Danny Hunt',
-      profilePicture: 'https://pbs.twimg.com/profile_images/1647625717721583619/EcHl0CIu_400x400.jpg',
+      profilePicture: 'https://pbs.twimg.com/profile_images/1826288753368846337/SU3kpd4N_400x400.jpg',
       followers: 0,
     },
 
