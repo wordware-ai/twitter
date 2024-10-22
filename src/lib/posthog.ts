@@ -2,47 +2,45 @@ import 'server-only'
 
 import { unstable_cache as cache } from 'next/cache'
 
-export const getTraffic =
-  // cache
+export const getTraffic = async (): Promise<{ trafficData: Array<{ timestamp: string; traffic: number }> }> => {
+  try {
+    const response = await fetch(`https://app.posthog.com/api/projects/${process.env.POSTHOG_PROJECT_ID}/insights/1771705?date_from=2024-08-01`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.POSTHOG_PERSONAL_API_KEY}`,
+      },
+    })
+    const data = await response.json()
+    const insights = data.result[0]
 
-  async (): Promise<{ trafficData: Array<{ timestamp: string; traffic: number }> }> => {
-    try {
-      const response = await fetch(`https://app.posthog.com/api/projects/${process.env.POSTHOG_PROJECT_ID}/insights/1771705?date_from=2024-08-01`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.POSTHOG_PERSONAL_API_KEY}`,
-        },
+    const startDate = new Date('2024-07-29T05:00:00Z')
+    const trafficData = insights.data
+      .map((traffic: number, index: number) => {
+        const [date, time] = insights.days[index].split(' ')
+        const timestamp = `${date}T${time}Z`
+
+        return {
+          timestamp,
+          traffic,
+        }
       })
-      const data = await response.json()
-      const insights = data.result[0]
+      .filter((item: { timestamp: string; traffic: number }) => new Date(item.timestamp) >= startDate)
+      .slice(0, -1)
 
-      const startDate = new Date('2024-07-29T05:00:00Z')
-      const trafficData = insights.data
-        .map((traffic: number, index: number) => {
-          const [date, time] = insights.days[index].split(' ')
-          const timestamp = `${date}T${time}Z`
-
-          return {
-            timestamp,
-            traffic,
-          }
-        })
-        .filter((item: { timestamp: string; traffic: number }) => new Date(item.timestamp) >= startDate)
-        .slice(0, -1)
-
-      return { trafficData }
-    } catch (error) {
-      console.error('🥲 Error fetching traffic data:', error)
-      return { trafficData: [] }
-    }
+    return { trafficData }
+  } catch (error) {
+    console.error('🥲 Error fetching traffic data:', error)
+    return { trafficData: [] }
   }
+}
 //   ['traffic'],
 //   { revalidate: 3600 }, // Cache for 1 hour (3600 seconds).
 //   // Posthog Insights won't be refetched until someone opens the insight via UI.
 // )
 
-export const getMostVisited = cache(
+export const getMostVisited =
+  // cache(
   async (): Promise<{ mostVisited: Array<{ name: string; visits: number }> }> => {
     try {
       const response = await fetch(`https://app.posthog.com/api/projects/${process.env.POSTHOG_PROJECT_ID}/insights/1771725`, {
@@ -67,8 +65,9 @@ export const getMostVisited = cache(
       console.error(' 🥲 Error fetching most visited data:', error)
       return { mostVisited: [] }
     }
-  },
-  ['visits'],
-  { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
-  // Posthog Insights won't be refetched until someone opens the insight via UI.
-)
+  }
+//   ,
+//   ['visits'],
+//   { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
+//   // Posthog Insights won't be refetched until someone opens the insight via UI.
+// )
