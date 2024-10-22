@@ -11,7 +11,6 @@ export const getTraffic = cache(
           'Content-Type': 'application/json',
           Authorization: `Bearer ${process.env.POSTHOG_PERSONAL_API_KEY}`,
         },
-        cache: 'no-store',
       })
       const data = await response.json()
       const insights = data.result[0]
@@ -50,7 +49,6 @@ export const getMostVisited = cache(
           'Content-Type': 'application/json',
           Authorization: `Bearer ${process.env.POSTHOG_PERSONAL_API_KEY}`,
         },
-        cache: 'no-store',
       })
       const data = await response.json()
       const insights = data.result
