@@ -9,6 +9,7 @@ import { TrafficChart } from './charts'
 import MostVisited from './most-visited'
 
 export const maxDuration = 180
+export const dynamic = 'force-dynamic'
 
 const Page = async () => {
   // const { chartData, timestamp } = await getStatistics()
