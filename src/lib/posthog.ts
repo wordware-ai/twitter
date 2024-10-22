@@ -31,11 +31,11 @@ export const getTraffic = cache(
 
       return { trafficData }
     } catch (error) {
-      console.error('Error fetching traffic data:', error)
+      console.error('🥲 Error fetching traffic data:', error)
       return { trafficData: [] }
     }
   },
-  ['traffic-posthog'],
+  ['traffic'],
   { revalidate: 3600 }, // Cache for 1 hour (3600 seconds).
   // Posthog Insights won't be refetched until someone opens the insight via UI.
 )
@@ -62,11 +62,11 @@ export const getMostVisited = cache(
 
       return { mostVisited }
     } catch (error) {
-      console.error('Error fetching most visited data:', error)
+      console.error(' 🥲 Error fetching most visited data:', error)
       return { mostVisited: [] }
     }
   },
-  ['visits-posthog'],
+  ['visits'],
   { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
   // Posthog Insights won't be refetched until someone opens the insight via UI.
 )
