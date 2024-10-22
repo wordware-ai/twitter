@@ -51,14 +51,12 @@ export const metadata = {
     creator: 'wordware',
     images: [siteMetadata.socialBanner],
   },
+  /* <meta name="google-site-verification" content="voWl21V26444ofs1ojAqhH1UdOTEWBvJQHp9jADLDQU" /> */
   verification: {
     google: 'voWl21V26444ofs1ojAqhH1UdOTEWBvJQHp9jADLDQU',
   },
 }
 
-{
-  /* <meta name="google-site-verification" content="voWl21V26444ofs1ojAqhH1UdOTEWBvJQHp9jADLDQU" /> */
-}
 /**
  * RootLayout component
  * This component serves as the main layout wrapper for the entire application
