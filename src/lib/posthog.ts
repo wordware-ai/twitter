@@ -1,6 +1,6 @@
 import 'server-only'
 
-import { unstable_cache as cache } from 'next/cache'
+// import { unstable_cache as cache } from 'next/cache'
 
 export const getTraffic = async (): Promise<{ trafficData: Array<{ timestamp: string; traffic: number }> }> => {
   try {
