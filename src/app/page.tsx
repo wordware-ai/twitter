@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
 import { PiBrain, PiGithubLogo, PiXLogo } from 'react-icons/pi'
+import Head from 'next/head'  // Import Head component for managing <head> elements
 
 import Quote from '@/app/quote'
 import NewPairFormBothNames from '@/components/new-pair-form-both-names'
@@ -14,6 +15,10 @@ export const maxDuration = 181
 
 const Page = () => {
   return (
+  <> 
+    <Head>
+        <meta name="google-site-verification" content="voWl21V26444ofs1ojAqhH1UdOTEWBvJQHp9jADLDQU" />
+    </Head>
     <section className="">
       <div className="flex flex-col md:flex-row">
         <div className="relative flex min-h-[80svh] flex-col justify-center bg-[#F9FAFB] p-8 sm:p-12 md:w-1/2 md:p-16 lg:p-24">
@@ -122,6 +127,7 @@ const Page = () => {
       </div>
       {/* <TopList /> */}
     </section>
+  </> 
   )
 }
 
