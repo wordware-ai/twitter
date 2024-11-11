@@ -93,5 +93,10 @@ export async function generateMetadata({ params, searchParams }: { params: { use
       // dynamic twitter description
       description: siteMetadata.twitter(username),
     },
+    // prevent follow tag on other pages
+    robots: {
+      index: false,
+      follow: false,
+    },
   } satisfies Metadata
 }
