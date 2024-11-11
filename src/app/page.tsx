@@ -14,6 +14,31 @@ import { Button } from '@/components/ui/button'
 
 export const maxDuration = 181
 
+// follow tag
+export async function generateMetadata({ searchParams }: { searchParams: { ref?: string; u?: string } }) {
+  // Allow following only for specific query parameters
+  const allowedRefs = ['blog.wordware.ai']
+  const isAllowedRef = searchParams.ref && allowedRefs.includes(searchParams.ref)
+  const isRobotsQuery = searchParams.u === 'robots.txt'
+  // if robots.txt or blog.wordware.ai, allow following
+  if (isAllowedRef || isRobotsQuery) {
+    return {
+      robots: {
+        index: true,
+        follow: true,
+      },
+    }
+  }
+
+  // For all other cases, default to no follow
+  return {
+    robots: {
+      index: false,
+      follow: false,
+    },
+  }
+}
+
 const Page = () => {
   return (
     <>
