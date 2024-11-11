@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next/types'
 
+import { siteMetadata } from '@/app/metadata'
 import NewPairForm from '@/components/new-pair-form'
 import NewUsernameForm from '@/components/new-username-form'
 import { getUser } from '@/drizzle/queries'
@@ -89,6 +90,8 @@ export async function generateMetadata({ params, searchParams }: { params: { use
     },
     twitter: {
       images: image,
+      // dynamic twitter description
+      description: siteMetadata.twitter(username),
     },
   } satisfies Metadata
 }
