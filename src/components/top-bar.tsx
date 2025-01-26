@@ -79,7 +79,7 @@ const Topbar = () => {
             variant={'outline'}
             asChild>
             <a
-              href="https://x.com/wordware_ai"
+              href="https://x.com/wordware"
               target="_blank"
               className="flex-center gap-2">
               <PiXLogo size={18} />

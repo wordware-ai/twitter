@@ -53,7 +53,7 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
       )}
       <ActionButtons
         shareActive={!!result?.about}
-        text={`this is my Twitter Personality analysis by AI Agent, built on @wordware_ai`}
+        text={`this is my Twitter Personality analysis by AI Agent, built on @wordware`}
         url={`https://twitter.wordware.ai/${user.username}`}
       />
 

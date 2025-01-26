@@ -9,8 +9,8 @@ export const siteMetadata = {
   // dynamic twitter description
   twitter: (username?: string) =>
     username
-      ? `Check out ${username}'s Twitter personality analysis! See their strengths, communication patterns, and unique traits. Get fun insights like spirit animal, famous personality match, and more. Built with @wordware_ai.`
-      : 'AI-powered Twitter personality analysis that reveals your strengths, communication patterns, and unique traits. Get fun insights like your spirit animal, famous personality match, and more. Built with @wordware_ai.',
+      ? `Check out ${username}'s Twitter personality analysis! See their strengths, communication patterns, and unique traits. Get fun insights like spirit animal, famous personality match, and more. Built with @wordware.`
+      : 'AI-powered Twitter personality analysis that reveals your strengths, communication patterns, and unique traits. Get fun insights like your spirit animal, famous personality match, and more. Built with @wordware.',
   language: 'en-us',
   theme: 'light',
   siteUrl: new URL(getURL()),

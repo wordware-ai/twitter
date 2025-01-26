@@ -143,7 +143,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ names, unlocked, title, ico
                   <a
                     target="_blank"
                     className={cn(`flex-center rounded-md text-lg text-white`)}
-                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`here's our Twitter Compatibility Analysis for @${username} and @${usernamePair}, created by an AI Agent built on @wordware_ai.\n\n`)}&url=${encodeURIComponent(`https://twitter.wordware.ai/${username}/${usernamePair}?section=${contentKey}`)}`}>
+                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`here's our Twitter Compatibility Analysis for @${username} and @${usernamePair}, created by an AI Agent built on @wordware.\n\n`)}&url=${encodeURIComponent(`https://twitter.wordware.ai/${username}/${usernamePair}?section=${contentKey}`)}`}>
                     <PiXLogo /> Share
                   </a>
                 </Button>
@@ -151,7 +151,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ names, unlocked, title, ico
                 <a
                   target="_blank"
                   className={cn(`flex-center rounded-md p-1 text-lg text-white hover:bg-gray-200`)}
-                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`here's our Twitter Compatibility Analysis for @${username} and @${usernamePair}, created by an AI Agent built on @wordware_ai.\n\n https://twitter.wordware.ai/${username}/${usernamePair}?section=${contentKey}`)}`}>
+                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`here's our Twitter Compatibility Analysis for @${username} and @${usernamePair}, created by an AI Agent built on @wordware.\n\n https://twitter.wordware.ai/${username}/${usernamePair}?section=${contentKey}`)}`}>
                   <img
                     src={whatsapp.src}
                     alt="Whatsapp"
@@ -163,7 +163,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ names, unlocked, title, ico
                 <a
                   target="_blank"
                   className={cn(`flex-center rounded-md p-[7px] text-lg text-white hover:bg-gray-200`)}
-                  href={`https://www.linkedin.com/feed/?shareActive=true&shareUrl=${encodeURIComponent(`https://twitter.wordware.ai/${username}/${usernamePair}?section=${contentKey}`)}&text=${encodeURIComponent(`Here's our Twitter Compatibility Analysis for @${username} and @${usernamePair}, created by an AI Agent built on @wordware_ai #wordwareai`)}`}>
+                  href={`https://www.linkedin.com/feed/?shareActive=true&shareUrl=${encodeURIComponent(`https://twitter.wordware.ai/${username}/${usernamePair}?section=${contentKey}`)}&text=${encodeURIComponent(`Here's our Twitter Compatibility Analysis for @${username} and @${usernamePair}, created by an AI Agent built on @wordware #wordwareai`)}`}>
                   <img
                     src={linkedin.src}
                     alt="LinkedIn"
@@ -174,7 +174,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ names, unlocked, title, ico
                 <a
                   target="_blank"
                   className={cn(`flex-center rounded-md p-[7px] text-lg text-white hover:bg-gray-200`)}
-                  href={`https://www.threads.net/intent/post?text=${encodeURIComponent(`Here's our Twitter Compatibility Analysis for @${username} and @${usernamePair}, created by an AI Agent built on @wordware_ai #wordwareai\nhttps://twitter.wordware.ai/${username}/${usernamePair}?section=${contentKey}`)}`}>
+                  href={`https://www.threads.net/intent/post?text=${encodeURIComponent(`Here's our Twitter Compatibility Analysis for @${username} and @${usernamePair}, created by an AI Agent built on @wordware #wordwareai\nhttps://twitter.wordware.ai/${username}/${usernamePair}?section=${contentKey}`)}`}>
                   <img
                     src={threads.src}
                     alt="Threads"

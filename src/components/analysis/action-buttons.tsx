@@ -26,7 +26,7 @@ const ActionButtons = ({ shareActive, text, url }: ActionButtonsProps) => {
             <a
               target="_blank"
               className="flex-center gap-2"
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(text ?? `this is my Twitter Personality analysis by AI Agent, built on @wordware_ai`)}&url=${encodeURIComponent(url ?? `https://twitter.wordware.ai/`)}`}>
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(text ?? `this is my Twitter Personality analysis by AI Agent, built on @wordware`)}&url=${encodeURIComponent(url ?? `https://twitter.wordware.ai/`)}`}>
               <PiXLogo /> Share
             </a>
           </Button>
@@ -53,13 +53,13 @@ const ActionButtons = ({ shareActive, text, url }: ActionButtonsProps) => {
           <a
             target="_blank"
             className={cn(`flex-center flex-center h-8 gap-1 rounded-md p-1 text-sm text-black hover:bg-gray-200`)}
-            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(text ?? `this is my Twitter Personality analysis by AI Agent, built on @wordware_ai`)}&url=${encodeURIComponent(url ?? `https://twitter.wordware.ai/`)}`}>
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(text ?? `this is my Twitter Personality analysis by AI Agent, built on @wordware`)}&url=${encodeURIComponent(url ?? `https://twitter.wordware.ai/`)}`}>
             <PiXLogo /> Twitter
           </a>
           <a
             target="_blank"
             className={cn(`flex-center flex-center h-8 gap-1 rounded-md p-1 text-sm text-black hover:bg-gray-200`)}
-            href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`this is my Twitter Personality analysis by AI Agent, built on @wordware_ai\n\n ${url}`)}`}>
+            href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`this is my Twitter Personality analysis by AI Agent, built on @wordware\n\n ${url}`)}`}>
             <img
               src={whatsapp.src}
               alt="Whatsapp"
@@ -71,7 +71,7 @@ const ActionButtons = ({ shareActive, text, url }: ActionButtonsProps) => {
           <a
             target="_blank"
             className={cn(`flex-center flex-center h-8 gap-1 rounded-md p-[7px] text-sm text-black hover:bg-gray-200`)}
-            href={`https://www.linkedin.com/feed/?shareActive=true&shareUrl=${encodeURIComponent(url ?? '')}&text=${encodeURIComponent(`This is my Twitter Personality analysis by AI Agent, built on @wordware_ai #wordwareai`)}`}>
+            href={`https://www.linkedin.com/feed/?shareActive=true&shareUrl=${encodeURIComponent(url ?? '')}&text=${encodeURIComponent(`This is my Twitter Personality analysis by AI Agent, built on @wordware #wordwareai`)}`}>
             <img
               src={linkedin.src}
               alt="LinkedIn"
@@ -83,7 +83,7 @@ const ActionButtons = ({ shareActive, text, url }: ActionButtonsProps) => {
           <a
             target="_blank"
             className={cn(`flex-center flex-center h-8 gap-1 rounded-md p-[7px] text-sm text-black hover:bg-gray-200`)}
-            href={`https://www.threads.net/intent/post?text=${encodeURIComponent(`This is my Twitter Personality analysis by AI Agent, built on @wordware_ai #wordwareai\n${url ?? ''}`)}`}>
+            href={`https://www.threads.net/intent/post?text=${encodeURIComponent(`This is my Twitter Personality analysis by AI Agent, built on @wordware #wordwareai\n${url ?? ''}`)}`}>
             <img
               src={threads.src}
               alt="Threads"
