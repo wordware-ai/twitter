@@ -28,7 +28,7 @@ const Footer = () => {
           </a>
 
           <a
-            href="https://x.com/wordware_ai"
+            href="https://x.com/wordware"
             target="_blank"
             className="flex-center gap-2 text-white">
             <PiXLogo size={18} />X (fka. Twitter)
