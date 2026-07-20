@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -112,11 +113,11 @@ const NewPairFormBothNames = () => {
             </Button>
             <p className="text-xs">
               by clicking check compatibility you agree to our{' '}
-              <a
+              <Link
                 className="underline-offset-4 hover:underline"
                 href="/terms">
                 terms
-              </a>
+              </Link>
             </p>
             {form.formState.errors.username1 && (
               <p className="mt-2 text-sm font-medium text-destructive">Error with first username: {form.formState.errors.username1?.message}</p>

@@ -10,7 +10,7 @@ const relevantEvents = new Set(['checkout.session.completed'])
 
 export async function POST(req: Request) {
   const body = await req.text()
-  const signature = headers().get('Stripe-Signature') as string
+  const signature = (await headers()).get('Stripe-Signature') as string
 
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 

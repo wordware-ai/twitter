@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -75,11 +76,11 @@ const NewUsernameForm = () => {
                 </FormControl>
                 <p className="text-xs">
                   by clicking discover you agree to our{' '}
-                  <a
+                  <Link
                     className="underline-offset-4 hover:underline"
                     href="/terms">
                     terms
-                  </a>
+                  </Link>
                 </p>
                 <FormMessage />
               </FormItem>

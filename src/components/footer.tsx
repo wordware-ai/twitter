@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { PiDiscordLogo, PiEnvelope, PiLinkedinLogo, PiXLogo } from 'react-icons/pi'
 
 import WordwareLogo from './logo'
@@ -50,16 +51,16 @@ const Footer = () => {
           <a href="mailto:hello@wordware.ai">hello@wordware.ai</a>. Our team will assist you in resolving your concerns and processing any applicable refunds.
         </p>
         <div className="space-x-4 pt-3">
-          <a
+          <Link
             className="underline-offset-4 hover:underline"
             href="/terms">
             terms & conditions
-          </a>
-          <a
+          </Link>
+          <Link
             className="underline-offset-4 hover:underline"
             href="/privacy">
             privacy policy
-          </a>
+          </Link>
         </div>
       </div>
 
