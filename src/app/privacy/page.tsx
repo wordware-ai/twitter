@@ -6,7 +6,7 @@ Last Updated: 24th of September, 2024
 
 ## 1. Introduction
 
-Welcome to **twitter.wordware.ai** ("**we**," "**us**," or "**our**"). This Privacy Policy explains how **HeyDaily Inc.**, a Delaware C-Corp located at 746 Kansas St, San Francisco, CA 94107, USA, collects, uses, discloses, and protects your personal information when you use our website and services (collectively, the "Services"). By accessing or using our Services, you agree to the collection and use of information in accordance with this Privacy Policy.
+Welcome to **Twitter Personality by Sauna** ("**we**," "**us**," or "**our**"). This Privacy Policy explains how **HeyDaily Inc.**, a Delaware C-Corp located at 746 Kansas St, San Francisco, CA 94107, USA, collects, uses, discloses, and protects your personal information when you use our website and services (collectively, the "Services"). By accessing or using our Services, you agree to the collection and use of information in accordance with this Privacy Policy.
 
 ## 2. Information We Collect
 
@@ -194,7 +194,7 @@ We may transfer data internationally:
 
 If you have questions or wish to exercise your rights:
 
-- **Email**: sebastian@wordware.ai
+- **Email**: hello@sauna.ai
 - **Address**:
   \`\`\`
   HeyDaily Inc.
@@ -221,7 +221,7 @@ By using our Services and providing a Twitter handle, you consent to:
 
 If required, we have appointed a Data Protection Officer:
 
-- **Contact**: sebastian@wordware.ai
+- **Contact**: hello@sauna.ai
 - **Role**: Overseeing data protection strategy and compliance.
 
 ## 21. Your Rights Under Other Jurisdictions

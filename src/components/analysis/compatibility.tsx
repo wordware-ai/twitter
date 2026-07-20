@@ -9,7 +9,7 @@ import { CompatibilityAnalysis } from '@/types'
 import { compatibilityConfig } from '../../lib/analysis-config'
 import CompatibilityCard from '../compatibility/compatibility-card'
 import { CompatibilityPaywallCard } from './compatibility-paywall-card'
-import { WordwareCard } from './wordware-card'
+import { SaunaCard } from './sauna-card'
 
 type CompatibilityProps = {
   names: string[]
@@ -45,7 +45,7 @@ const Compatibility: React.FC<CompatibilityProps> = ({ pairAnalysis, unlocked, n
     return allCards.map((card, index) => (
       <React.Fragment key={card.contentKey}>
         {index === 1 && !unlocked && !pairAnalysis && <CompatibilityPaywallCard />}
-        {index === 7 && <WordwareCard />}
+        {index === 7 && <SaunaCard />}
         <CompatibilityCard
           names={[profile1Name, profile2Name]}
           {...card}

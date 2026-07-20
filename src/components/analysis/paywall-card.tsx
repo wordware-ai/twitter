@@ -127,7 +127,7 @@ export const PaywallCard: React.FC = () => {
             </Form>
 
             <p className="mt-4 text-xs text-gray-500">
-              By submitting your email, you agree to receive marketing content from Wordware. We&apos;ll use your email to send you the full analysis and keep
+              By submitting your email, you agree to receive marketing content from Sauna. We&apos;ll use your email to send you the full analysis and keep
               you updated on our products and services.
             </p>
           </>

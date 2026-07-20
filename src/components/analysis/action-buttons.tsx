@@ -1,11 +1,12 @@
 import { PiXLogo } from 'react-icons/pi'
 
-import WordwareLogo from '@/components/logo'
+import SaunaLogo from '@/components/logo'
 import linkedin from '@/components/logos/linkedin.svg'
 import threads from '@/components/logos/threads.svg'
 import whatsapp from '@/components/logos/whatsapp.svg'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { getURL } from '@/lib/config'
 
 type ActionButtonsProps = {
   shareActive: boolean
@@ -24,7 +25,7 @@ const ActionButtons = ({ shareActive, text, url }: ActionButtonsProps) => {
             <a
               target="_blank"
               className="flex-center gap-2"
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(text ?? `this is my Twitter Personality analysis by AI Agent, built on @wordware`)}&url=${encodeURIComponent(url ?? `https://twitter.wordware.ai/`)}`}>
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(text ?? `this is my Twitter Personality analysis by Sauna's AI agent`)}&url=${encodeURIComponent(url ?? getURL())}`}>
               <PiXLogo /> Share
             </a>
           </Button>
@@ -35,13 +36,13 @@ const ActionButtons = ({ shareActive, text, url }: ActionButtonsProps) => {
           <a
             className="flex-center gap-2"
             target="_blank"
-            href="https://wordware.ai/">
-            <WordwareLogo
+            href="https://sauna.ai/">
+            <SaunaLogo
               emblemOnly
               color="white"
               width={20}
             />
-            Wordware
+            Sauna
           </a>
         </Button>
       </div>
@@ -51,13 +52,13 @@ const ActionButtons = ({ shareActive, text, url }: ActionButtonsProps) => {
           <a
             target="_blank"
             className={cn(`flex-center flex-center h-8 gap-1 rounded-md p-1 text-sm text-black hover:bg-gray-200`)}
-            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(text ?? `this is my Twitter Personality analysis by AI Agent, built on @wordware`)}&url=${encodeURIComponent(url ?? `https://twitter.wordware.ai/`)}`}>
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(text ?? `this is my Twitter Personality analysis by Sauna's AI agent`)}&url=${encodeURIComponent(url ?? getURL())}`}>
             <PiXLogo /> Twitter
           </a>
           <a
             target="_blank"
             className={cn(`flex-center flex-center h-8 gap-1 rounded-md p-1 text-sm text-black hover:bg-gray-200`)}
-            href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`this is my Twitter Personality analysis by AI Agent, built on @wordware\n\n ${url}`)}`}>
+            href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`this is my Twitter Personality analysis by Sauna's AI agent\n\n ${url}`)}`}>
             <img
               src={whatsapp.src}
               alt="Whatsapp"
@@ -69,7 +70,7 @@ const ActionButtons = ({ shareActive, text, url }: ActionButtonsProps) => {
           <a
             target="_blank"
             className={cn(`flex-center flex-center h-8 gap-1 rounded-md p-[7px] text-sm text-black hover:bg-gray-200`)}
-            href={`https://www.linkedin.com/feed/?shareActive=true&shareUrl=${encodeURIComponent(url ?? '')}&text=${encodeURIComponent(`This is my Twitter Personality analysis by AI Agent, built on @wordware #wordwareai`)}`}>
+            href={`https://www.linkedin.com/feed/?shareActive=true&shareUrl=${encodeURIComponent(url ?? '')}&text=${encodeURIComponent(`This is my Twitter Personality analysis by Sauna's AI agent`)}`}>
             <img
               src={linkedin.src}
               alt="LinkedIn"
@@ -81,7 +82,7 @@ const ActionButtons = ({ shareActive, text, url }: ActionButtonsProps) => {
           <a
             target="_blank"
             className={cn(`flex-center flex-center h-8 gap-1 rounded-md p-[7px] text-sm text-black hover:bg-gray-200`)}
-            href={`https://www.threads.net/intent/post?text=${encodeURIComponent(`This is my Twitter Personality analysis by AI Agent, built on @wordware #wordwareai\n${url ?? ''}`)}`}>
+            href={`https://www.threads.net/intent/post?text=${encodeURIComponent(`This is my Twitter Personality analysis by Sauna's AI agent\n${url ?? ''}`)}`}>
             <img
               src={threads.src}
               alt="Threads"

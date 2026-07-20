@@ -7,9 +7,9 @@ Last Updated: 24th of September 2024
 
 ## 1. Introduction
 
-Welcome to **twitter.wordware.ai** ("we," "us," or "our"). These Terms and Conditions ("Terms") govern your access to and use of our website and services (collectively, the "Services"), which provide a playful analysis of personality based on public Twitter handles. The Services are operated by **HeyDaily Inc.**, a Delaware C-Corp located at 746 Kansas St, San Francisco, CA 94107, USA.
+Welcome to **Twitter Personality by Sauna** ("we," "us," or "our"). These Terms and Conditions ("Terms") govern your access to and use of our website and services (collectively, the "Services"), which provide a playful analysis of personality based on public Twitter handles. The Services are operated by **HeyDaily Inc.**, a Delaware C-Corp located at 746 Kansas St, San Francisco, CA 94107, USA.
 
-By accessing or using our Services, you agree to be bound by these Terms and our [Privacy Policy](https://twitter.wordware.ai/privacy) ("Privacy Policy"). If you do not agree to these Terms, please do not use our Services.
+By accessing or using our Services, you agree to be bound by these Terms and our [Privacy Policy](/privacy) ("Privacy Policy"). If you do not agree to these Terms, please do not use our Services.
 
 ## 2. Acceptance of Terms
 
@@ -131,7 +131,7 @@ We may modify these Terms at any time. We will notify you of any changes by upda
 
 If you have any questions about these Terms or wish to exercise any of your rights, please contact us at:
 
-- **Email**: [sebastian@wordware.ai](mailto:sebastian@wordware.ai)
+- **Email**: [hello@sauna.ai](mailto:hello@sauna.ai)
 - **Address**: 746 Kansas St, San Francisco, CA 94107, USA
 
 ## 15. Governing Law and Jurisdiction

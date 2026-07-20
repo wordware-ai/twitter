@@ -5,7 +5,7 @@ import posthog from 'posthog-js'
 
 import { SelectPair, SelectUser } from '@/drizzle/schema'
 import { useCompatibilityAnalysis } from '@/hooks/use-compatibility-analysis'
-import { PAIRS_PAYWALL } from '@/lib/config'
+import { getURL, PAIRS_PAYWALL } from '@/lib/config'
 
 import ActionButtons from './action-buttons'
 import Compatibility from './compatibility'
@@ -51,8 +51,8 @@ const PairComponent = ({ users, pair }: { users: SelectUser[]; pair: SelectPair 
       {!unlocked && !pair.analysis && <CompatibilityPriceButton price={paywallFlag as string} />}
       <ActionButtons
         shareActive={!!compatibilityResult?.about}
-        text={`this is my and ${user2.username}'s Compatibility analysis by AI Agent, built on @wordware`}
-        url={`https://twitter.wordware.ai/${user1.username}/${user2.username}`}
+        text={`this is my and ${user2.username}'s Compatibility analysis by Sauna's AI agent`}
+        url={`${getURL()}${user1.username}/${user2.username}`}
       />
       <Compatibility
         names={[user1.name || user1.username, user2.name || user2.username]}

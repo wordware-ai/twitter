@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import { PiCaretLeft, PiXLogo } from 'react-icons/pi'
+import { PiArrowUpRight, PiCaretLeft } from 'react-icons/pi'
 
-import WordwareLogo from '@/components/logo'
+import SaunaLogo from '@/components/logo'
 import { Button } from '@/components/ui/button'
 
 const Topbar = () => {
@@ -21,14 +21,14 @@ const Topbar = () => {
             </Link>
           </Button>
         </div>
-        <div className="flex w-full items-center justify-center gap-2 whitespace-nowrap">
-          Build your AI App for free in
+        <div className="flex w-full items-center justify-center gap-3 whitespace-nowrap">
+          Meet your AI coworker
           <a
-            href="https://wordware.ai/"
+            href="https://sauna.ai/"
             target="_blank">
-            <WordwareLogo
+            <SaunaLogo
               color="black"
-              width={134}
+              width={110}
             />
           </a>
         </div>
@@ -48,31 +48,18 @@ const Topbar = () => {
             variant={'default'}
             asChild>
             <a
-              href={process.env.NEXT_PUBLIC_SHARED_APP_URL}
+              href="https://sauna.ai/"
               target="_blank"
               className="flex-center gap-2">
-              <WordwareLogo
+              <SaunaLogo
                 emblemOnly
                 color={'white'}
                 width={12}
               />
               <p>
-                Duplicate <span className="hidden md:inline">this</span> AI Agent
+                Try <span className="hidden md:inline">Sauna</span>
               </p>
-            </a>
-          </Button>
-          <Button
-            size={'sm'}
-            variant={'outline'}
-            asChild>
-            <a
-              href="https://x.com/wordware"
-              target="_blank"
-              className="flex-center gap-2">
-              <PiXLogo size={18} />
-              <p>
-                Follow <span className="hidden md:inline">us</span>
-              </p>
+              <PiArrowUpRight />
             </a>
           </Button>
         </div>

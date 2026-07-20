@@ -24,7 +24,7 @@ const PairPage = async ({ params }: { params: Promise<{ username: string; userna
   if (!user1 || !user2 || !pair) return <div>Pair does not exist</div>
 
   return (
-    <div className="flex-center relative min-h-screen w-full flex-col gap-12 bg-[#F9FAFB] px-4 py-28 sm:px-12 md:px-28 md:pt-24">
+    <div className="flex-center relative min-h-screen w-full flex-col gap-12 bg-desk px-4 py-28 sm:px-12 md:px-28 md:pt-24">
       <Topbar />
       <div className="flex-center flex-col gap-6">
         <div className="text-center text-xl font-light">

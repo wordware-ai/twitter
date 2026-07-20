@@ -41,7 +41,7 @@ export const ProgressIndicator = ({
 
       {!disableAnalysis && (
         <>
-          {/* Wordware analysis step */}
+          {/* AI analysis step */}
           <StepIndicator
             started={steps.wordwareStarted}
             completed={steps.wordwareCompleted}

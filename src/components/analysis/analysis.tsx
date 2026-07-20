@@ -8,7 +8,7 @@ import { TwitterAnalysis } from '@/types'
 import { cardData } from '../../lib/analysis-config'
 import AnalysisCard from './analysis-card'
 import { PaywallCard } from './paywall-card'
-import { WordwareCard } from './wordware-card'
+import { SaunaCard } from './sauna-card'
 
 type AnalysisProps = {
   unlocked: boolean
@@ -32,8 +32,8 @@ const Analysis: React.FC<AnalysisProps> = ({ unlocked, userData }) => {
         {cardData.map((card, index) => (
           <React.Fragment key={card.contentKey}>
             {!unlocked && index === 1 && <PaywallCard />}
-            {index === 1 && <WordwareCard />}
-            {index === 7 && <WordwareCard />}
+            {index === 1 && <SaunaCard />}
+            {index === 7 && <SaunaCard />}
             <AnalysisCard
               {...card}
               content={userData?.[card.contentKey] || ''}
