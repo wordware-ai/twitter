@@ -5,7 +5,7 @@ import React from 'react'
 import { Markdown } from '@/components/markdown'
 import { TwitterAnalysis } from '@/types'
 
-import { cardData } from '../../lib/wordware-config'
+import { cardData } from '../../lib/analysis-config'
 import AnalysisCard from './analysis-card'
 import { PaywallCard } from './paywall-card'
 import { WordwareCard } from './wordware-card'

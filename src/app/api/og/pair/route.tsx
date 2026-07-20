@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og'
 import type { NextRequest } from 'next/server'
 import { PiRobot } from 'react-icons/pi'
 
-import { compatibilityConfig } from '@/lib/wordware-config'
+import { compatibilityConfig } from '@/lib/analysis-config'
 
 export const runtime = 'edge'
 const light = fetch(new URL('./Inter-Light.ttf', import.meta.url)).then((res) => res.arrayBuffer())

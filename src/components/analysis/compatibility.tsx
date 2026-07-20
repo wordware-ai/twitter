@@ -6,7 +6,7 @@ import { PiQuestion } from 'react-icons/pi'
 import { Markdown } from '@/components/markdown'
 import { CompatibilityAnalysis } from '@/types'
 
-import { compatibilityConfig } from '../../lib/wordware-config'
+import { compatibilityConfig } from '../../lib/analysis-config'
 import CompatibilityCard from '../compatibility/compatibility-card'
 import { CompatibilityPaywallCard } from './compatibility-paywall-card'
 import { WordwareCard } from './wordware-card'

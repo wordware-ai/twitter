@@ -57,7 +57,7 @@ export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = 
   }
 
   const handleTweetAnalysis = async (props: { username: string; full: boolean; currentAnalysis?: TwitterAnalysis | undefined }) => {
-    const response = await fetch('/api/wordware', {
+    const response = await fetch('/api/analysis', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(props),
