@@ -4,6 +4,7 @@ import { unstable_noStore as noStore, revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 import { scrapeTweets } from '@/core/logic'
+import { fetchProfileXApi } from '@/core/x-api'
 import { getPair, getUser, insertPair, insertUser, unlockPair, unlockUser, updateUser } from '@/drizzle/queries'
 
 import { fetchUserDataBySocialData } from '../core/social-data'
@@ -18,11 +19,20 @@ export const handleNewUsername = async ({ username, redirectPath }: { username: 
     }
   }
 
-  const { data, error } = await fetchUserDataBySocialData({ username })
+  let { data, error } = await fetchProfileXApi({ username })
   if (!data) {
-    console.log(`[${username}] ⚠️ Profile SocialData`, error)
+    console.log(`[${username}] ⚠️ Profile X API (1/2)`, error)
   } else {
-    console.log(`[${username}] ✅ Profile SocialData`)
+    console.log(`[${username}] ✅ Profile X API (1/2)`)
+  }
+
+  if (!data) {
+    ;({ data, error } = await fetchUserDataBySocialData({ username }))
+    if (!data) {
+      console.log(`[${username}] ⚠️ Profile SocialData (2/2)`, error)
+    } else {
+      console.log(`[${username}] ✅ Profile SocialData (2/2)`)
+    }
   }
 
   if (data && !error) {
@@ -78,15 +88,14 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
       if (!tweets) throw new Error('No tweets found')
     } catch (e) {
       error = e
-      console.warn(`[${username}] ⚠️ All 3 attemtps failed. Trying again...`, e)
+      console.warn(`[${username}] ⚠️ All scrape methods failed. Retrying once...`, e)
       try {
         const res = await scrapeTweets({ username, twitterUserID: twitterUserID })
         tweets = res.data
         error = res.error
-        console.warn(`[${username}] ⚠️ All 6 attemtps failed.`, e)
         if (!tweets) throw new Error('No tweets found')
       } catch (e) {
-        console.warn(`[${username}] ⚠️ Yeah it's fucked:`, e)
+        console.warn(`[${username}] ⚠️ Tweet scraping failed after retry:`, e)
         throw e
       }
     }
