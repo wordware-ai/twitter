@@ -1,31 +1,35 @@
 # Twitter Personality 🐦🧠
 
-![Twitter Personality](https://twitter.wordware.ai/social/og.png)
+Twitter Personality is a web application that analyzes your Twitter/X handle to create a personalized personality profile using an AI agent — built by the team behind [Sauna](https://sauna.ai), your AI coworker.
 
-Twitter Personality is a web application that analyzes your Twitter handle to create a personalized personality profile using Wordware AI Agent. This project leverages cutting-edge AI technologies to provide users with unique insights into their Twitter persona. 🚀
+The site went viral in 2024. This is the relaunched version: official X API for data, Vercel AI SDK + AI Gateway for generation (model swappable via one env var), Next.js 15, and Sauna branding. All previously generated analyses remain cached in the database and keep rendering.
 
-You can explore the AI agent and prompts used in this app by visiting [this Wordware link](https://app.wordware.ai/share/2436ad08-5374-4750-a0f9-105080ff97ea/playground).
+## How it works
 
-## Setting Up the Project 🛠️
+1. Enter a Twitter/X username (or two, for a compatibility check).
+2. The profile and ~15 recent posts are fetched via the official **X API v2** (SocialData as fallback) and cached in Neon Postgres.
+3. An LLM (default `zai/glm-5.2`, via the **Vercel AI Gateway**) streams a structured analysis — roast, strengths, love life, spirit animal, pickup lines and more — straight into the page.
+4. The result is cached, shareable, and rendered into dynamic OG images.
 
-To set up the Twitter Personality project on your local machine, follow these steps:
+## Setting up the project 🛠️
 
-1. **Clone the Repository** 📂: Clone the Twitter Personality repository from GitHub to your local machine using your preferred method (e.g., Git Bash, GitHub Desktop, or the command line).
-2. **Install Dependencies** 📦: Navigate to the project directory and run `npm install` to install all the required dependencies.
-3. **Environment Variables** 🔐: Create a `.env.local` file in the project root directory based on the `.env.example` file. Here are some key environment variables you'll need to set:
-   - `DATABASE_URL`: Your Neon database URL (Do not expose these credentials to the browser).
-   - `WORDWARE_API_KEY`: Your Wordware API key for AI processing.
-   - `WORDWARE_PROMPT_ID`, `WORDWARE_ROAST_PROMPT_ID`, `WORDWARE_FULL_PROMPT_ID`, `WORDWARE_PAIR_PROMPT_ID`: The specific Wordware prompt IDs for this project.
-   - `NEXT_PUBLIC_BASE_URL`: The base URL for your application (e.g., http://localhost:3000 for local development).
-   - `LOOPS_API_KEY`: Your Loops API key for newsletter functionality.
-   - `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST`, `POSTHOG_PROJECT_ID`, `POSTHOG_PERSONAL_API_KEY`: PostHog analytics configuration.
-   - `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID`, `STRIPE_PRODUCT_ID`: Stripe configuration for payments.
-   - `NEXT_PUBLIC_PAIR_PASSWORD`: Password for pair functionality.
-   - For scraping, you'll need at least one of the following (we use all of these in a system of fallback functions)
-     - `TWITTER_API_TOKEN` and `TWITTER_COOKIE`: Twitter API configuration.
-     - `APIFY_API_KEY`: API key for Apify web scraping service.
-     - `SOCIALDATA_API_KEY`: SocialData API key.
+1. **Clone the repository** and run `npm install`.
+2. **Environment variables**: create `.env.local` based on `.env.example`:
+   - `DATABASE_URL`: Neon Postgres connection string.
+   - `AI_GATEWAY_API_KEY`: Vercel AI Gateway key (omit on Vercel — OIDC is automatic).
+   - `AI_MODEL` (optional): any [Gateway model string](https://vercel.com/ai-gateway/models), e.g. `zai/glm-5.2`, `anthropic/claude-sonnet-5`, `openai/gpt-5.2`. Swapping models is just changing this var.
+   - `X_API_BEARER_TOKEN`: official X API v2 bearer token (pay-per-use; buy credits in the [X developer console](https://developer.x.com)).
+   - `SOCIALDATA_API_KEY`: fallback scraper.
+   - `NEXT_PUBLIC_BASE_URL`: base URL of the deployment — share links derive from it.
+   - `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST`: analytics (optional).
+   - `STRIPE_*`: paywall plumbing — the paywall is off by default (see `src/lib/config.tsx`).
+3. **Run**: `npm run dev`.
 
-Refer to the `.env.example` file for a complete list of required environment variables.
+## Architecture notes
 
-Example `.env.local` file content (replace with your actual values):
+- **Prompts** live in `src/lib/prompts.ts` (the original viral prompts, ported from Wordware). Output shapes are enforced with zod schemas in `src/lib/schemas.ts` — these mirror the cached JSONB analyses key-for-key, so do not change keys casually.
+- **Streaming contract**: `/api/analysis` and `/api/analysis/pair` stream raw JSON text; the client renders partial JSON as it arrives (`src/lib/parse-partial-json.ts`).
+- **Caching/dedupe**: `users`/`pairs` rows carry status flags (`wordware*` columns — historical names kept for data compatibility) with staleness windows to dedupe concurrent generations.
+- **Brand**: Sauna tokens are defined in `tailwind.config.ts` + `src/app/globals.css`; official logo SVGs in `public/brand/`.
+
+Deployed on Vercel.
