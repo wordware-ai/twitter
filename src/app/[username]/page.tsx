@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next/types'
 
+import { refreshStaleUser } from '@/actions/actions'
 import { siteMetadata } from '@/app/metadata'
 import NewPairForm from '@/components/new-pair-form'
 import NewUsernameForm from '@/components/new-username-form'
@@ -18,11 +19,14 @@ export const dynamic = 'force-dynamic'
 // LEE Case 2
 const Page = async ({ params }: { params: Promise<{ username: string }> }) => {
   const { username } = await params
-  const data = await getUser({ username })
+  let data = await getUser({ username })
 
   if (!data) {
     return redirect(`/?u=${username}`)
   }
+
+  // Analyses older than ~6 months are archived and lazily regenerated on visit
+  data = await refreshStaleUser({ user: data })
 
   return (
     <div className="flex-center relative min-h-screen w-full flex-col gap-12 bg-desk px-4 py-28 sm:px-12 md:px-28 md:pt-24">

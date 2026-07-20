@@ -19,13 +19,15 @@ const config = {
       },
       colors: {
         // Sauna brand palette (https://www.sauna.ai/brand)
+        // forest is lightened from the brand's #003116 for better on-screen contrast
         ink: '#171814',
         paper: '#FFFFFF',
         desk: '#FAFAF9',
         canvas: '#F5F3F0',
         lichen: '#93EFA4',
-        forest: '#003116',
+        forest: '#0B5B34',
         steel: '#395C6C',
+        azure: '#1264A3',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

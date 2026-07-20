@@ -61,7 +61,13 @@ ${profileInfo}
 ${tweetsMarkdown}
 
 You can **bold** important information within the strings.
-Do not add anything else. Do not add markdown. Return ONLY plain JSON. Answer in the language in which the user posts most of their tweets.`
+Do not add anything else. Do not add markdown. Return ONLY plain JSON. Answer in the language in which the user posts most of their tweets.
+
+Return a JSON object with EXACTLY these keys and no others:
+- "name": string — the person's name
+- "about": string — the one-line description, starting with "Based on our AI agent's analysis of your tweets...."
+- "emojis": string — 5-8 emojis describing the person
+- "roast": string — the roast, at least 6 punchy sentences`
 
   return { system, prompt }
 }
@@ -109,7 +115,23 @@ ${tweetsMarkdown}
 You can **bold** important information within the strings.
 Do not add anything else. Do not add markdown. Return ONLY plain JSON.
 
-Answer in the language in which the user posts most of their tweets.`
+Answer in the language in which the user posts most of their tweets.
+
+Return a JSON object with EXACTLY these keys and no others:
+- "strengths": array of at least 5 objects, each { "title": string, "subtitle": string }
+- "weaknesses": array of at least 5 objects, each { "title": string, "subtitle": string }
+- "loveLife": string
+- "money": string
+- "health": string
+- "biggestGoal": string
+- "colleaguePerspective": string
+- "pickupLines": array of at least 3 strings
+- "famousPersonComparison": string
+- "previousLife": string
+- "animal": string
+- "fiftyDollarThing": string
+- "career": string
+- "lifeSuggestion": string`
 
   return { system, prompt }
 }
@@ -194,7 +216,10 @@ ${profileInfo2}
 ${tweetsMarkdown2}
 
 You can **bold** important information within the strings.
-Do not add anything else. Do not add markdown. Return ONLY plain JSON. Answer in the language in which the users post most of their tweets.`
+Do not add anything else. Do not add markdown. Return ONLY plain JSON. Answer in the language in which the users post most of their tweets.
+
+Return a JSON object with EXACTLY these keys and no others:
+"mbti" (object: { "profile1": string, "profile2": string }), "about" (string), "crazy" (string), "drama" (string), "emojis" (string), "divorce" (string), "marriage" (string), "3rd_wheel" (string), "free_time" (string), "red_flags" (object: { "profile1": array of strings, "profile2": array of strings }), "dealbreaker" (string), "green_flags" (object: { "profile1": array of strings, "profile2": array of strings }), "follower_flex" (string), "risk_appetite" (string), "love_languages" (string), "secret_desires" (string), "friends_forever" (string), "jealousy_levels" (string), "attachment_style" (string), "values_alignment" (string), "breakup_percentage" (string), "overall_compatibility" (string), "personality_type_match" (string), "emotional_compatibility" (string), "financial_compatibility" (string), "communication_style_compatibility" (string)`
 
   return { system, prompt }
 }

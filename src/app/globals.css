@@ -25,12 +25,12 @@
     --muted: 36 20% 95%; /* Canvas */
     --muted-foreground: 199 31% 32%; /* Steel */
     --accent: 131 74% 76%; /* Lichen */
-    --accent-foreground: 147 100% 10%; /* Forest */
+    --accent-foreground: 151 78% 20%; /* Forest (lightened) */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 40 12% 90%;
     --input: 40 12% 90%;
-    --ring: 147 100% 10%; /* Forest */
+    --ring: 151 78% 20%; /* Forest (lightened) */
     --radius: 0.5rem;
   }
 }

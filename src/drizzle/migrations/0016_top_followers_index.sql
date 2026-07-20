@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS "followers_completed_idx" ON "users" USING btree ("followers" DESC NULLS LAST) WHERE "users"."wordware_completed" = true;

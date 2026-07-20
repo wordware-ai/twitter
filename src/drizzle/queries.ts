@@ -1,15 +1,117 @@
 import 'server-only'
 
-import { unstable_noStore as noStore } from 'next/cache'
-import { and, eq } from 'drizzle-orm'
+import { unstable_cache as cache, unstable_noStore as noStore } from 'next/cache'
+import { and, desc, eq, inArray } from 'drizzle-orm'
 
 import { db } from './db'
 import { InsertPair, InsertUser, pairs, SelectUser, users } from './schema'
+
+export interface UserCardData {
+  id: string
+  username: string
+  name: string | null
+  profilePicture: string | null
+  followers: number | null
+}
 
 export const getUser = async ({ username }: { username: SelectUser['username'] }) => {
   noStore()
   return await db.query.users.findFirst({ where: eq(users.lowercaseUsername, username.toLowerCase()) })
 }
+
+const featuredUsernames = [
+  'yoheinakajima',
+  'MattPRD',
+  'benparr',
+  'jowyang',
+  'saranormous',
+  'swyx',
+  'azeem',
+  'unable0_',
+  'bertie_ai',
+  'kozerafilip',
+  'AlexReibman',
+  'bentossell',
+]
+
+const topPairUsernames = [
+  ['leeerob', 'rauchg'],
+  ['t3dotgg', 'theprimeagen'],
+  ['beyonce', 'sc'],
+  ['cristiano', 'realmadrid'],
+  ['taylorswift13', 'tkelce'],
+  ['barackobama', 'michelleobama'],
+  ['tomholland1996', 'zendaya'],
+  ['billgates', 'melindagates'],
+  ['blakelively', 'vancityreynolds'],
+  ['giseleofficial', 'tombrady'],
+  ['camila_cabello', 'shawnmendes'],
+  ['ninja', 'pokimanelol'],
+  ['mrbeast', 'pewdiepie'],
+  ['kingjames', 'lakers'],
+  ['elonmusk', 'tesla'],
+  ['rogerfederer', 'rafaelnadal'],
+  ['nba', 'stephencurry30'],
+]
+
+const userCardColumns = {
+  id: true,
+  username: true,
+  name: true,
+  profilePicture: true,
+  followers: true,
+} as const
+
+export const getTop = cache(
+  async (): Promise<UserCardData[]> => {
+    return db.query.users.findMany({
+      where: eq(users.wordwareCompleted, true),
+      orderBy: desc(users.followers),
+      limit: 20,
+      columns: userCardColumns,
+    })
+  },
+  ['top-users'],
+  { revalidate: 3600 },
+)
+
+export const getTopPairs = cache(
+  async (): Promise<[UserCardData, UserCardData][]> => {
+    const pairPromises = topPairUsernames.map(async ([username1, username2]) => {
+      const [user1, user2] = await Promise.all([
+        db.query.users.findFirst({ where: eq(users.lowercaseUsername, username1.toLowerCase()), columns: userCardColumns }),
+        db.query.users.findFirst({ where: eq(users.lowercaseUsername, username2.toLowerCase()), columns: userCardColumns }),
+      ])
+
+      if (!user1 || !user2) {
+        console.warn(`One or both users not found: ${username1}, ${username2}`)
+        return null
+      }
+
+      return [user1, user2] as [UserCardData, UserCardData]
+    })
+
+    const resolved = await Promise.all(pairPromises)
+    return resolved.filter((pair): pair is [UserCardData, UserCardData] => pair !== null)
+  },
+  ['top-pairs'],
+  { revalidate: 3600 },
+)
+
+export const getFeatured = cache(
+  async (): Promise<UserCardData[]> => {
+    return await db.query.users.findMany({
+      where: inArray(
+        users.lowercaseUsername,
+        featuredUsernames.map((u) => u.toLowerCase()),
+      ),
+      orderBy: desc(users.followers),
+      columns: userCardColumns,
+    })
+  },
+  ['featured-users'],
+  { revalidate: 3600 },
+)
 
 export const insertUser = async ({ user }: { user: InsertUser }) => {
   await db.insert(users).values(user)

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { PiArrowUpRight, PiCaretLeft } from 'react-icons/pi'
+import { PiArrowUpRight, PiCaretLeft, PiUsersThree } from 'react-icons/pi'
 
 import SaunaLogo from '@/components/logo'
 import { Button } from '@/components/ui/button'
@@ -18,6 +18,17 @@ const Topbar = () => {
               href={'/'}>
               <PiCaretLeft />
               Homepage
+            </Link>
+          </Button>
+          <Button
+            size={'sm'}
+            variant={'outline'}
+            asChild>
+            <Link
+              className="flex-center gap-2"
+              href={'/featured'}>
+              <PiUsersThree />
+              Featured Roasts
             </Link>
           </Button>
         </div>

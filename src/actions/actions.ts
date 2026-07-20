@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation'
 import { scrapeTweets } from '@/core/logic'
 import { fetchProfileXApi } from '@/core/x-api'
 import { getPair, getUser, insertPair, insertUser, unlockPair, unlockUser, updateUser } from '@/drizzle/queries'
+import { SelectUser } from '@/drizzle/schema'
 
 import { fetchUserDataBySocialData } from '../core/social-data'
 
@@ -56,6 +57,38 @@ export const handleNewUsername = async ({ username, redirectPath }: { username: 
       found: false,
     }
   }
+}
+
+const ANALYSIS_MAX_AGE_MS = 182 * 24 * 60 * 60 * 1000 // ~6 months
+
+/**
+ * Lazily expire analyses older than ~6 months: archive the current analysis and
+ * tweets into `analysisHistory`, then reset the pipeline flags so the visit
+ * re-scrapes and re-generates. The stale analysis stays in place (and on
+ * screen) until the fresh one streams in over it.
+ */
+export const refreshStaleUser = async ({ user }: { user: SelectUser }): Promise<SelectUser> => {
+  if (!user.wordwareCompleted) return user
+  if (Date.now() - user.wordwareStartedTime.getTime() < ANALYSIS_MAX_AGE_MS) return user
+
+  const history = [
+    ...((user.analysisHistory as object[] | null) ?? []),
+    { archivedAt: new Date().toISOString(), analysis: user.analysis, tweets: user.tweets },
+  ]
+
+  const updated = {
+    ...user,
+    analysisHistory: history,
+    tweetScrapeStarted: false,
+    tweetScrapeCompleted: false,
+    wordwareStarted: false,
+    wordwareCompleted: false,
+    paidWordwareStarted: false,
+    paidWordwareCompleted: false,
+  }
+  await updateUser({ user: updated })
+  console.log(`[${user.username}] ♻️ Archived analysis from ${user.wordwareStartedTime.toISOString()}, re-running scrape + roast`)
+  return updated
 }
 
 export const processScrapedUser = async ({ username }: { username: string }) => {
