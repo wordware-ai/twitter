@@ -5,7 +5,6 @@ import './globals.css'
 import Callout from '@/components/callout'
 import { DeveloperInfo } from '@/components/developer-info'
 import Footer from '@/components/footer'
-import { NewsletterForm } from '@/components/newsletter-form'
 import { getURL } from '@/lib/config'
 import Providers from '@/lib/providers'
 import { cn } from '@/lib/utils'
@@ -81,11 +80,6 @@ export default function RootLayout({
             {/* Callout section */}
             <section className="w-full">
               <Callout />
-            </section>
-
-            {/* Newsletter form section */}
-            <section className="pb-24">
-              <NewsletterForm />
             </section>
 
             {/* Footer component */}

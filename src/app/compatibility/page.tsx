@@ -1,17 +1,10 @@
 import { Suspense } from 'react'
 import { Metadata } from 'next'
-import Link from 'next/link'
-import { PiBrain, PiGithubLogo, PiXLogo } from 'react-icons/pi'
+import { PiGithubLogo, PiXLogo } from 'react-icons/pi'
 
-import Quote from '@/app/quote'
 import NewPairFormBothNames from '@/components/new-pair-form-both-names'
 import NewUsernameForm from '@/components/new-username-form'
-import PHButton from '@/components/ph-button'
 import { Button } from '@/components/ui/button'
-
-// import TopList from '../top-list'
-
-// import TopList from '../top-list'
 
 export const maxDuration = 181
 
@@ -36,7 +29,7 @@ const Page = () => {
   return (
     <section className="">
       <div className="flex flex-col md:flex-row">
-        <div className="relative flex min-h-[80svh] flex-col justify-center bg-[#F9FAFB] p-8 sm:p-12 md:w-1/2 md:p-16 lg:p-24">
+        <div className="relative mx-auto flex min-h-[80svh] w-full max-w-3xl flex-col justify-center bg-[#F9FAFB] p-8 sm:p-12 md:p-16">
           <div className="grow" />
 
           <div>
@@ -99,15 +92,7 @@ const Page = () => {
 
           <div className="bottom-6 space-y-3 border-t">
             <div className="flex flex-col gap-2">
-              <p className="mt-8 text-sm">
-                <span
-                  className="bg-clip-text font-bold text-transparent"
-                  style={{ backgroundColor: '#CB9F9F' }}>
-                  support the Wordware launch!
-                </span>
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <PHButton />
+              <div className="mt-8 flex flex-wrap gap-2">
                 <Button
                   variant={'outline'}
                   asChild>
@@ -119,27 +104,11 @@ const Page = () => {
                     GitHub Repo
                   </a>
                 </Button>
-                <Button
-                  asChild
-                  variant={'outline'}>
-                  <Link
-                    href="/open"
-                    className="flex items-center gap-2">
-                    <PiBrain />
-                    Stats
-                  </Link>
-                </Button>
               </div>
             </div>
           </div>
         </div>
-        <div className="flex h-full w-full items-center justify-center bg-[#F1F2F6] md:h-auto md:w-1/2">
-          <div className="hidden md:block">
-            <Quote />
-          </div>
-        </div>
       </div>
-      {/* <TopList /> */}
     </section>
   )
 }

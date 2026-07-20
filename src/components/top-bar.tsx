@@ -1,8 +1,7 @@
 import Link from 'next/link'
-import { PiBrain, PiCaretLeft, PiXLogo } from 'react-icons/pi'
+import { PiCaretLeft, PiXLogo } from 'react-icons/pi'
 
 import WordwareLogo from '@/components/logo'
-// import PHButton from '@/components/ph-button'
 import { Button } from '@/components/ui/button'
 
 const Topbar = () => {
@@ -19,17 +18,6 @@ const Topbar = () => {
               href={'/'}>
               <PiCaretLeft />
               Homepage
-            </Link>
-          </Button>
-          <Button
-            size={'sm'}
-            asChild
-            variant={'outline'}>
-            <Link
-              href="/open"
-              className="flex items-center gap-2">
-              <PiBrain />
-              Stats for nerds
             </Link>
           </Button>
         </div>
@@ -73,7 +61,6 @@ const Topbar = () => {
               </p>
             </a>
           </Button>
-          {/* <PHButton text="Support us!" /> */}
           <Button
             size={'sm'}
             variant={'outline'}

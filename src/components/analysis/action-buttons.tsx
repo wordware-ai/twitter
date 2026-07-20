@@ -4,7 +4,6 @@ import WordwareLogo from '@/components/logo'
 import linkedin from '@/components/logos/linkedin.svg'
 import threads from '@/components/logos/threads.svg'
 import whatsapp from '@/components/logos/whatsapp.svg'
-import PHButton from '@/components/ph-button'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -18,7 +17,6 @@ const ActionButtons = ({ shareActive, text, url }: ActionButtonsProps) => {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex-center flex-wrap gap-4">
-        <PHButton text="Support us!" />
         {shareActive && (
           <Button
             size={'sm'}
