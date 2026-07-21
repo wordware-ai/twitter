@@ -2,10 +2,10 @@ import { Suspense } from 'react'
 import { notFound, redirect } from 'next/navigation'
 import { Metadata } from 'next/types'
 
-import { refreshStaleUser } from '@/actions/actions'
 import { siteMetadata } from '@/app/metadata'
 import NewPairForm from '@/components/new-pair-form'
 import NewUsernameForm from '@/components/new-username-form'
+import { refreshStaleUser } from '@/core/stale-analysis'
 import { getUser } from '@/drizzle/queries'
 
 import { ProfileHighlight } from '../../components/analysis/profile-highlight'

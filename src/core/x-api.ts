@@ -23,7 +23,9 @@ const USER_FIELDS = [
   'pinned_tweet_id',
 ].join(',')
 
-const TWEET_FIELDS = ['created_at', 'public_metrics', 'text', 'referenced_tweets'].join(',')
+// note_tweet: full text of long-form posts (plain `text` truncates them);
+// entities: lets us expand t.co links so the model sees real URLs
+const TWEET_FIELDS = ['created_at', 'public_metrics', 'text', 'referenced_tweets', 'note_tweet', 'entities'].join(',')
 
 // Match the historical SocialData cap so fresh rows look like cached ones
 const MAX_TWEETS = 15
@@ -48,6 +50,8 @@ type XApiUser = {
   }
 }
 
+type XApiUrlEntity = { url: string; expanded_url?: string }
+
 type XApiTweet = {
   id: string
   text: string
@@ -60,6 +64,19 @@ type XApiTweet = {
     impression_count?: number
   }
   referenced_tweets?: { type: 'retweeted' | 'quoted' | 'replied_to'; id: string }[]
+  note_tweet?: { text: string; entities?: { urls?: XApiUrlEntity[] } }
+  entities?: { urls?: XApiUrlEntity[] }
+}
+
+// Replace t.co shortlinks with their expanded URLs so the analysis model sees
+// what was actually linked instead of an opaque https://t.co/... token
+const expandTweetText = (tweet: XApiTweet): string => {
+  let text = tweet.note_tweet?.text ?? tweet.text
+  const urls = [...(tweet.entities?.urls ?? []), ...(tweet.note_tweet?.entities?.urls ?? [])]
+  for (const u of urls) {
+    if (u.expanded_url) text = text.replaceAll(u.url, u.expanded_url)
+  }
+  return text
 }
 
 const xApiFetch = async (path: string) => {
@@ -145,7 +162,7 @@ export async function fetchTweetsXApi({ userId, username }: { userId: string; us
       isRetweet: tweet.referenced_tweets?.some((ref) => ref.type === 'retweeted') ?? false,
       author: { userName: username },
       createdAt: tweet.created_at || '',
-      text: tweet.text,
+      text: expandTweetText(tweet),
       retweetCount: tweet.public_metrics?.retweet_count ?? 0,
       replyCount: tweet.public_metrics?.reply_count ?? 0,
       likeCount: tweet.public_metrics?.like_count ?? 0,
