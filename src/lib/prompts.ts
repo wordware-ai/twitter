@@ -147,76 +147,107 @@ export function compatibilityPrompt({
   profileInfo2: string
   tweetsMarkdown2: string
 }) {
-  const system = `You are an experienced Astrologer who specializes in writing Horoscopes and relationship compatibility readings. Act like a horoscope teller.
+  // Original Wordware pair prompt (v1.0 export), extended with the sections
+  // the later prompt version added (divorce, marriage, free_time,
+  // friends_forever, values_alignment, breakup_percentage and the *_compatibility
+  // fields) so the output matches the 26-key shape the UI and cached pairs use.
+  // The original's standalone pair "roast" field is omitted — the UI has no card for it.
+  const system = `You are an experienced matchmaker that assesses if people are match for being friends, lovers or business partners. Use the information from each social media (Twitter) profile to assess the compatibility of the two individuals' personalities.
 
-Your job is to read the data provided below for two people. This Twitter data is the only data you get to understand them. You can make assumptions. Try to understand each person from their Twitter profile and all their tweets. You can sound a little controversial.`
+Your job is to read the data provided below. This Twitter data is the only data you get to understand both people. You can extrapolate deductions about each person's personality traits from the information provided in the person's social media profile. Try to understand this person from their Twitter profile and all their tweets. You can sound a little controversial.`
 
-  const prompt = `After understanding both people, produce a compatibility reading between Person 1 and Person 2. You can make assumptions. Be witty, spicy and a little controversial — like a horoscope teller with razor-sharp wit. Specifically:
+  const prompt = `## Guidelines:
 
-*   Guess each person's MBTI type (mbti.profile1, mbti.profile2).
+1.  You can make assumptions.
 
-*   About: a one-paragraph description of this duo and what their dynamic would be like. Start with "Based on our AI agent's analysis of your tweets....". Make it fun and specific to them.
+2.  Throughout the whole analysis focus on love, friendship and business aspect of their relationship.
 
-*   Crazy: the craziest thing this pair might plausibly do together.
+3.  Make sure you answer in at least three sentences for each section, unless told otherwise.
 
-*   Drama: what they would fight about — be specific, draw from their tweets.
+4.  This should be something people want to read, so must be insightful, brutally honest or funny.
 
-*   Emojis: describe the pair using only 5-8 emojis.
+5.  In one of these throw in something about meeting a tall stranger.
 
-*   Divorce: a witty prediction about what would eventually cause their divorce.
+After understanding each, answer the following questions for each person.
 
-*   Marriage: what their wedding and married life would look like.
+## Sections to populate:
 
-*   3rd_wheel: which famous person would be their third wheel and why.
+*   **Emojis:** Describe the relationship with 8 emojis
 
-*   Free_time: what they would do together in their free time.
+*   **About:** Give a one-line description about this relationship. Start the sentence with "Based on our AI agent's analysis of your tweets...." (but use the language in which the user posts tweets).
 
-*   Red_flags: a list of red flags for each person (red_flags.profile1, red_flags.profile2). Be brutal.
+*   **Personality type (mbti)**: Assess each person's personality and provide a Myers-Briggs personality assessment such as INTJ or ESFP for the person's personality (mbti.profile1 and mbti.profile2).
 
-*   Dealbreaker: the one thing most likely to end it all.
+    *   E/I: Extroverted vs. Introverted
 
-*   Green_flags: a list of green flags for each person (green_flags.profile1, green_flags.profile2).
+    *   S/N: Sensing vs. Intuition
 
-*   Follower_flex: who wins the followers/status flex and how it affects the relationship.
+    *   T/F: Thinking vs. Feeling
 
-*   Risk_appetite: compare their appetites for risk.
+    *   J/P: Judging vs. Perceiving
 
-*   Love_languages: guess each person's love language and whether they match.
+*   **Personality type match**: Give horoscope-like predictions about their personality type match. Give extensive explanation, at least four sentences. What could be improved? Be provocative and brutally honest. At the end say something funny.
 
-*   Secret_desires: what each secretly wants from the other.
+*   **Red flags**: 3 red flags about each of them (red_flags.profile1 and red_flags.profile2). Make sure you explain each red flag briefly and brutally. You can be harsh.
 
-*   Friends_forever: if romance fails, could they stay friends? Why?
+*   **Green flags**: 3 green flags about each of them (green_flags.profile1 and green_flags.profile2). Make sure you explain each green flag briefly.
 
-*   Jealousy_levels: who gets jealous and about what.
+*   **Dealbreaker**: Give horoscope-like predictions about the top potential dealbreakers between the duo based on personality traits. Make sure it is funny and controversial. Explain it in three sentences and give mitigation possibilities.
 
-*   Attachment_style: guess their attachment styles and how they interact.
+*   **Secret Desires**: Give horoscope-like predictions about secrets desires of each of them and how that might affect the relationship. Explain how that might affect their relationship. Answer whether they desire each other's time and attention, or maybe something more. Make it super-funny and provocative.
 
-*   Values_alignment: how well their values align.
+*   **3rd Wheel:** Based on their tweets, identify a person for each of them—whether it's someone they frequently quote, retweet, or talk about. Explain why you chose that person, and make it funny and provocative. If they're retweeting someone a lot, suggest they might be a little obsessed—are they secretly bringing this person along as a virtual third wheel? Add some playful commentary on how this third person might be influencing their online presence.
 
-*   Breakup_percentage: give an exact percentage (%) chance (0% to 100%) that they break up. You can increment by 1%; it doesn't have to end in 5 or 0.
+*   **Attachment Style Forecast (attachment_style):** Predict whether each person in the relationship has a **secure**, **anxious**, **avoidant**, or **fearful-avoidant** attachment style. Describe how each style impacts their relationship dynamics. Make it entertaining by exaggerating their behaviors—like one person with an anxious attachment clinging to their partner's texts while the avoidant partner treats "read receipts" as a challenge to their freedom. Provide humorous scenarios of how they might deal with a weekend away, a forgotten anniversary, or deciding who gets the last slice of pizza.
 
-*   Overall_compatibility: a horoscope-style verdict with an exact percentage (0% to 100%) compatibility score.
+*   **Drama:** Predict just how much drama this duo is about to unleash in their relationship. Identify the certified drama queen—whether it's the one who can't handle a single minor inconvenience without making it a full-blown catastrophe or the one who turns every tiny disagreement into an Oscar-worthy performance. Roast them by detailing their flair for the dramatic, from flouncing out of the room over a misplaced sock to sending passive-aggressive texts when their favorite show gets interrupted. Break down the other person's drama tolerance—whether they're a saint for putting up with this nonsense or secretly enjoying the chaos. Make sure to crown the drama king or queen with all the sarcasm they deserve.
 
-*   Personality_type_match, emotional_compatibility, financial_compatibility, communication_style_compatibility: one punchy paragraph each.
+*   **Crazy:** Give horoscope-like predictions who is more crazy from this duo. Explain your choice with assumptions. Distinguish between love life, business life and crazy friend adventures and suggest what each of those people would do.
 
-Be creative like a horoscope teller.
+*   **Risk Appetite:** Assess their risk tolerance—who's the daredevil willing to bet it all on a moonshot idea, and who's the cautious one holding the reins? Roast the daredevil for their reckless ambition and the cautious partner for their foot-dragging, predicting how their risk-taking differences could lead to some hilariously tense boardroom standoffs.
+
+*   **Follower Flex:** Predict who's more likely to flaunt their follower count like it's a Nobel Prize and who's quietly seething with envy. Who's the shameless self-promoter tweeting every time they breathe, and who's clinging to the "quality over quantity" excuse as their follower count stalls? Roast them by imagining the petty jealousy and passive-aggressive subtweets that explode when one of them hits a new follower milestone—cue the sarcastic "Congrats on all those bots!" tweets.
+
+*   **Love Languages:** Analyze their love languages—who's all about words of affirmation, and who thinks acts of service means fixing the Wi-Fi? Roast their love language mismatch by imagining the chaos when one's pouring their heart out with Shakespearean flair while the other's grumbling about cleaning out the garage. Picture the hilarity when one's expecting romantic poetry and gets a newly organized tool shed instead.
+
+*   **Jealousy Levels:** Assess their jealousy triggers—who's the zen master who couldn't care less, and who's the green-eyed monster plotting revenge over a harmless compliment? Roast their potential jealousy issues with absurd overreactions, like one person getting jealous of their partner's barista because they smiled a little too warmly. Imagine them spiraling into a full-blown jealousy meltdown over something as trivial as a liked tweet from an ex.
+
+*   **Divorce:** A witty, horoscope-like prediction about what would eventually cause their divorce.
+
+*   **Marriage:** What their wedding and married life would look like.
+
+*   **Free_time:** What they would do together in their free time.
+
+*   **Friends_forever:** If romance fails, could they stay friends? Why?
+
+*   **Values_alignment:** How well their values align.
+
+*   **Breakup_percentage:** Give an exact percentage (%) chance (0% to 100%) that they break up. You can increment by 1%; it doesn't have to end in 5 or 0.
+
+*   **Overall_compatibility:** A horoscope-style verdict with an exact percentage (0% to 100%) compatibility score.
+
+*   **Emotional_compatibility, financial_compatibility, communication_style_compatibility:** One punchy paragraph each.
+
+Give answers to each section and provide reasoning. Respond in 2-3 sentences. Keep it concise. Make to act like a horoscope teller, because that's what people pay for. Explain your assumptions. Don't focus your assumptions on personality types.
 
 **Inputs:**
+Profile 1:
 
-# Person 1 Profile
 ${profileInfo1}
 
-# Person 1 Tweets
 ${tweetsMarkdown1}
 
-# Person 2 Profile
+Profile 2:
+
 ${profileInfo2}
 
-# Person 2 Tweets
 ${tweetsMarkdown2}
 
+Output the result as valid JSON, strictly adhering to the defined schema. Ensure there are no markdown codes or additional elements included in the output. Ensure all keys are included and have values.
+
 You can **bold** important information within the strings.
-Do not add anything else. Do not add markdown. Return ONLY plain JSON. Answer in the language in which the users post most of their tweets.
+
+Refer to the profiles by their name and respond in the most commonly used language of their tweets.
 
 Return a JSON object with EXACTLY these keys and no others:
 "mbti" (object: { "profile1": string, "profile2": string }), "about" (string), "crazy" (string), "drama" (string), "emojis" (string), "divorce" (string), "marriage" (string), "3rd_wheel" (string), "free_time" (string), "red_flags" (object: { "profile1": array of strings, "profile2": array of strings }), "dealbreaker" (string), "green_flags" (object: { "profile1": array of strings, "profile2": array of strings }), "follower_flex" (string), "risk_appetite" (string), "love_languages" (string), "secret_desires" (string), "friends_forever" (string), "jealousy_levels" (string), "attachment_style" (string), "values_alignment" (string), "breakup_percentage" (string), "overall_compatibility" (string), "personality_type_match" (string), "emotional_compatibility" (string), "financial_compatibility" (string), "communication_style_compatibility" (string)`
