@@ -72,10 +72,13 @@ export const refreshStaleUser = async ({ user }: { user: SelectUser }): Promise<
   if (!user.wordwareCompleted) return user
   if (Date.now() - user.wordwareStartedTime.getTime() < ANALYSIS_MAX_AGE_MS) return user
 
-  const history = [
-    ...((user.analysisHistory as object[] | null) ?? []),
-    { archivedAt: new Date().toISOString(), analysis: user.analysis, tweets: user.tweets },
-  ]
+  // Safety valve: never archive the same user more than once a day, even if a
+  // bug elsewhere leaves the started-time looking stale after a regeneration
+  const existingHistory = (user.analysisHistory as { archivedAt?: string }[] | null) ?? []
+  const lastArchivedAt = existingHistory[existingHistory.length - 1]?.archivedAt
+  if (lastArchivedAt && Date.now() - new Date(lastArchivedAt).getTime() < 24 * 60 * 60 * 1000) return user
+
+  const history = [...existingHistory, { archivedAt: new Date().toISOString(), analysis: user.analysis, tweets: user.tweets }]
 
   let { data: freshProfile } = await fetchProfileXApi({ username: user.username })
   if (!freshProfile) {

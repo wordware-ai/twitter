@@ -51,9 +51,10 @@ export async function POST(request: Request) {
   const { system, prompt } = full ? fullPrompt({ profileInfo, tweetsMarkdown }) : roastPrompt({ profileInfo, tweetsMarkdown })
 
   // Mark generation as started (reset in onError below if it fails)
+  const startedAt = new Date()
   const startedObject = full
-    ? { paidWordwareStarted: true, paidWordwareStartedTime: new Date() }
-    : { wordwareStarted: true, wordwareStartedTime: new Date() }
+    ? { paidWordwareStarted: true, paidWordwareStartedTime: startedAt }
+    : { wordwareStarted: true, wordwareStartedTime: startedAt }
   await updateUser({ user: { ...user, ...startedObject } })
 
   const existingAnalysis = user?.analysis as TwitterAnalysis
@@ -72,9 +73,12 @@ export async function POST(request: Request) {
     onEnd: async ({ text }) => {
       try {
         const output = JSON.parse(text)
+        // Include the fresh started time: spreading the pre-generation `user`
+        // would write the old timestamp back, making a just-regenerated
+        // analysis still look stale to refreshStaleUser (regeneration loop)
         const statusObject = full
-          ? { paidWordwareStarted: true, paidWordwareCompleted: true }
-          : { wordwareStarted: true, wordwareCompleted: true }
+          ? { paidWordwareStarted: true, paidWordwareStartedTime: startedAt, paidWordwareCompleted: true }
+          : { wordwareStarted: true, wordwareStartedTime: startedAt, wordwareCompleted: true }
         await updateUser({
           user: {
             ...user,

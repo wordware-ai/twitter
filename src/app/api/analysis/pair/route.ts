@@ -46,11 +46,12 @@ export async function POST(request: Request) {
     tweetsMarkdown2,
   })
 
+  const startedAt = new Date()
   await updatePair({
     pair: {
       ...pair,
       wordwareStarted: true,
-      wordwareStartedTime: new Date(),
+      wordwareStartedTime: startedAt,
     },
   })
 
@@ -76,6 +77,7 @@ export async function POST(request: Request) {
           pair: {
             ...pair,
             wordwareStarted: true,
+            wordwareStartedTime: startedAt,
             wordwareCompleted: true,
             analysis: output,
           },
