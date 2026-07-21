@@ -3,7 +3,7 @@
     "app/api/stripe/**.js": {
       "memory": 256
     },
-    "app/api/wordware/**.js": {
+    "app/api/analysis/**.js": {
       "memory": 256
     }
   }

@@ -11,7 +11,8 @@ import { getPair, getUser } from '@/drizzle/queries'
 
 import PairComponent from '../../../components/analysis/pair-component'
 
-const PairPage = async ({ params: { username, usernamePair } }: { params: { username: string; usernamePair: string } }) => {
+const PairPage = async ({ params }: { params: Promise<{ username: string; usernamePair: string }> }) => {
+  const { username, usernamePair } = await params
   console.log('Page for', username, 'and', usernamePair)
   //ALWAYS SORT THE USER IDS SO WE CAN USE THEM AS KEYS
   const [username1, username2] = [username, usernamePair].sort()
@@ -23,7 +24,7 @@ const PairPage = async ({ params: { username, usernamePair } }: { params: { user
   if (!user1 || !user2 || !pair) return <div>Pair does not exist</div>
 
   return (
-    <div className="flex-center relative min-h-screen w-full flex-col gap-12 bg-[#F9FAFB] px-4 py-28 sm:px-12 md:px-28 md:pt-24">
+    <div className="flex-center relative min-h-screen w-full flex-col gap-12 bg-desk px-4 py-28 sm:px-12 md:px-28 md:pt-24">
       <Topbar />
       <div className="flex-center flex-col gap-6">
         <div className="text-center text-xl font-light">
@@ -58,15 +59,22 @@ const PairPage = async ({ params: { username, usernamePair } }: { params: { user
 
 export default PairPage
 
-export async function generateMetadata({ params, searchParams }: { params: { username: string; usernamePair: string }; searchParams: { section: string } }) {
-  const [username1, username2] = [params.username, params.usernamePair].sort()
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ username: string; usernamePair: string }>
+  searchParams: Promise<{ section: string }>
+}) {
+  const { username, usernamePair } = await params
+  const [username1, username2] = [username, usernamePair].sort()
   const [user1, user2] = await Promise.all([getUser({ username: username1 }), getUser({ username: username2 })])
   const pair = await getPair({ usernames: [username1, username2] })
 
   if (!user1 || !user2 || !pair) return notFound()
 
   const imageParams = new URLSearchParams()
-  const section = searchParams.section || 'about'
+  const section = (await searchParams).section || 'about'
   // const section = 'about' //TODO: Hardcode about for now, to make it dynamic we need to design the full OG image
   // generator for all the section types
   const content = (pair.analysis as any)?.[section]

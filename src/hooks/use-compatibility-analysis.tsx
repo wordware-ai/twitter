@@ -44,7 +44,7 @@ export const useCompatibilityAnalysis = (user1: SelectUser, user2: SelectUser, p
       console.log('Not starting compatibility analysis', steps.compatibilityAnalysisStarted, Date.now() - pair.wordwareStartedTime.getTime())
       return
     }
-    const response = await fetch('/api/wordware/pair', {
+    const response = await fetch('/api/analysis/pair', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(props),

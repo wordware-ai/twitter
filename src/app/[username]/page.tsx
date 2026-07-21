@@ -5,6 +5,7 @@ import { Metadata } from 'next/types'
 import { siteMetadata } from '@/app/metadata'
 import NewPairForm from '@/components/new-pair-form'
 import NewUsernameForm from '@/components/new-username-form'
+import { refreshStaleUser } from '@/core/stale-analysis'
 import { getUser } from '@/drizzle/queries'
 
 import { ProfileHighlight } from '../../components/analysis/profile-highlight'
@@ -16,15 +17,19 @@ export const maxDuration = 300
 export const dynamic = 'force-dynamic'
 
 // LEE Case 2
-const Page = async ({ params }: { params: { username: string } }) => {
-  const data = await getUser({ username: params.username })
+const Page = async ({ params }: { params: Promise<{ username: string }> }) => {
+  const { username } = await params
+  let data = await getUser({ username })
 
   if (!data) {
-    return redirect(`/?u=${params.username}`)
+    return redirect(`/?u=${username}`)
   }
 
+  // Analyses older than ~6 months are archived and lazily regenerated on visit
+  data = await refreshStaleUser({ user: data })
+
   return (
-    <div className="flex-center relative min-h-screen w-full flex-col gap-12 bg-[#F9FAFB] px-4 py-28 sm:px-12 md:px-28 md:pt-24">
+    <div className="flex-center relative min-h-screen w-full flex-col gap-12 bg-desk px-4 py-28 sm:px-12 md:px-28 md:pt-24">
       <Topbar />
       <div className="flex-center flex-col gap-6">
         <div className="text-center text-xl font-light">
@@ -53,9 +58,16 @@ const Page = async ({ params }: { params: { username: string } }) => {
 
 export default Page
 
-export async function generateMetadata({ params, searchParams }: { params: { username?: string }; searchParams: { section?: string } }) {
-  if (!params.username) return notFound()
-  const user = await getUser({ username: params.username })
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ username?: string }>
+  searchParams: Promise<{ section?: string }>
+}) {
+  const { username: usernameParam } = await params
+  if (!usernameParam) return notFound()
+  const user = await getUser({ username: usernameParam })
 
   if (user == null) notFound()
   const imageParams = new URLSearchParams()
@@ -63,7 +75,7 @@ export async function generateMetadata({ params, searchParams }: { params: { use
   const name = user?.name || ''
   const username = user?.username || ''
   const picture = user?.profilePicture || ''
-  const section = searchParams.section || 'about'
+  const section = (await searchParams).section || 'about'
   const content = (user.analysis as any)?.[section]
   const emojis = ((user.analysis as any)?.emojis || '').trim()
 

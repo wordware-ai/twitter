@@ -13,7 +13,21 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        // Sauna brand: Google Sans Flex primary, Inter secondary
+        sans: ['Google Sans Flex', 'Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      },
       colors: {
+        // Sauna brand palette (https://www.sauna.ai/brand)
+        // forest is lightened from the brand's #003116 for better on-screen contrast
+        ink: '#171814',
+        paper: '#FFFFFF',
+        desk: '#FAFAF9',
+        canvas: '#F5F3F0',
+        lichen: '#93EFA4',
+        forest: '#0B5B34',
+        steel: '#395C6C',
+        azure: '#1264A3',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -62,20 +76,10 @@ const config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
-        marquee: {
-          from: { transform: 'translateX(0)' },
-          to: { transform: 'translateX(calc(-100% - var(--gap)))' },
-        },
-        'marquee-vertical': {
-          from: { transform: 'translateY(0)' },
-          to: { transform: 'translateY(calc(-100% - var(--gap)))' },
-        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        marquee: 'marquee var(--duration) linear infinite',
-        'marquee-vertical': 'marquee-vertical var(--duration) linear infinite',
       },
     },
   },

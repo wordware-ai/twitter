@@ -7,7 +7,7 @@ import posthog from 'posthog-js'
 import { PriceButton } from '@/components/analysis/paywall-card'
 import { SelectUser } from '@/drizzle/schema'
 import { useTwitterAnalysis } from '@/hooks/use-twitter-analysis'
-import { PERSONALITY_PART2_PAYWALL } from '@/lib/config'
+import { getURL, PERSONALITY_PART2_PAYWALL } from '@/lib/config'
 import { analysisPlaceholder } from '@/lib/constants'
 import { TwitterAnalysis } from '@/types'
 
@@ -53,8 +53,8 @@ const ResultComponent = ({ user }: { user: SelectUser }) => {
       )}
       <ActionButtons
         shareActive={!!result?.about}
-        text={`this is my Twitter Personality analysis by AI Agent, built on @wordware`}
-        url={`https://twitter.wordware.ai/${user.username}`}
+        text={`this is my Twitter Personality analysis by Sauna's AI agent`}
+        url={`${getURL()}${user.username}`}
       />
 
       <div className="flex-center w-full flex-col gap-4">

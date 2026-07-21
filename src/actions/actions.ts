@@ -3,13 +3,11 @@
 import { unstable_noStore as noStore, revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-import { scrapeProfileApify } from '@/core/apify'
 import { scrapeTweets } from '@/core/logic'
+import { fetchProfileXApi } from '@/core/x-api'
 import { getPair, getUser, insertPair, insertUser, unlockPair, unlockUser, updateUser } from '@/drizzle/queries'
-import { createLoopsContact } from '@/lib/loops'
 
 import { fetchUserDataBySocialData } from '../core/social-data'
-import { fetchUserData } from '../core/twitter-api'
 
 export const handleNewUsername = async ({ username, redirectPath }: { username: string; redirectPath?: string }) => {
   const user = await getUser({ username })
@@ -21,28 +19,19 @@ export const handleNewUsername = async ({ username, redirectPath }: { username: 
     }
   }
 
-  let { data, error } = await fetchUserData({ screenName: username })
-  if (error) {
-    console.log(`[${username}] ⚠️ Profile TwitterAPI (1/3)`, error)
+  let { data, error } = await fetchProfileXApi({ username })
+  if (!data) {
+    console.log(`[${username}] ⚠️ Profile X API (1/2)`, error)
   } else {
-    console.log(`[${username}] ✅ Profile TwitterAPI (1/3)`)
+    console.log(`[${username}] ✅ Profile X API (1/2)`)
   }
 
-  if (!data && error) {
+  if (!data) {
     ;({ data, error } = await fetchUserDataBySocialData({ username }))
     if (!data) {
-      console.log(`[${username}] ⚠️ Profile SocialData (2/3)`, error)
+      console.log(`[${username}] ⚠️ Profile SocialData (2/2)`, error)
     } else {
-      console.log(`[${username}] ✅ Profile SocialData (2/3)`)
-    }
-  }
-
-  if (!data && error) {
-    ;({ data, error } = await scrapeProfileApify({ username }))
-    if (!data) {
-      console.log(`[${username}] ⚠️ Profile Apify (3/3)`, error)
-    } else {
-      console.log(`[${username}] ✅ Profile Apify (3/3)`)
+      console.log(`[${username}] ✅ Profile SocialData (2/2)`)
     }
   }
 
@@ -99,15 +88,14 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
       if (!tweets) throw new Error('No tweets found')
     } catch (e) {
       error = e
-      console.warn(`[${username}] ⚠️ All 3 attemtps failed. Trying again...`, e)
+      console.warn(`[${username}] ⚠️ All scrape methods failed. Retrying once...`, e)
       try {
         const res = await scrapeTweets({ username, twitterUserID: twitterUserID })
         tweets = res.data
         error = res.error
-        console.warn(`[${username}] ⚠️ All 6 attemtps failed.`, e)
         if (!tweets) throw new Error('No tweets found')
       } catch (e) {
-        console.warn(`[${username}] ⚠️ Yeah it's fucked:`, e)
+        console.warn(`[${username}] ⚠️ Tweet scraping failed after retry:`, e)
         throw e
       }
     }
@@ -132,19 +120,11 @@ export const processScrapedUser = async ({ username }: { username: string }) => 
   }
 }
 
-export const newsletterSignup = async ({ email }: { email: string }) => {
-  try {
-    await createLoopsContact(email)
-    return { success: true }
-  } catch (error) {
-    return { success: false, error: error }
-  }
-}
-
+// `email` is accepted for backwards compatibility with the paywall forms but no
+// longer stored anywhere (the Loops integration was removed).
 export const unlockGenerationByEmail = async ({
   username,
   usernamePair,
-  email,
   type = 'user',
 }: {
   username: string
@@ -153,8 +133,6 @@ export const unlockGenerationByEmail = async ({
   type?: 'pair' | 'user'
 }) => {
   try {
-    await createLoopsContact(email, 'Twitter Personality - PAYWALL')
-
     if (type === 'user') {
       await unlockUser({ username: username.replace('/', ''), unlockType: 'email' })
     }
@@ -165,12 +143,6 @@ export const unlockGenerationByEmail = async ({
     revalidatePath(username)
     return { success: true }
   } catch (error) {
-    if (error instanceof Error && error.message.includes('Email already on list')) {
-      await unlockUser({ username: username.replace('/', ''), unlockType: 'email' })
-      revalidatePath(username)
-      return { success: true }
-    }
-
     if (error instanceof Error) {
       return { success: false, error: error.message }
     }

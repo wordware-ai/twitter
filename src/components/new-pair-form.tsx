@@ -63,6 +63,11 @@ const NewPairForm = () => {
                       className="w-full rounded-l-sm rounded-r-none border-black"
                       placeholder="@username"
                       {...field}
+                    name="x-handle-pair"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    autoCapitalize="none"
+                    spellCheck={false}
                     />
                     <Button
                       disabled={form.formState.isSubmitting}

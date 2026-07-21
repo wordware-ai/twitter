@@ -1,72 +1,23 @@
 import 'server-only'
 
 import { unstable_cache as cache, unstable_noStore as noStore } from 'next/cache'
-import { and, desc, eq, inArray, sql } from 'drizzle-orm'
-
-import { UserCardData } from '@/app/top-list'
+import { and, desc, eq, inArray } from 'drizzle-orm'
 
 import { db } from './db'
 import { InsertPair, InsertUser, pairs, SelectUser, users } from './schema'
+
+export interface UserCardData {
+  id: string
+  username: string
+  name: string | null
+  profilePicture: string | null
+  followers: number | null
+}
 
 export const getUser = async ({ username }: { username: SelectUser['username'] }) => {
   noStore()
   return await db.query.users.findFirst({ where: eq(users.lowercaseUsername, username.toLowerCase()) })
 }
-
-export const getUserCached = cache(
-  async ({ username }: { username: SelectUser['username'] }) => {
-    return await db.query.users.findFirst({ where: eq(users.lowercaseUsername, username.toLowerCase()) })
-  },
-  ['user-cache'],
-)
-
-export const getAuthors = cache(async (): Promise<UserCardData[]> => {
-  return [
-    {
-      id: '2',
-      username: 'bertie_ai',
-      name: 'Robert Chandler',
-      profilePicture: 'https://pbs.twimg.com/profile_images/1582852165831229440/PijbiUGm_400x400.jpg',
-      followers: 0,
-    },
-    {
-      id: '3',
-      username: 'kozerafilip',
-      name: 'Filip Kozera',
-      profilePicture: 'https://pbs.twimg.com/profile_images/1720918552721661952/Opqp--Su_400x400.jpg',
-      followers: 0,
-    },
-    {
-      id: '6',
-      username: 'unable0_',
-      name: 'Kamil Ruczynski',
-      profilePicture: 'https://pbs.twimg.com/profile_images/1737521497525088258/WylWyvQn_400x400.jpg',
-      followers: 0,
-    },
-    {
-      id: '4',
-      username: 'pio_sce',
-      name: 'Pio Scelina',
-      profilePicture: 'https://pbs.twimg.com/profile_images/1693591650818244608/ts3JYlzY_400x400.jpg',
-      followers: 0,
-    },
-    {
-      id: '5',
-      username: 'danny_hunt_code',
-      name: 'Danny Hunt',
-      profilePicture: 'https://pbs.twimg.com/profile_images/1826288753368846337/SU3kpd4N_400x400.jpg',
-      followers: 0,
-    },
-
-    {
-      id: '7',
-      username: 'ky__zo',
-      name: 'Kyzo',
-      profilePicture: 'https://pbs.twimg.com/profile_images/1726431958891466752/JaDcBy6P_400x400.jpg',
-      followers: 0,
-    },
-  ]
-}, ['authors-users'])
 
 const featuredUsernames = [
   'yoheinakajima',
@@ -83,22 +34,7 @@ const featuredUsernames = [
   'bentossell',
 ]
 
-export const getTop = cache(async (): Promise<UserCardData[]> => {
-  return db.query.users.findMany({
-    where: eq(users.wordwareCompleted, true),
-    orderBy: desc(users.followers),
-    limit: 20,
-    columns: {
-      id: true,
-      username: true,
-      name: true,
-      profilePicture: true,
-      followers: true,
-    },
-  })
-}, ['top-users'])
-
-const topPairs = [
+const topPairUsernames = [
   ['leeerob', 'rauchg'],
   ['t3dotgg', 'theprimeagen'],
   ['beyonce', 'sc'],
@@ -111,70 +47,71 @@ const topPairs = [
   ['giseleofficial', 'tombrady'],
   ['camila_cabello', 'shawnmendes'],
   ['ninja', 'pokimanelol'],
-  ['conangray', 'oliviarodrigo'],
   ['mrbeast', 'pewdiepie'],
   ['kingjames', 'lakers'],
-  ['narendramodi', 'pmoindia'],
   ['elonmusk', 'tesla'],
   ['rogerfederer', 'rafaelnadal'],
-  ['markruffalo', 'chrishemsworth'],
   ['nba', 'stephencurry30'],
-  ['ronnie2k', 'nba2k'],
 ]
 
-export const getTopPairs = cache(async (): Promise<[UserCardData, UserCardData][]> => {
-  const pairPromises = topPairs.map(async ([username1, username2]) => {
-    const [user1, user2] = await Promise.all([
-      db.query.users.findFirst({
-        where: eq(users.lowercaseUsername, username1.toLowerCase()),
-        columns: {
-          id: true,
-          username: true,
-          name: true,
-          profilePicture: true,
-          followers: true,
-        },
-      }),
-      db.query.users.findFirst({
-        where: eq(users.lowercaseUsername, username2.toLowerCase()),
-        columns: {
-          id: true,
-          username: true,
-          name: true,
-          profilePicture: true,
-          followers: true,
-        },
-      }),
-    ])
+const userCardColumns = {
+  id: true,
+  username: true,
+  name: true,
+  profilePicture: true,
+  followers: true,
+} as const
 
-    if (!user1 || !user2) {
-      console.warn(`One or both users not found: ${username1}, ${username2}`)
-      return null
-    }
+export const getTop = cache(
+  async (): Promise<UserCardData[]> => {
+    return db.query.users.findMany({
+      where: eq(users.wordwareCompleted, true),
+      orderBy: desc(users.followers),
+      limit: 20,
+      columns: userCardColumns,
+    })
+  },
+  ['top-users'],
+  { revalidate: 3600 },
+)
 
-    return [user1, user2] as [UserCardData, UserCardData]
-  })
+export const getTopPairs = cache(
+  async (): Promise<[UserCardData, UserCardData][]> => {
+    // One query for every username, assembled into pairs afterwards
+    const allUsernames = topPairUsernames.flat().map((u) => u.toLowerCase())
+    const rows = await db.query.users.findMany({
+      where: inArray(users.lowercaseUsername, allUsernames),
+      columns: { ...userCardColumns, lowercaseUsername: true },
+    })
+    const byUsername = new Map(rows.map((r) => [r.lowercaseUsername, r]))
 
-  const pairs = await Promise.all(pairPromises)
-  return pairs.filter((pair): pair is [UserCardData, UserCardData] => pair !== null)
-}, ['top-pairs-4'])
+    return topPairUsernames
+      .map(([username1, username2]) => {
+        const user1 = byUsername.get(username1.toLowerCase())
+        const user2 = byUsername.get(username2.toLowerCase())
+        if (!user1 || !user2) return null
+        return [user1, user2] as [UserCardData, UserCardData]
+      })
+      .filter((pair): pair is [UserCardData, UserCardData] => pair !== null)
+  },
+  ['top-pairs'],
+  { revalidate: 3600 },
+)
 
-export const getFeatured = cache(async (): Promise<UserCardData[]> => {
-  return await db.query.users.findMany({
-    where: inArray(
-      users.lowercaseUsername,
-      featuredUsernames.map((u) => u.toLowerCase()),
-    ),
-    orderBy: desc(users.followers),
-    columns: {
-      id: true,
-      username: true,
-      name: true,
-      profilePicture: true,
-      followers: true,
-    },
-  })
-}, ['featured-users'])
+export const getFeatured = cache(
+  async (): Promise<UserCardData[]> => {
+    return await db.query.users.findMany({
+      where: inArray(
+        users.lowercaseUsername,
+        featuredUsernames.map((u) => u.toLowerCase()),
+      ),
+      orderBy: desc(users.followers),
+      columns: userCardColumns,
+    })
+  },
+  ['featured-users'],
+  { revalidate: 3600 },
+)
 
 export const insertUser = async ({ user }: { user: InsertUser }) => {
   await db.insert(users).values(user)
@@ -240,71 +177,6 @@ export const unlockPair = async ({ username1, username2, unlockType }: { usernam
     return { success: false, error: 'An unknown error occurred' }
   }
 }
-
-export const getStatistics = cache(
-  async () => {
-    const result = await db.execute(sql`
-      SELECT 
-        DATE(created_at) AS date, 
-        EXTRACT(HOUR FROM created_at) AS hour, 
-        COUNT(DISTINCT id) AS unique_users_count
-      FROM users
-      GROUP BY DATE(created_at), EXTRACT(HOUR FROM created_at)
-    `)
-
-    let cumulative = 0
-    const formattedResult = result.rows
-      .map((row: any) => ({
-        timestamp: `${row.date}T${row.hour.toString().padStart(2, '0')}:00:00Z`,
-        unique: parseInt(row.unique_users_count),
-        cumulative: 0, // We'll calculate this after sorting
-      }))
-      .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
-
-    formattedResult.forEach((item) => {
-      cumulative += item.unique
-      item.cumulative = cumulative
-    })
-
-    // Remove the last item from the array (which might be incomplete data for the current hour)
-    const lastElement = formattedResult[formattedResult.length - 2] // Get the second to last element
-    const lastTimestamp = lastElement ? new Date(lastElement.timestamp) : new Date()
-    return { chartData: formattedResult.slice(0, -1), timestamp: lastTimestamp.toISOString() }
-  },
-  ['statistics'],
-  { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
-)
-
-// export const getStatistics = cache(
-//   async () => {
-//     const result = await db.execute(sql`
-//       SELECT
-//         DATE(created_at) AS date,
-//         EXTRACT(HOUR FROM created_at) AS hour,
-//         COUNT(DISTINCT id) AS unique_users_count
-//       FROM users
-//       GROUP BY DATE(created_at), EXTRACT(HOUR FROM created_at)
-//       ORDER BY DATE(created_at), EXTRACT(HOUR FROM created_at)
-//     `)
-
-//     let cumulative = 0
-//     const formattedResult = result.rows.map((row: any) => {
-//       cumulative += parseInt(row.unique_users_count)
-//       return {
-//         timestamp: `${row.date}T${row.hour.toString().padStart(2, '0')}:00:00Z`,
-//         unique: parseInt(row.unique_users_count),
-//         cumulative: cumulative,
-//       }
-//     })
-
-//     // Remove the last item from the array (which might be incomplete data for the current hour)
-//     const lastElement = formattedResult[formattedResult.length - 2] // Get the second to last element
-//     const lastTimestamp = lastElement ? new Date(lastElement.timestamp) : new Date()
-//     return { chartData: formattedResult.slice(0, -1), timestamp: lastTimestamp.toISOString() }
-//   },
-//   ['statistics'],
-//   { revalidate: 3600 }, // Cache for 1 hour (3600 seconds)
-// )
 
 export const insertPair = async ({ usernames }: { usernames: string[] }) => {
   const [user1lowercaseUsername, user2lowercaseUsername] = [usernames[0].toLowerCase(), usernames[1].toLowerCase()].sort()

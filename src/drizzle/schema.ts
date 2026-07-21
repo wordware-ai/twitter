@@ -18,6 +18,9 @@ export const users = pgTable(
     fullProfile: jsonb('full_profile'),
     tweets: jsonb('tweets'),
     analysis: jsonb('analysis'),
+    // Archive of previous {archivedAt, analysis, tweets} snapshots, appended
+    // whenever a stale analysis is lazily regenerated (see refreshStaleUser)
+    analysisHistory: jsonb('analysis_history'),
     followers: integer('followers'),
     unlocked: boolean('unlocked').default(false),
     unlockType: text('unlock_type').$type<'stripe' | 'email' | 'free'>(),
@@ -40,6 +43,11 @@ export const users = pgTable(
       lowercaseUsernameIdx: index('lowercase_username_idx').on(table.lowercaseUsername),
       createdAtIndex: index('created_at_index').on(table.createdAt),
       createdAtDateHourIdx: index('created_at_date_hour_idx').on(sql`DATE(${table.createdAt}), EXTRACT(HOUR FROM ${table.createdAt})`),
+      // Partial index so the "most followed analyzed users" query (getTop)
+      // doesn't scan the whole table
+      followersCompletedIdx: index('followers_completed_idx')
+        .on(table.followers.desc())
+        .where(sql`${table.wordwareCompleted} = true`),
     }
   },
 )
@@ -71,20 +79,6 @@ export const pairs = pgTable(
     }
   },
 )
-
-// export const userStatistics = pgTable(
-//   'user_statistics',
-//   {
-//     timestamp: timestamp('timestamp').notNull(),
-//     uniqueUsersCount: integer('unique_users_count').notNull(),
-//     uniquePairsCount: integer('unique_pairs_count').notNull(),
-//   },
-//   (table) => {
-//     return {
-//       timestampIdx: uniqueIndex('timestamp_idx').on(table.timestamp),
-//     }
-//   },
-// )
 
 export type InsertUser = typeof users.$inferInsert
 export type SelectUser = typeof users.$inferSelect

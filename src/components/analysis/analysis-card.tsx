@@ -3,7 +3,7 @@ import { useParams } from 'next/navigation'
 import { IconType } from 'react-icons'
 import { PiXLogo } from 'react-icons/pi'
 
-import WordwareLogo from '@/components/logo'
+import SaunaLogo from '@/components/logo'
 import linkedin from '@/components/logos/linkedin.svg'
 import threads from '@/components/logos/threads.svg'
 import whatsapp from '@/components/logos/whatsapp.svg'
@@ -11,6 +11,7 @@ import { Markdown } from '@/components/markdown'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
+import { getURL } from '@/lib/config'
 
 /**
  * Represents an item in the content array with a title and subtitle.
@@ -133,7 +134,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ unlocked, title, icon: Icon
                   <a
                     target="_blank"
                     className={cn(`flex-center rounded-md text-lg text-white`)}
-                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`this is my Twitter Personality analysis by AI Agent, built on @wordware\n\n`)}&url=${encodeURIComponent(`https://twitter.wordware.ai/${username}?section=${contentKey}`)}`}>
+                    href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`this is my Twitter Personality analysis by Sauna's AI agent\n\n`)}&url=${encodeURIComponent(`${getURL()}${username}?section=${contentKey}`)}`}>
                     <PiXLogo /> Share
                   </a>
                 </Button>
@@ -141,7 +142,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ unlocked, title, icon: Icon
                 <a
                   target="_blank"
                   className={cn(`flex-center rounded-md p-1 text-lg text-white hover:bg-gray-200`)}
-                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`this is my Twitter Personality analysis by AI Agent, built on @wordware\n\n https://twitter.wordware.ai/${username}?section=${contentKey}`)}`}>
+                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`this is my Twitter Personality analysis by Sauna's AI agent\n\n ${getURL()}${username}?section=${contentKey}`)}`}>
                   <img
                     src={whatsapp.src}
                     alt="Whatsapp"
@@ -153,7 +154,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ unlocked, title, icon: Icon
                 <a
                   target="_blank"
                   className={cn(`flex-center rounded-md p-[7px] text-lg text-white hover:bg-gray-200`)}
-                  href={`https://www.linkedin.com/feed/?shareActive=true&shareUrl=${encodeURIComponent(`https://twitter.wordware.ai/${username}?section=${contentKey}`)}&text=${encodeURIComponent(`This is my Twitter Personality analysis by AI Agent, built on @wordware #wordwareai`)}`}>
+                  href={`https://www.linkedin.com/feed/?shareActive=true&shareUrl=${encodeURIComponent(`${getURL()}${username}?section=${contentKey}`)}&text=${encodeURIComponent(`This is my Twitter Personality analysis by Sauna's AI agent`)}`}>
                   <img
                     src={linkedin.src}
                     alt="LinkedIn"
@@ -164,7 +165,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ unlocked, title, icon: Icon
                 <a
                   target="_blank"
                   className={cn(`flex-center rounded-md p-[7px] text-lg text-white hover:bg-gray-200`)}
-                  href={`https://www.threads.net/intent/post?text=${encodeURIComponent(`This is my Twitter Personality analysis by AI Agent, built on @wordware #wordwareai\nhttps://twitter.wordware.ai/${username}?section=${contentKey}`)}`}>
+                  href={`https://www.threads.net/intent/post?text=${encodeURIComponent(`This is my Twitter Personality analysis by Sauna's AI agent\n${getURL()}${username}?section=${contentKey}`)}`}>
                   <img
                     src={threads.src}
                     alt="Threads"
@@ -179,8 +180,8 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ unlocked, title, icon: Icon
           <CardContent className="flex flex-col text-gray-700">{renderContent()}</CardContent>
         </div>
         <CardFooter className={`flex items-center justify-end space-x-2`}>
-          <a href="https://wordware.ai?utm_source=twitterai">
-            <WordwareLogo
+          <a href="https://sauna.ai?utm_source=twitterai">
+            <SaunaLogo
               emblemOnly
               color={'black'}
               width={18}
@@ -190,11 +191,11 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ unlocked, title, icon: Icon
           <span className="items-center text-xs">
             Made with{' '}
             <a
-              href="https://wordware.ai?utm_source=twitterai"
+              href="https://sauna.ai?utm_source=twitterai"
               className="font-semibold underline-offset-4 hover:underline">
-              Wordware
+              Sauna
             </a>{' '}
-            - AI superpowers for builders
+            - AI superpowers for everyone
           </span>
         </CardFooter>
       </div>

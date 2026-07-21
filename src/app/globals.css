@@ -2,33 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Sauna brand tokens (https://www.sauna.ai/brand) mapped onto the shadcn/ui
+ * HSL variable system:
+ *   Ink #171814 → foreground/primary, Paper #FFFFFF → cards,
+ *   Desk #FAFAF9 → page background, Canvas #F5F3F0 → secondary/muted,
+ *   Lichen #93EFA4 → accent, Forest #003116 → dark surfaces/ring,
+ *   Steel #395C6C → muted foreground, Blue #1264A3 → links.
+ */
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --background: 60 8% 98%; /* Desk */
+    --foreground: 75 9% 9%; /* Ink */
+    --card: 0 0% 100%; /* Paper */
+    --card-foreground: 75 9% 9%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --popover-foreground: 75 9% 9%;
+    --primary: 75 9% 9%; /* Ink */
+    --primary-foreground: 60 8% 98%;
+    --secondary: 36 20% 95%; /* Canvas */
+    --secondary-foreground: 75 9% 9%;
+    --muted: 36 20% 95%; /* Canvas */
+    --muted-foreground: 199 31% 32%; /* Steel */
+    --accent: 131 74% 76%; /* Lichen */
+    --accent-foreground: 151 78% 20%; /* Forest (lightened) */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 40 12% 90%;
+    --input: 40 12% 90%;
+    --ring: 151 78% 20%; /* Forest (lightened) */
     --radius: 0.5rem;
-    --chart-1: 347 77% 50%;
-    --chart-2: 352 83% 91%;
-    --chart-3: 350 80% 72%;
-    --chart-4: 351 83% 82%;
-    --chart-5: 349 77% 62%;
   }
 }
 
@@ -47,40 +50,4 @@
 
 .flex-between {
   @apply flex items-center justify-between;
-}
-
-.test-red {
-  @apply border-2 border-red-500;
-}
-
-.test-blue {
-  @apply border-2 border-blue-500;
-}
-
-.test-green {
-  @apply border-2 border-green-500;
-}
-
-.test-purple {
-  @apply border-2 border-purple-500;
-}
-
-.test-yellow {
-  @apply border-2 border-yellow-500;
-}
-
-.test-pink {
-  @apply border-2 border-pink-500;
-}
-
-.test-orange {
-  @apply border-2 border-orange-500;
-}
-
-.test-indigo {
-  @apply border-2 border-gray-500;
-}
-
-.test-black {
-  @apply border-2 border-black;
 }

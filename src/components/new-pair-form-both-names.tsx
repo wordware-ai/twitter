@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import * as React from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -76,6 +77,11 @@ const NewPairFormBothNames = () => {
                         className="w-full rounded-b-none border-black"
                         placeholder="@username"
                         {...field}
+                      name="x-handle-1"
+                      autoComplete="off"
+                      autoCorrect="off"
+                      autoCapitalize="none"
+                      spellCheck={false}
                       />
                     </FormControl>
                   </FormItem>
@@ -96,6 +102,11 @@ const NewPairFormBothNames = () => {
                         className="w-full rounded-b-none border-black"
                         placeholder="@username"
                         {...field}
+                      name="x-handle-2"
+                      autoComplete="off"
+                      autoCorrect="off"
+                      autoCapitalize="none"
+                      spellCheck={false}
                       />
                     </FormControl>
                   </FormItem>
@@ -112,11 +123,11 @@ const NewPairFormBothNames = () => {
             </Button>
             <p className="text-xs">
               by clicking check compatibility you agree to our{' '}
-              <a
+              <Link
                 className="underline-offset-4 hover:underline"
                 href="/terms">
                 terms
-              </a>
+              </Link>
             </p>
             {form.formState.errors.username1 && (
               <p className="mt-2 text-sm font-medium text-destructive">Error with first username: {form.formState.errors.username1?.message}</p>

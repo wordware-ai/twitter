@@ -50,12 +50,11 @@ export const CompatibilityPaywallCard: React.FC = () => {
   // console.log('paywall flag', paywallFlag, searchParams.get('stripe'))
 
   async function onSubmit(values: z.infer<typeof FormSchema>) {
-    // Attempt to create a contact in Loops
     const { success } = await unlockGenerationByEmail({ username: username as string, usernamePair: usernamePair as string, email: values.email })
     if (!success) {
       toast.error('Something went wrong')
     } else {
-      toast.success('You have been added to the newsletter.')
+      toast.success('Unlocked! Your full analysis is on its way.')
       const newUrl = new URL(pathname, window.location.origin)
       newUrl.searchParams.set('success', 'true')
       router.replace(newUrl.toString())
@@ -127,8 +126,8 @@ export const CompatibilityPaywallCard: React.FC = () => {
             </Form>
 
             <p className="mt-4 text-xs text-gray-500">
-              By submitting your email, you agree to receive marketing content from Wordware. We&apos;ll use your email to send you the full analysis and keep
-              you updated on our products and services.
+              Your email is only used to unlock the full analysis on this page — it isn&apos;t stored or shared, and you won&apos;t receive any emails from
+              us.
             </p>
           </>
         )}

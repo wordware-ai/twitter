@@ -1,19 +1,13 @@
-import { Inter } from 'next/font/google'
-
 import './globals.css'
 
 import Callout from '@/components/callout'
 import { DeveloperInfo } from '@/components/developer-info'
 import Footer from '@/components/footer'
-import { NewsletterForm } from '@/components/newsletter-form'
 import { getURL } from '@/lib/config'
 import Providers from '@/lib/providers'
 import { cn } from '@/lib/utils'
 
 import siteMetadata from './metadata'
-
-// Initialize the Inter font with Latin subset
-const inter = Inter({ subsets: ['latin'] })
 
 /**
  * Metadata configuration for the application
@@ -26,6 +20,7 @@ export const metadata = {
     default: siteMetadata.title,
   },
   description: siteMetadata.description,
+  keywords: siteMetadata.keywords,
   openGraph: {
     title: siteMetadata.title,
     description: siteMetadata.description,
@@ -48,7 +43,7 @@ export const metadata = {
     card: 'summary_large_image',
     title: siteMetadata.title,
     description: siteMetadata.description,
-    creator: 'wordware',
+    creator: 'sauna',
     images: [siteMetadata.socialBanner],
   },
   /* <meta name="google-site-verification" content="voWl21V26444ofs1ojAqhH1UdOTEWBvJQHp9jADLDQU" /> */
@@ -72,7 +67,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, 'bg-[#F9FAFB] font-light')}>
+      <head>
+        {/* Google Sans Flex is not yet available via next/font — load it directly per the Sauna brand guidelines */}
+        <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
+        />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..700&family=Inter:wght@300..700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className={cn('bg-desk font-sans font-light')}>
         <Providers>
           <>
             {/* Main content area */}
@@ -81,11 +92,6 @@ export default function RootLayout({
             {/* Callout section */}
             <section className="w-full">
               <Callout />
-            </section>
-
-            {/* Newsletter form section */}
-            <section className="pb-24">
-              <NewsletterForm />
             </section>
 
             {/* Footer component */}
