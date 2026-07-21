@@ -1,9 +1,9 @@
-import { Output, streamText } from 'ai'
+import { streamText } from 'ai'
 
 import { getPair, getUser, updatePair } from '@/drizzle/queries'
 import { AI_MODEL } from '@/lib/ai'
+import { parseJsonLoose } from '@/lib/parse-json-loose'
 import { compatibilityPrompt, formatTweetsMarkdown } from '@/lib/prompts'
-import { compatibilitySchema } from '@/lib/schemas'
 import { TweetType } from '@/types'
 
 /**
@@ -65,14 +65,15 @@ export async function POST(request: Request) {
     })
   }
 
+  // Plain text mode on purpose — see /api/analysis: constrained decoding
+  // flattens the voice; the prompt enumerates the exact keys instead
   const result = streamText({
     model: AI_MODEL,
     system,
     prompt,
-    output: Output.object({ schema: compatibilitySchema }),
     onEnd: async ({ text }) => {
       try {
-        const output = JSON.parse(text)
+        const output = parseJsonLoose(text)
         await updatePair({
           pair: {
             ...pair,

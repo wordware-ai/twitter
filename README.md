@@ -27,7 +27,7 @@ The site went viral in 2024. This is the relaunched version: official X API for 
 
 ## Architecture notes
 
-- **Prompts** live in `src/lib/prompts.ts` (the original viral prompts, ported from Wordware). Output shapes are enforced with zod schemas in `src/lib/schemas.ts` — these mirror the cached JSONB analyses key-for-key, so do not change keys casually.
+- **Prompts** live in `src/lib/prompts.ts` (the original viral prompts, ported from Wordware). Prompts enumerate the exact output keys (structured-output mode is deliberately avoided — constrained decoding flattens the voice); `src/lib/schemas.ts` documents the shapes, which mirror the cached JSONB analyses key-for-key, so do not change keys casually.
 - **Streaming contract**: `/api/analysis` and `/api/analysis/pair` stream raw JSON text; the client renders partial JSON as it arrives (`src/lib/parse-partial-json.ts`).
 - **Caching/dedupe**: `users`/`pairs` rows carry status flags (`wordware*` columns — historical names kept for data compatibility) with staleness windows to dedupe concurrent generations.
 - **Brand**: Sauna tokens are defined in `tailwind.config.ts` + `src/app/globals.css`; official logo SVGs in `public/brand/`.

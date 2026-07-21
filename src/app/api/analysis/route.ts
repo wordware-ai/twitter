@@ -1,10 +1,9 @@
-import { Output, streamText } from 'ai'
-import { z } from 'zod'
+import { streamText } from 'ai'
 
 import { getUser, updateUser } from '@/drizzle/queries'
 import { AI_MODEL } from '@/lib/ai'
+import { parseJsonLoose } from '@/lib/parse-json-loose'
 import { formatTweetsMarkdown, fullPrompt, roastPrompt } from '@/lib/prompts'
-import { fullSchema, roastSchema } from '@/lib/schemas'
 import { TweetType, TwitterAnalysis } from '@/types'
 
 /**
@@ -64,15 +63,16 @@ export async function POST(request: Request) {
     await updateUser({ user: { ...user, ...statusObject } })
   }
 
+  // Plain text mode on purpose: structured-output (json_schema) constrained
+  // decoding noticeably flattens the roast's voice. The prompts enumerate the
+  // exact JSON keys and parsing is lenient (parseJsonLoose).
   const result = streamText({
     model: AI_MODEL,
     system,
     prompt,
-    // The two run types share one route; widen the union so TS accepts either schema
-    output: Output.object({ schema: (full ? fullSchema : roastSchema) as unknown as z.ZodType<Record<string, unknown>> }),
     onEnd: async ({ text }) => {
       try {
-        const output = JSON.parse(text)
+        const output = parseJsonLoose(text)
         // Include the fresh started time: spreading the pre-generation `user`
         // would write the old timestamp back, making a just-regenerated
         // analysis still look stale to refreshStaleUser (regeneration loop)
