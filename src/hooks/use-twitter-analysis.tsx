@@ -36,7 +36,7 @@ export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = 
         currentResult = (await runWordwareAnalysis(user, setSteps)) as TwitterAnalysis
       }
 
-      if (shouldRunPaidWordwareAnalysis(user, result)) {
+      if (shouldRunPaidWordwareAnalysis(user)) {
         await runPaidWordwareAnalysis(user, setSteps, currentResult)
       }
     }
@@ -112,18 +112,14 @@ export const useTwitterAnalysis = (user: SelectUser, disableAnalysis: boolean = 
     )
   }
 
-  const shouldRunPaidWordwareAnalysis = (user: SelectUser, result: TwitterAnalysis | undefined): boolean => {
+  // Run the full analysis only when its status flags say it hasn't completed
+  // and it isn't already running. (The old `unlockedCheck || verdict` fired a
+  // full-analysis request on every page load.)
+  const shouldRunPaidWordwareAnalysis = (user: SelectUser): boolean => {
     const unlockedCheck = PERSONALITY_PART2_PAYWALL ? user.unlocked || false : true
-    console.log('🟣 | file: twitter-analysis.tsx:117 | shouldRunPaidWordwareAnalysis | unlockedCheck:', unlockedCheck)
-    const verdict =
-      (!user.paidWordwareCompleted &&
-        (!result || !result.loveLife) &&
-        ((user.unlocked && !user.paidWordwareStarted) ||
-          (user.unlocked && !user.paidWordwareCompleted && Date.now() - user.paidWordwareStartedTime.getTime() > 60 * 1000))) ||
-      false
-
-    console.log('🟣 | file: twitter-analysis.tsx:119 | shouldRunPaidWordwareAnalysis | verdict:', verdict)
-    return unlockedCheck || verdict
+    const notCompleted = !user.paidWordwareCompleted
+    const notRunning = !user.paidWordwareStarted || Date.now() - user.paidWordwareStartedTime.getTime() > 60 * 1000
+    return unlockedCheck && notCompleted && notRunning
   }
 
   const runTweetScrape = async (user: SelectUser, setSteps: React.Dispatch<React.SetStateAction<Steps>>): Promise<boolean> => {

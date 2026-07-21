@@ -77,6 +77,11 @@ const NewPairFormBothNames = () => {
                         className="w-full rounded-b-none border-black"
                         placeholder="@username"
                         {...field}
+                      name="x-handle-1"
+                      autoComplete="off"
+                      autoCorrect="off"
+                      autoCapitalize="none"
+                      spellCheck={false}
                       />
                     </FormControl>
                   </FormItem>
@@ -97,6 +102,11 @@ const NewPairFormBothNames = () => {
                         className="w-full rounded-b-none border-black"
                         placeholder="@username"
                         {...field}
+                      name="x-handle-2"
+                      autoComplete="off"
+                      autoCorrect="off"
+                      autoCapitalize="none"
+                      spellCheck={false}
                       />
                     </FormControl>
                   </FormItem>

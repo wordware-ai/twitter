@@ -64,6 +64,11 @@ const NewUsernameForm = () => {
                       className="w-full rounded-l-sm rounded-r-none border-black"
                       placeholder="@username"
                       {...field}
+                    name="x-handle"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    autoCapitalize="none"
+                    spellCheck={false}
                     />
                     <Button
                       disabled={form.formState.isSubmitting}
