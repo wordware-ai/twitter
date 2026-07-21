@@ -9,28 +9,14 @@ import { Button } from '@/components/ui/button'
 
 export const maxDuration = 181
 
-// follow tag
-export async function generateMetadata({ searchParams }: { searchParams: Promise<{ ref?: string; u?: string }> }) {
-  // Allow following only for specific query parameters
-  const { ref, u } = await searchParams
-  const allowedRefs = ['blog.wordware.ai', 'sauna.ai', 'www.sauna.ai']
-  const isAllowedRef = ref && allowedRefs.includes(ref)
-  const isRobotsQuery = u === 'robots.txt'
-  // if robots.txt or blog.wordware.ai, allow following
-  if (isAllowedRef || isRobotsQuery) {
-    return {
-      robots: {
-        index: true,
-        follow: true,
-      },
-    }
-  }
-
-  // For all other cases, default to no follow
+// The homepage is the main entry point for search — index it unconditionally.
+// (It previously defaulted to noindex unless visited via specific ref params,
+// which suppressed rankings for the site's core keywords.)
+export async function generateMetadata() {
   return {
     robots: {
-      index: false,
-      follow: false,
+      index: true,
+      follow: true,
     },
   }
 }
@@ -88,9 +74,12 @@ const Page = () => {
                 <ul className="mt-2 list-disc space-y-1 pl-8">
                   <li>find your Twitter account online</li>
                   <li>read your profile and tweets</li>
-                  <li>use frontier AI models to analyse your personality</li>
-                  <li>create a shareable page with your personality or compatibility analysis</li>
+                  <li>roast you, then analyse your personality with frontier AI models</li>
+                  <li>create a shareable page with your Twitter personality analysis or compatibility test</li>
                 </ul>
+                <p className="mt-3 text-sm text-gray-500">
+                  The viral Twitter roast &amp; personality test — formerly by Wordware, now brought back by Sauna.
+                </p>
               </div>
             </div>
             <div className="grow" />

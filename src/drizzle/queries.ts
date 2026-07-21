@@ -77,22 +77,22 @@ export const getTop = cache(
 
 export const getTopPairs = cache(
   async (): Promise<[UserCardData, UserCardData][]> => {
-    const pairPromises = topPairUsernames.map(async ([username1, username2]) => {
-      const [user1, user2] = await Promise.all([
-        db.query.users.findFirst({ where: eq(users.lowercaseUsername, username1.toLowerCase()), columns: userCardColumns }),
-        db.query.users.findFirst({ where: eq(users.lowercaseUsername, username2.toLowerCase()), columns: userCardColumns }),
-      ])
-
-      if (!user1 || !user2) {
-        console.warn(`One or both users not found: ${username1}, ${username2}`)
-        return null
-      }
-
-      return [user1, user2] as [UserCardData, UserCardData]
+    // One query for every username, assembled into pairs afterwards
+    const allUsernames = topPairUsernames.flat().map((u) => u.toLowerCase())
+    const rows = await db.query.users.findMany({
+      where: inArray(users.lowercaseUsername, allUsernames),
+      columns: { ...userCardColumns, lowercaseUsername: true },
     })
+    const byUsername = new Map(rows.map((r) => [r.lowercaseUsername, r]))
 
-    const resolved = await Promise.all(pairPromises)
-    return resolved.filter((pair): pair is [UserCardData, UserCardData] => pair !== null)
+    return topPairUsernames
+      .map(([username1, username2]) => {
+        const user1 = byUsername.get(username1.toLowerCase())
+        const user2 = byUsername.get(username2.toLowerCase())
+        if (!user1 || !user2) return null
+        return [user1, user2] as [UserCardData, UserCardData]
+      })
+      .filter((pair): pair is [UserCardData, UserCardData] => pair !== null)
   },
   ['top-pairs'],
   { revalidate: 3600 },

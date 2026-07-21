@@ -13,8 +13,10 @@ export const maxDuration = 60
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Featured Roasts',
-  description: 'Interesting people who have been roasted by the AI agent — and popular compatibility pairings.',
+  title: 'Featured Twitter Roasts - AI Personality Analysis by Sauna',
+  description:
+    'Famous founders, investors and creators roasted by the AI agent. Browse popular Twitter personality analyses and compatibility pairings, then get your own AI roast.',
+  robots: { index: true, follow: true },
 }
 
 const saunaTeam = ['kozerafilip', 'bertie_ai', 'unable0_']
@@ -97,7 +99,15 @@ const UserGrid = ({ users, title, subtitle }: { users: UserCardData[]; title: st
 )
 
 const Page = async () => {
-  const [top, topPairs, featured] = await Promise.all([getTop(), getTopPairs(), getFeatured()])
+  // Render whatever sections load; a failing query hides its section instead
+  // of taking the whole page down
+  const [topResult, topPairsResult, featuredResult] = await Promise.allSettled([getTop(), getTopPairs(), getFeatured()])
+  const top = topResult.status === 'fulfilled' ? topResult.value : []
+  const topPairs = topPairsResult.status === 'fulfilled' ? topPairsResult.value : []
+  const featured = featuredResult.status === 'fulfilled' ? featuredResult.value : []
+  for (const r of [topResult, topPairsResult, featuredResult]) {
+    if (r.status === 'rejected') console.error('Featured page query failed:', r.reason)
+  }
 
   return (
     <div className="flex-center relative min-h-screen w-full flex-col gap-16 bg-desk px-4 py-28 sm:px-12 md:px-24 md:pt-24">
@@ -111,31 +121,37 @@ const Page = async () => {
       </div>
 
       <div className="flex w-full max-w-6xl flex-col gap-16">
-        <UserGrid
-          users={featured}
-          title="Luminaries"
-          subtitle="Founders, investors and builders the internet loves to roast"
-        />
+        {featured.length > 0 && (
+          <UserGrid
+            users={featured}
+            title="Luminaries"
+            subtitle="Founders, investors and builders the internet loves to roast"
+          />
+        )}
 
-        <UserGrid
-          users={top}
-          title="Most Followed"
-          subtitle="The biggest accounts analyzed so far"
-        />
+        {top.length > 0 && (
+          <UserGrid
+            users={top}
+            title="Most Followed"
+            subtitle="The biggest accounts analyzed so far"
+          />
+        )}
 
-        <div className="flex-center w-full flex-col gap-2">
-          <h2 className="text-2xl md:text-3xl">Popular Compatibilities</h2>
-          <p className="mb-4 text-sm text-gray-500">Famous duos, put through the compatibility check</p>
-          <div className="relative grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {topPairs.map((pair) => (
-              <div
-                className="relative"
-                key={pair[0].id + pair[1].id}>
-                <PairCard pair={pair} />
-              </div>
-            ))}
+        {topPairs.length > 0 && (
+          <div className="flex-center w-full flex-col gap-2">
+            <h2 className="text-2xl md:text-3xl">Popular Compatibilities</h2>
+            <p className="mb-4 text-sm text-gray-500">Famous duos, put through the compatibility check</p>
+            <div className="relative grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {topPairs.map((pair) => (
+                <div
+                  className="relative"
+                  key={pair[0].id + pair[1].id}>
+                  <PairCard pair={pair} />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   )

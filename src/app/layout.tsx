@@ -20,6 +20,7 @@ export const metadata = {
     default: siteMetadata.title,
   },
   description: siteMetadata.description,
+  keywords: siteMetadata.keywords,
   openGraph: {
     title: siteMetadata.title,
     description: siteMetadata.description,

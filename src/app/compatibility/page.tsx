@@ -11,6 +11,10 @@ import { Button } from '@/components/ui/button'
 export const maxDuration = 181
 
 export const metadata: Metadata = {
+  title: 'Twitter Compatibility Check - AI Analysis by Sauna',
+  description:
+    'Check the compatibility of two Twitter profiles with an AI agent: MBTI match, red flags, green flags, breakup odds and more. Free AI-powered Twitter compatibility test.',
+  robots: { index: true, follow: true },
   openGraph: {
     images: [
       {

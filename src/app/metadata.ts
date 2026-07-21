@@ -1,11 +1,27 @@
 import { getURL } from '@/lib/config'
 
 export const siteMetadata = {
-  title: 'Twitter Personality - AI Agent by Sauna',
+  title: 'Twitter Personality - AI Roast & Personality Test by Sauna',
   author: 'Sauna',
   headerTitle: 'Twitter Personality',
   description:
-    'Twitter Personality is an advanced AI-powered tool that performs in-depth analysis of your Twitter activity, revealing personality traits, communication patterns, and behavioral insights. Understand your online presence, discover your unique social media voice, and gain valuable insights about how you engage with others on Twitter. Built by Sauna — your AI coworker.',
+    'Twitter Personality is an advanced AI-powered Twitter personality analysis and roast tool. The AI agent reads your profile and tweets, roasts you, and reveals personality traits, communication patterns, and behavioral insights — plus fun extras like your spirit animal and famous personality match. The viral Twitter roast, formerly by Wordware, now built by Sauna — your AI coworker.',
+  keywords: [
+    'twitter personality',
+    'twitter personality analysis',
+    'twitter personality test',
+    'twitter personality ai',
+    'twitter roast',
+    'twitter roast ai',
+    'ai roast',
+    'twitter profile ai',
+    'twitter compatibility',
+    'wordware twitter',
+    'wordware twitter roast',
+    'wordware ai',
+    'sauna ai',
+    'sauna twitter roast',
+  ],
   // dynamic twitter description
   twitter: (username?: string) =>
     username
