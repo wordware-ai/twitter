@@ -8,4 +8,4 @@
  *
  * Catalog: https://vercel.com/ai-gateway/models
  */
-export const AI_MODEL = process.env.AI_MODEL ?? 'zai/glm-5.2'
+export const AI_MODEL = process.env.AI_MODEL ?? 'xai/grok-4.20-non-reasoning'

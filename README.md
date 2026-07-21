@@ -8,7 +8,7 @@ The site went viral in 2024. This is the relaunched version: official X API for 
 
 1. Enter a Twitter/X username (or two, for a compatibility check).
 2. The profile and ~15 recent posts are fetched via the official **X API v2** (SocialData as fallback) and cached in Neon Postgres.
-3. An LLM (default `zai/glm-5.2`, via the **Vercel AI Gateway**) streams a structured analysis — roast, strengths, love life, spirit animal, pickup lines and more — straight into the page.
+3. An LLM (default `xai/grok-4.20-non-reasoning`, via the **Vercel AI Gateway**) streams a structured analysis — roast, strengths, love life, spirit animal, pickup lines and more — straight into the page.
 4. The result is cached, shareable, and rendered into dynamic OG images.
 
 ## Setting up the project 🛠️
@@ -17,7 +17,7 @@ The site went viral in 2024. This is the relaunched version: official X API for 
 2. **Environment variables**: create `.env.local` based on `.env.example`:
    - `DATABASE_URL`: Neon Postgres connection string.
    - `AI_GATEWAY_API_KEY`: Vercel AI Gateway key (omit on Vercel — OIDC is automatic).
-   - `AI_MODEL` (optional): any [Gateway model string](https://vercel.com/ai-gateway/models), e.g. `zai/glm-5.2`, `anthropic/claude-sonnet-5`, `openai/gpt-5.2`. Swapping models is just changing this var.
+   - `AI_MODEL` (optional): any [Gateway model string](https://vercel.com/ai-gateway/models), e.g. `xai/grok-4.20-non-reasoning`, `zai/glm-5.2`, `openai/gpt-5.2`. Swapping models is just changing this var.
    - `X_API_BEARER_TOKEN`: official X API v2 bearer token (pay-per-use; buy credits in the [X developer console](https://developer.x.com)).
    - `SOCIALDATA_API_KEY`: fallback scraper.
    - `NEXT_PUBLIC_BASE_URL`: base URL of the deployment — share links derive from it.
