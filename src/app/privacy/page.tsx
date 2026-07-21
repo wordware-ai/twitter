@@ -194,7 +194,7 @@ We may transfer data internationally:
 
 If you have questions or wish to exercise your rights:
 
-- **Email**: hello@sauna.ai
+- **Email**: roast@sauna.ai
 - **Address**:
   \`\`\`
   HeyDaily Inc.
@@ -221,7 +221,7 @@ By using our Services and providing a Twitter handle, you consent to:
 
 If required, we have appointed a Data Protection Officer:
 
-- **Contact**: hello@sauna.ai
+- **Contact**: roast@sauna.ai
 - **Role**: Overseeing data protection strategy and compliance.
 
 ## 21. Your Rights Under Other Jurisdictions

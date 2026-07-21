@@ -63,8 +63,9 @@ const ANALYSIS_MAX_AGE_MS = 182 * 24 * 60 * 60 * 1000 // ~6 months
 
 /**
  * Lazily expire analyses older than ~6 months: archive the current analysis and
- * tweets into `analysisHistory`, then reset the pipeline flags so the visit
- * re-scrapes and re-generates. The stale analysis stays in place (and on
+ * tweets into `analysisHistory`, refresh the profile (avatars from old scrapes
+ * 404 — X rotates profile-image URLs), then reset the pipeline flags so the
+ * visit re-scrapes and re-generates. The stale analysis stays in place (and on
  * screen) until the fresh one streams in over it.
  */
 export const refreshStaleUser = async ({ user }: { user: SelectUser }): Promise<SelectUser> => {
@@ -76,8 +77,24 @@ export const refreshStaleUser = async ({ user }: { user: SelectUser }): Promise<
     { archivedAt: new Date().toISOString(), analysis: user.analysis, tweets: user.tweets },
   ]
 
+  let { data: freshProfile } = await fetchProfileXApi({ username: user.username })
+  if (!freshProfile) {
+    ;({ data: freshProfile } = await fetchUserDataBySocialData({ username: user.username }))
+  }
+  const profileFields = freshProfile
+    ? {
+        name: freshProfile.name,
+        profilePicture: freshProfile.profilePicture,
+        description: freshProfile.description,
+        location: freshProfile.location,
+        followers: freshProfile.followers,
+        fullProfile: freshProfile.fullProfile,
+      }
+    : {}
+
   const updated = {
     ...user,
+    ...profileFields,
     analysisHistory: history,
     tweetScrapeStarted: false,
     tweetScrapeCompleted: false,
@@ -87,7 +104,7 @@ export const refreshStaleUser = async ({ user }: { user: SelectUser }): Promise<
     paidWordwareCompleted: false,
   }
   await updateUser({ user: updated })
-  console.log(`[${user.username}] ♻️ Archived analysis from ${user.wordwareStartedTime.toISOString()}, re-running scrape + roast`)
+  console.log(`[${user.username}] ♻️ Archived analysis from ${user.wordwareStartedTime.toISOString()}, refreshed profile, re-running scrape + roast`)
   return updated
 }
 

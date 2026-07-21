@@ -21,7 +21,7 @@ const Footer = () => {
           </a>
 
           <a
-            href="mailto:hello@sauna.ai"
+            href="mailto:roast@sauna.ai"
             target="_blank"
             className="flex-center gap-2 text-white">
             <PiEnvelope size={18} />
@@ -40,7 +40,7 @@ const Footer = () => {
         <div>Refund Policy</div>
         <p className="max-w-xl text-sm">
           If you wish to request a refund or discuss any issues regarding Twitter Personality purchase, please contact us at{' '}
-          <a href="mailto:hello@sauna.ai">hello@sauna.ai</a>. Our team will assist you in resolving your concerns and processing any applicable refunds.
+          <a href="mailto:roast@sauna.ai">roast@sauna.ai</a>. Our team will assist you in resolving your concerns and processing any applicable refunds.
         </p>
         <div className="space-x-4 pt-3">
           <Link

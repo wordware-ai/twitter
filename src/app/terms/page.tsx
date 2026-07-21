@@ -131,7 +131,7 @@ We may modify these Terms at any time. We will notify you of any changes by upda
 
 If you have any questions about these Terms or wish to exercise any of your rights, please contact us at:
 
-- **Email**: [hello@sauna.ai](mailto:hello@sauna.ai)
+- **Email**: [roast@sauna.ai](mailto:roast@sauna.ai)
 - **Address**: 746 Kansas St, San Francisco, CA 94107, USA
 
 ## 15. Governing Law and Jurisdiction
