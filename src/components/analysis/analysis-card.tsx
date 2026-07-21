@@ -195,7 +195,7 @@ const AnalysisCard: React.FC<AnalysisCardProps> = ({ unlocked, title, icon: Icon
               className="font-semibold underline-offset-4 hover:underline">
               Sauna
             </a>{' '}
-            - AI superpowers for builders
+            - AI superpowers for everyone
           </span>
         </CardFooter>
       </div>
