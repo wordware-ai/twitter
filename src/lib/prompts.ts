@@ -137,11 +137,15 @@ Return a JSON object with EXACTLY these keys and no others:
 }
 
 export function compatibilityPrompt({
+  name1,
+  name2,
   profileInfo1,
   tweetsMarkdown1,
   profileInfo2,
   tweetsMarkdown2,
 }: {
+  name1: string
+  name2: string
   profileInfo1: string
   tweetsMarkdown1: string
   profileInfo2: string
@@ -231,13 +235,13 @@ After understanding each, answer the following questions for each person.
 Give answers to each section and provide reasoning. Respond in 2-3 sentences. Keep it concise. Make to act like a horoscope teller, because that's what people pay for. Explain your assumptions. Don't focus your assumptions on personality types.
 
 **Inputs:**
-Profile 1:
+${name1}'s profile:
 
 ${profileInfo1}
 
 ${tweetsMarkdown1}
 
-Profile 2:
+${name2}'s profile:
 
 ${profileInfo2}
 
@@ -247,7 +251,7 @@ Output the result as valid JSON, strictly adhering to the defined schema. Ensure
 
 You can **bold** important information within the strings.
 
-Refer to the profiles by their name and respond in the most commonly used language of their tweets.
+Refer to the profiles by their name and respond in the most commonly used language of their tweets. ALWAYS call the two people **${name1}** and **${name2}** in the text you write — NEVER "Profile 1", "Profile 2", "person one", "the first person" or similar. (The JSON keys "profile1" and "profile2" stay as keys: profile1 = ${name1}, profile2 = ${name2}.)
 
 Return a JSON object with EXACTLY these keys and no others:
 "mbti" (object: { "profile1": string, "profile2": string }), "about" (string), "crazy" (string), "drama" (string), "emojis" (string), "divorce" (string), "marriage" (string), "3rd_wheel" (string), "free_time" (string), "red_flags" (object: { "profile1": array of strings, "profile2": array of strings }), "dealbreaker" (string), "green_flags" (object: { "profile1": array of strings, "profile2": array of strings }), "follower_flex" (string), "risk_appetite" (string), "love_languages" (string), "secret_desires" (string), "friends_forever" (string), "jealousy_levels" (string), "attachment_style" (string), "values_alignment" (string), "breakup_percentage" (string), "overall_compatibility" (string), "personality_type_match" (string), "emotional_compatibility" (string), "financial_compatibility" (string), "communication_style_compatibility" (string)`

@@ -4,6 +4,7 @@ import { getUser, updateUser } from '@/drizzle/queries'
 import { AI_MODEL } from '@/lib/ai'
 import { parseJsonLoose } from '@/lib/parse-json-loose'
 import { formatTweetsMarkdown, fullPrompt, roastPrompt } from '@/lib/prompts'
+import { fullSchema, roastSchema } from '@/lib/schemas'
 import { TweetType, TwitterAnalysis } from '@/types'
 
 /**
@@ -73,6 +74,11 @@ export async function POST(request: Request) {
     onEnd: async ({ text }) => {
       try {
         const output = parseJsonLoose(text)
+        // Plain-text mode can occasionally drop a key — log it for observability
+        const check = (full ? fullSchema : roastSchema).safeParse(output)
+        if (!check.success) {
+          console.warn(`[${user.username}] ⚠️ Output shape issues:`, check.error.issues.map((i) => i.path.join('.')).join(', '))
+        }
         // Include the fresh started time: spreading the pre-generation `user`
         // would write the old timestamp back, making a just-regenerated
         // analysis still look stale to refreshStaleUser (regeneration loop)
