@@ -7,7 +7,7 @@ import { PiPlus } from 'react-icons/pi'
 import { ProfileHighlight } from '@/components/analysis/profile-highlight'
 import NewPairFormBothNames from '@/components/new-pair-form-both-names'
 import Topbar from '@/components/top-bar'
-import { getPair, getUser } from '@/drizzle/queries'
+import { getPair, getUser, insertPair } from '@/drizzle/queries'
 
 import PairComponent from '../../../components/analysis/pair-component'
 
@@ -16,12 +16,24 @@ const PairPage = async ({ params }: { params: Promise<{ username: string; userna
   console.log('Page for', username, 'and', usernamePair)
   //ALWAYS SORT THE USER IDS SO WE CAN USE THEM AS KEYS
   const [username1, username2] = [username, usernamePair].sort()
-  const pair = await getPair({ usernames: [username1, username2] })
+  let pair = await getPair({ usernames: [username1, username2] })
 
-  // User pairs have to have been created before getting to this page
   const [user1, user2] = await Promise.all([getUser({ username: username1 }), getUser({ username: username2 })])
 
-  if (!user1 || !user2 || !pair) return <div>Pair does not exist</div>
+  if (!user1 || !user2) return <div>Pair does not exist</div>
+
+  // Self-heal: when both users exist but the pair row doesn't (direct URL
+  // visit, or the creation flow was interrupted), create it on the fly
+  if (!pair) {
+    try {
+      await insertPair({ usernames: [username1, username2] })
+    } catch {
+      // lost a race with a concurrent visitor — the row exists now
+    }
+    pair = await getPair({ usernames: [username1, username2] })
+  }
+
+  if (!pair) return <div>Pair does not exist</div>
 
   return (
     <div className="flex-center relative min-h-screen w-full flex-col gap-12 bg-desk px-4 py-28 sm:px-12 md:px-28 md:pt-24">
@@ -71,13 +83,15 @@ export async function generateMetadata({
   const [user1, user2] = await Promise.all([getUser({ username: username1 }), getUser({ username: username2 })])
   const pair = await getPair({ usernames: [username1, username2] })
 
-  if (!user1 || !user2 || !pair) return notFound()
+  // Only 404 when a user is missing — a missing pair row is self-healed by the
+  // page component, so metadata must not kill the request before that happens
+  if (!user1 || !user2) return notFound()
 
   const imageParams = new URLSearchParams()
   const section = (await searchParams).section || 'about'
   // const section = 'about' //TODO: Hardcode about for now, to make it dynamic we need to design the full OG image
   // generator for all the section types
-  const content = (pair.analysis as any)?.[section]
+  const content = (pair?.analysis as any)?.[section]
 
   imageParams.set('name1', user1.name || '')
   imageParams.set('username1', user1.username || '')
