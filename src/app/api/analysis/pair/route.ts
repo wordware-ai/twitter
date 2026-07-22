@@ -4,6 +4,7 @@ import { getPair, getUser, updatePair } from '@/drizzle/queries'
 import { AI_MODEL } from '@/lib/ai'
 import { parseJsonLoose } from '@/lib/parse-json-loose'
 import { compatibilityPrompt, formatTweetsMarkdown } from '@/lib/prompts'
+import { compatibilitySchema } from '@/lib/schemas'
 import { TweetType } from '@/types'
 
 /**
@@ -40,6 +41,8 @@ export async function POST(request: Request) {
   const tweetsMarkdown2 = formatTweetsMarkdown(user2.tweets as TweetType[], user2.username)
 
   const { system, prompt } = compatibilityPrompt({
+    name1: user1.name || user1.username,
+    name2: user2.name || user2.username,
     profileInfo1: JSON.stringify(user1.fullProfile),
     tweetsMarkdown1,
     profileInfo2: JSON.stringify(user2.fullProfile),
@@ -74,6 +77,12 @@ export async function POST(request: Request) {
     onEnd: async ({ text }) => {
       try {
         const output = parseJsonLoose(text)
+        // Plain-text mode can occasionally drop a key — log it for observability
+        // (the UI skips missing cards gracefully)
+        const check = compatibilitySchema.safeParse(output)
+        if (!check.success) {
+          console.warn(`[${pair.user1lowercaseUsername}, ${pair.user2lowercaseUsername}] ⚠️ Output shape issues:`, check.error.issues.map((i) => i.path.join('.')).join(', '))
+        }
         await updatePair({
           pair: {
             ...pair,

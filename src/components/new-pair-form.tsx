@@ -33,9 +33,10 @@ const NewPairForm = () => {
       toast.error('You cannot pair with yourself')
       return
     }
+    // No redirectPath here: handleNewUsername's redirect() would navigate away
+    // before handlePair could create the pair row, 404ing the pair page
     const response = await handleNewUsername({
       username: cleanedUsername,
-      redirectPath: `${pathname}/${cleanedUsername}`,
     })
 
     if (response?.error) {
