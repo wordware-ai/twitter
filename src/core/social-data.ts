@@ -52,7 +52,7 @@ type SocialDataTweet = {
 }
 
 export async function fetchTweets(userId: string) {
-  const url = `https://api.socialdata.tools/twitter/user/${userId}/tweets-and-replies`
+  const url = `https://api.socialdata.tools/twitter/user/${encodeURIComponent(userId)}/tweets-and-replies`
 
   try {
     const response = await fetch(url, {
@@ -101,7 +101,11 @@ export async function fetchAndParseSocialDataTweets(userId: string): Promise<Twe
 }
 
 export async function fetchTweetsByUsername(username: string) {
-  const url = `https://api.socialdata.tools/twitter/search?query=from%3A${username}%20-filter%3Areplies&type=Latest`
+  const params = new URLSearchParams({
+    query: `from:${username} -filter:replies`,
+    type: 'Latest',
+  })
+  const url = `https://api.socialdata.tools/twitter/search?${params}`
 
   try {
     const response = await fetch(url, {
@@ -153,7 +157,7 @@ export async function fetchUserDataBySocialData({ username }: { username: string
   data: DatabaseUser | null
   error: string | null
 }> {
-  const url = `https://api.socialdata.tools/twitter/user/${username}`
+  const url = `https://api.socialdata.tools/twitter/user/${encodeURIComponent(username)}`
 
   try {
     const response = await fetch(url, {

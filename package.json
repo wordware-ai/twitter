@@ -10,7 +10,8 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "stripe:listen": "stripe listen --forward-to localhost:3000/api/stripe/webhook"
+    "stripe:listen": "stripe listen --forward-to localhost:3000/api/stripe/webhook",
+    "test": "node --conditions=react-server --import tsx --test --test-concurrency=1 src/core/*.test.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -36,6 +37,7 @@
     "react-markdown": "^9.0.1",
     "remark-gfm": "^4.0.0",
     "secure-json-parse": "^2.7.0",
+    "server-only": "0.0.1",
     "sonner": "^2.0.7",
     "stripe": "^22.3.2",
     "tailwind-merge": "^2.4.0",
