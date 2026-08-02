@@ -27,7 +27,7 @@
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.45.2",
     "lucide-react": "^1.25.0",
-    "next": "^15.5.20",
+    "next": "^15.5.21",
     "posthog-js": "^1.405.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
