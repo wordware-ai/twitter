@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 
 import { scrapeTweets } from '@/core/logic'
 import { fetchProfileXApi } from '@/core/x-api'
+import { fetchProfileXquik, isXquikConfigured } from '@/core/xquik'
 import { getPair, getUser, insertPair, insertUser, unlockPair, unlockUser, updateUser } from '@/drizzle/queries'
 
 import { fetchUserDataBySocialData } from '../core/social-data'
@@ -21,17 +22,26 @@ export const handleNewUsername = async ({ username, redirectPath }: { username: 
 
   let { data, error } = await fetchProfileXApi({ username })
   if (!data) {
-    console.log(`[${username}] ⚠️ Profile X API (1/2)`, error)
+    console.log(`[${username}] ⚠️ Profile X API (1/3)`, error)
   } else {
-    console.log(`[${username}] ✅ Profile X API (1/2)`)
+    console.log(`[${username}] ✅ Profile X API (1/3)`)
+  }
+
+  if (!data && isXquikConfigured()) {
+    ;({ data, error } = await fetchProfileXquik({ username }))
+    if (!data) {
+      console.log(`[${username}] ⚠️ Profile Xquik (2/3)`, error)
+    } else {
+      console.log(`[${username}] ✅ Profile Xquik (2/3)`)
+    }
   }
 
   if (!data) {
     ;({ data, error } = await fetchUserDataBySocialData({ username }))
     if (!data) {
-      console.log(`[${username}] ⚠️ Profile SocialData (2/2)`, error)
+      console.log(`[${username}] ⚠️ Profile SocialData (3/3)`, error)
     } else {
-      console.log(`[${username}] ✅ Profile SocialData (2/2)`)
+      console.log(`[${username}] ✅ Profile SocialData (3/3)`)
     }
   }
 

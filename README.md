@@ -7,7 +7,7 @@ The site went viral in 2024. This is the relaunched version: official X API for 
 ## How it works
 
 1. Enter a Twitter/X username (or two, for a compatibility check).
-2. The profile and ~15 recent posts are fetched via the official **X API v2** (SocialData as fallback) and cached in Neon Postgres.
+2. The profile and ~15 recent posts are fetched via the official **X API v2** (Xquik and SocialData as fallbacks) and cached in Neon Postgres.
 3. An LLM (default `xai/grok-4.20-non-reasoning`, via the **Vercel AI Gateway**) streams a structured analysis — roast, strengths, love life, spirit animal, pickup lines and more — straight into the page.
 4. The result is cached, shareable, and rendered into dynamic OG images.
 
@@ -19,6 +19,7 @@ The site went viral in 2024. This is the relaunched version: official X API for 
    - `AI_GATEWAY_API_KEY`: Vercel AI Gateway key (omit on Vercel — OIDC is automatic).
    - `AI_MODEL` (optional): any [Gateway model string](https://vercel.com/ai-gateway/models), e.g. `xai/grok-4.20-non-reasoning`, `zai/glm-5.2`, `openai/gpt-5.2`. Swapping models is just changing this var.
    - `X_API_BEARER_TOKEN`: official X API v2 bearer token (pay-per-use; buy credits in the [X developer console](https://developer.x.com)).
+   - `XQUIK_API_KEY`: optional [Xquik](https://xquik.com) fallback for profile and post reads.
    - `SOCIALDATA_API_KEY`: fallback scraper.
    - `NEXT_PUBLIC_BASE_URL`: base URL of the deployment — share links derive from it.
    - `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST`: analytics (optional).
@@ -33,3 +34,5 @@ The site went viral in 2024. This is the relaunched version: official X API for 
 - **Brand**: Sauna tokens are defined in `tailwind.config.ts` + `src/app/globals.css`; official logo SVGs in `public/brand/`.
 
 Deployed on Vercel.
+
+Xquik is an independent third-party service. Not affiliated with X Corp. "Twitter" and "X" are trademarks of X Corp.
