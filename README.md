@@ -33,3 +33,11 @@ The site went viral in 2024. This is the relaunched version: official X API for 
 - **Brand**: Sauna tokens are defined in `tailwind.config.ts` + `src/app/globals.css`; official logo SVGs in `public/brand/`.
 
 Deployed on Vercel.
+
+## Product price lookup
+
+New full analyses use [Parallel Search MCP](https://docs.parallel.ai/integrations/mcp/search-mcp) to look up products for the existing under-$50 recommendation. Anonymous search uses Fast mode and needs no account or API key. The configured `AI_MODEL` selects product queries from the supplied interests, then the normal JSON generation receives product results for the `fiftyDollarThing` field. Personal analysis still uses the Twitter profile and tweets. Cached analyses, roasts and compatibility checks do not run product lookup.
+
+Set `PRODUCT_SEARCH_ENABLED=false` to disable it, including all MCP discovery requests. An optional `PARALLEL_API_KEY` is used as a Bearer token when configured; authentication failures do not retry anonymously. Lookup has a 20-second research budget, at most three model steps and three tool calls, with request cancellation propagated to MCP and model calls. If lookup fails, reaches the anonymous quota, or the configured model lacks tool support, the analysis is instructed to label its price as an estimate. Product links and supported USD prices appear in the existing Thing to Buy card; shipping and tax are excluded, and prices may change. Lookup adds a research pass using your configured model.
+
+Run `npm test` for deterministic caller tests with a scripted model and an HTTP MCP fixture. `npm run test:product-search:live` exercises the same resolver against the real anonymous endpoint with a scripted model; it makes no live inference request and reports quota responses separately from successful lookup.
