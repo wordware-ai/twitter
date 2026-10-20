@@ -1,9 +1,7 @@
-import { streamText } from 'ai'
-
 import { getUser, updateUser } from '@/drizzle/queries'
-import { AI_MODEL } from '@/lib/ai'
+import { streamPersonalityAnalysis } from '@/lib/analysis-stream'
 import { parseJsonLoose } from '@/lib/parse-json-loose'
-import { formatTweetsMarkdown, fullPrompt, roastPrompt } from '@/lib/prompts'
+import { formatTweetsMarkdown } from '@/lib/prompts'
 import { fullSchema, roastSchema } from '@/lib/schemas'
 import { TweetType, TwitterAnalysis } from '@/types'
 
@@ -48,13 +46,9 @@ export async function POST(request: Request) {
   const tweetsMarkdown = formatTweetsMarkdown(tweets, username)
   const profileInfo = JSON.stringify(user.fullProfile)
 
-  const { system, prompt } = full ? fullPrompt({ profileInfo, tweetsMarkdown }) : roastPrompt({ profileInfo, tweetsMarkdown })
-
   // Mark generation as started (reset in onError below if it fails)
   const startedAt = new Date()
-  const startedObject = full
-    ? { paidWordwareStarted: true, paidWordwareStartedTime: startedAt }
-    : { wordwareStarted: true, wordwareStartedTime: startedAt }
+  const startedObject = full ? { paidWordwareStarted: true, paidWordwareStartedTime: startedAt } : { wordwareStarted: true, wordwareStartedTime: startedAt }
   await updateUser({ user: { ...user, ...startedObject } })
 
   const existingAnalysis = user?.analysis as TwitterAnalysis
@@ -67,10 +61,11 @@ export async function POST(request: Request) {
   // Plain text mode on purpose: structured-output (json_schema) constrained
   // decoding noticeably flattens the roast's voice. The prompts enumerate the
   // exact JSON keys and parsing is lenient (parseJsonLoose).
-  const result = streamText({
-    model: AI_MODEL,
-    system,
-    prompt,
+  const result = await streamPersonalityAnalysis({
+    full: Boolean(full),
+    profileInfo,
+    tweetsMarkdown,
+    signal: request.signal,
     onEnd: async ({ text }) => {
       try {
         const output = parseJsonLoose(text)

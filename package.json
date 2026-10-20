@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "test": "tsx --test tests/*.test.ts",
+    "test:product-search:live": "tsx tests/analysis-stream.live.ts",
     "build": "bun db:migrate && next build",
     "build:old": "next build",
     "db:generate": "drizzle-kit generate",
@@ -13,6 +15,7 @@
     "stripe:listen": "stripe listen --forward-to localhost:3000/api/stripe/webhook"
   },
   "dependencies": {
+    "@ai-sdk/mcp": "^2.0.80",
     "@hookform/resolvers": "^3.9.0",
     "@neondatabase/serverless": "^1.1.0",
     "@radix-ui/react-avatar": "^1.2.3",
